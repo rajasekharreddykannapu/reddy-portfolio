@@ -3,8 +3,7 @@ export const profile = {
   title: "Principal Engineering Manager",
   location: "Hyderabad, India",
   email: "rajasekhar.sachin@gmail.com",
-  // TODO: replace with your real LinkedIn profile URL
-  linkedin: null as string | null,
+  linkedin: "https://www.linkedin.com/in/kannapurajasekharreddy/" as string | null,
   github: "https://github.com/rajasekharreddykannapu",
   valueProp:
     "Building scalable, distributed, cloud-native SaaS platforms — and the teams that ship them.",
