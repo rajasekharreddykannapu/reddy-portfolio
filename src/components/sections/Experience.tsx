@@ -1,13 +1,40 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { education, experience } from "@/lib/resume";
+import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
 
 export default function Experience() {
   return (
     <section id="experience" className="mx-auto max-w-5xl px-6 py-20">
-      <h2 className="font-mono text-sm uppercase tracking-widest text-accent">Experience</h2>
-      <ol className="mt-10 space-y-12 border-l border-border pl-8">
-        {experience.map((entry) => (
-          <li key={`${entry.company}-${entry.role}-${entry.start}`} className="relative">
-            <span className="absolute -left-[2.29rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent" />
+      <motion.h2
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={fadeUp}
+        className="font-mono text-sm uppercase tracking-widest text-accent"
+      >
+        Experience
+      </motion.h2>
+      <motion.ol
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={staggerContainer}
+        className="mt-10 space-y-12 border-l border-border pl-8"
+      >
+        {experience.map((entry, index) => (
+          <motion.li
+            key={`${entry.company}-${entry.role}-${entry.start}`}
+            variants={fadeUp}
+            className="relative"
+          >
+            <span className="absolute -left-[2.29rem] top-1.5 flex h-2.5 w-2.5">
+              {index === 0 && (
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+              )}
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
+            </span>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
               <h3 className="text-lg font-semibold text-foreground">
                 {entry.role} <span className="font-normal text-muted">· {entry.company}</span>
@@ -24,9 +51,9 @@ export default function Experience() {
                 </li>
               ))}
             </ul>
-          </li>
+          </motion.li>
         ))}
-        <li className="relative">
+        <motion.li variants={fadeUp} className="relative">
           <span className="absolute -left-[2.29rem] top-1.5 h-2.5 w-2.5 rounded-full bg-border" />
           <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
             <h3 className="text-lg font-semibold text-foreground">
@@ -34,8 +61,8 @@ export default function Experience() {
             </h3>
             <p className="font-mono text-sm text-muted">{education.year}</p>
           </div>
-        </li>
-      </ol>
+        </motion.li>
+      </motion.ol>
     </section>
   );
 }
