@@ -39,10 +39,10 @@ export default function Contact() {
             target={link.href.startsWith("http") ? "_blank" : undefined}
             rel={link.href.startsWith("http") ? "noreferrer" : undefined}
             whileHover={{ y: -2 }}
-            className="flex items-center justify-between gap-6 rounded-xl border border-border bg-surface px-5 py-3.5 text-sm transition-colors hover:border-accent sm:min-w-[15rem]"
+            className="flex w-full min-w-0 items-center justify-between gap-6 rounded-xl border border-border bg-surface px-5 py-3.5 text-sm transition-colors hover:border-accent sm:w-auto sm:min-w-[15rem]"
           >
-            <span className="text-muted">{link.label}</span>
-            <span className="font-mono text-foreground">{link.value}</span>
+            <span className="shrink-0 text-muted">{link.label}</span>
+            <span className="min-w-0 truncate font-mono text-foreground">{link.value}</span>
           </motion.a>
         ))}
       </motion.div>
