@@ -1,5 +1,5 @@
 export const profile = {
-  name: "Rajasekhar Reddy Kannapu",
+  name: "Kannapu Rajasekhar Reddy",
   title: "Principal Engineering Manager",
   location: "Hyderabad, India",
   email: "rajasekhar.sachin@gmail.com",
