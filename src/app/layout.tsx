@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 const siteTitle = `${profile.name} — ${profile.title}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://reddy-portfolio.vercel.app"),
+  metadataBase: new URL("https://krajasekharreddy.com"),
   title: siteTitle,
   description: profile.summary,
   keywords: [
@@ -35,8 +35,12 @@ export const metadata: Metadata = {
     profile.name,
   ],
   authors: [{ name: profile.name }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
+    url: "https://krajasekharreddy.com",
     title: siteTitle,
     description: profile.valueProp,
     siteName: profile.name,
