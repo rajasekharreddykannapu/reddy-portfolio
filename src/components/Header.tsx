@@ -1,4 +1,5 @@
 import ThemeToggle from "@/components/ThemeToggle";
+import SocialLinks from "@/components/SocialLinks";
 
 const links = [
   { href: "#about", label: "About" },
@@ -27,7 +28,10 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <SocialLinks />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

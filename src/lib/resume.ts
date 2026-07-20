@@ -11,6 +11,14 @@ export const profile = {
     "Principal Engineering Manager with 6+ years of experience building scalable, distributed, cloud-native SaaS platforms. Proven track record of scaling systems, teams, and revenue (₹10L → $1M, 10 → 1000+ customers). Expertise in microservices architecture, API design, performance optimization, and high-availability systems using C#, Angular, and Azure. Strong background in technical leadership, system design, and engineering execution.",
 };
 
+export type Stat = { value: string; label: string };
+
+export const stats: Stat[] = [
+  { value: "6+", label: "Years of experience" },
+  { value: "9", label: "Engineers led" },
+  { value: "1000+", label: "Customers scaled to" },
+];
+
 export type ExperienceEntry = {
   role: string;
   company: string;

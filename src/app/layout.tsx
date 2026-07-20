@@ -17,9 +17,35 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteTitle = `${profile.name} — ${profile.title}`;
+
 export const metadata: Metadata = {
-  title: `${profile.name} — ${profile.title}`,
+  metadataBase: new URL("https://reddy-portfolio.vercel.app"),
+  title: siteTitle,
   description: profile.summary,
+  keywords: [
+    "Engineering Manager",
+    "Principal Engineer",
+    "Software Architecture",
+    "Microservices",
+    "Distributed Systems",
+    ".NET",
+    "Azure",
+    "Angular",
+    profile.name,
+  ],
+  authors: [{ name: profile.name }],
+  openGraph: {
+    type: "website",
+    title: siteTitle,
+    description: profile.valueProp,
+    siteName: profile.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: profile.valueProp,
+  },
 };
 
 const themeInitScript = `

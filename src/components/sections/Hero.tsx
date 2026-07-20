@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { profile } from "@/lib/resume";
+import { profile, stats } from "@/lib/resume";
 import { staggerContainer, fadeUp } from "@/lib/motion";
 
 export default function Hero() {
@@ -50,6 +50,24 @@ export default function Hero() {
             Get in touch
           </motion.a>
         </motion.div>
+        <motion.dl
+          variants={fadeUp}
+          className="mt-14 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border bg-border"
+        >
+          {stats.map((stat) => (
+            <div key={stat.label} className="bg-surface px-5 py-6 text-center sm:text-left">
+              <dt className="sr-only">{stat.label}</dt>
+              <dd>
+                <span className="block text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                  {stat.value}
+                </span>
+                <span className="mt-1 block text-xs leading-snug text-muted sm:text-sm">
+                  {stat.label}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
       </motion.div>
     </section>
   );
