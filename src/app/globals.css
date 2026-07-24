@@ -9,8 +9,8 @@
   --foreground: #14181f;
   --muted: #5b6472;
   --border: #e4e6ea;
-  --accent: #0f766e;
-  --accent-2: #0369a1;
+  --accent: #4f46e5;
+  --accent-2: #7c3aed;
   --accent-foreground: #ffffff;
   --hairline: rgba(15, 23, 32, 0.06);
 }
@@ -22,8 +22,8 @@
   --foreground: #e9edf3;
   --muted: #8b95a3;
   --border: #232933;
-  --accent: #2dd4bf;
-  --accent-2: #38bdf8;
+  --accent: #818cf8;
+  --accent-2: #c084fc;
   --accent-foreground: #080b10;
   --hairline: rgba(255, 255, 255, 0.08);
 }
