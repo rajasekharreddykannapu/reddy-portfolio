@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function About() {
   return (
@@ -14,12 +15,10 @@ export default function About() {
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      <motion.h2 variants={fadeUp} className="font-mono text-sm uppercase tracking-widest text-accent">
-        About
-      </motion.h2>
+      <SectionHeading index="01">About</SectionHeading>
       <motion.p
         variants={fadeUp}
-        className="mt-5 max-w-3xl text-xl leading-relaxed text-foreground sm:text-2xl"
+        className="mt-6 max-w-3xl text-xl leading-relaxed text-foreground sm:text-2xl"
       >
         {profile.summary}
       </motion.p>

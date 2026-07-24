@@ -3,25 +3,25 @@
 import { motion } from "framer-motion";
 import { education, experience } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function Experience() {
   return (
     <section id="experience" className="mx-auto max-w-5xl px-6 py-20">
-      <motion.h2
+      <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={viewportOnce}
-        variants={fadeUp}
-        className="font-mono text-sm uppercase tracking-widest text-accent"
+        variants={staggerContainer}
       >
-        Experience
-      </motion.h2>
+        <SectionHeading index="02">Experience</SectionHeading>
+      </motion.div>
       <motion.ol
         initial="hidden"
         whileInView="visible"
         viewport={viewportOnce}
         variants={staggerContainer}
-        className="mt-10 space-y-12 border-l border-border pl-8"
+        className="relative mt-10 space-y-12 pl-8 before:absolute before:left-0 before:top-1 before:bottom-1 before:w-px before:bg-gradient-to-b before:from-accent/60 before:via-border before:to-transparent"
       >
         {experience.map((entry, index) => (
           <motion.li

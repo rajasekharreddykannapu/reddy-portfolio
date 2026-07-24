@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
+import SectionHeading from "@/components/SectionHeading";
 
 const links = [
   { label: "Email", href: `mailto:${profile.email}`, value: profile.email },
@@ -22,12 +23,10 @@ export default function Contact() {
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      <motion.h2 variants={fadeUp} className="font-mono text-sm uppercase tracking-widest text-accent">
-        Contact
-      </motion.h2>
+      <SectionHeading index="05">Contact</SectionHeading>
       <motion.p
         variants={fadeUp}
-        className="mt-5 max-w-xl text-2xl font-medium leading-snug text-foreground sm:text-3xl"
+        className="mt-6 max-w-xl text-2xl font-medium leading-snug text-foreground sm:text-3xl"
       >
         Open to conversations about engineering leadership, platform architecture, and scaling teams.
       </motion.p>
@@ -39,7 +38,7 @@ export default function Contact() {
             target={link.href.startsWith("http") ? "_blank" : undefined}
             rel={link.href.startsWith("http") ? "noreferrer" : undefined}
             whileHover={{ y: -2 }}
-            className="flex w-full min-w-0 items-center justify-between gap-6 rounded-xl border border-border bg-surface px-5 py-3.5 text-sm transition-colors hover:border-accent sm:w-auto sm:min-w-[15rem]"
+            className="card flex w-full min-w-0 items-center justify-between gap-6 px-5 py-3.5 text-sm transition-colors hover:border-accent sm:w-auto sm:min-w-[15rem]"
           >
             <span className="shrink-0 text-muted">{link.label}</span>
             <span className="min-w-0 truncate font-mono text-foreground">{link.value}</span>

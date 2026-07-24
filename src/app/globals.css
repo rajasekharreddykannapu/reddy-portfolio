@@ -5,30 +5,38 @@
 :root {
   --background: #fafaf9;
   --surface: #ffffff;
+  --surface-2: #f4f4f3;
   --foreground: #14181f;
   --muted: #5b6472;
   --border: #e4e6ea;
   --accent: #0f766e;
+  --accent-2: #0369a1;
   --accent-foreground: #ffffff;
+  --hairline: rgba(15, 23, 32, 0.06);
 }
 
 .dark {
-  --background: #0a0d12;
+  --background: #080b10;
   --surface: #12161d;
+  --surface-2: #161b23;
   --foreground: #e9edf3;
   --muted: #8b95a3;
   --border: #232933;
   --accent: #2dd4bf;
-  --accent-foreground: #0a0d12;
+  --accent-2: #38bdf8;
+  --accent-foreground: #080b10;
+  --hairline: rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -39,13 +47,76 @@ html {
 }
 
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Cinematic ambient depth — a soft aurora anchored to the top of the page. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 15% -5%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 90% 0%, color-mix(in srgb, var(--accent-2) 12%, transparent), transparent 70%);
+}
+
+/* Fine film grain for a premium, non-flat surface. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
   background: var(--accent);
   color: var(--accent-foreground);
+}
+
+/* Subtle vertical sheen on large display text — sophistication without color. */
+.text-sheen {
+  background: linear-gradient(180deg, var(--foreground) 30%, color-mix(in srgb, var(--foreground) 68%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Signature accent gradient for metrics and highlights. */
+.text-gradient {
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Elevated surface with a top hairline highlight — reads as lit from above. */
+.card {
+  position: relative;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--foreground) 3%, transparent), transparent 40%),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding-top: 1px;
+  background: linear-gradient(180deg, var(--hairline), transparent 30%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .hero-glow {
@@ -54,7 +125,7 @@ body {
   height: 480px;
   background:
     radial-gradient(circle at 25% 30%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 60%),
-    radial-gradient(circle at 75% 65%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%);
+    radial-gradient(circle at 75% 65%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 55%);
   filter: blur(60px);
   opacity: 0.55;
   pointer-events: none;
