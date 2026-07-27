@@ -190,7 +190,7 @@ export default function JourneyContent() {
             </Reveal>
           </div>
           <div className="pointer-events-none fixed left-6 top-1/2 hidden -translate-y-1/2 font-mono text-[10px] tracking-widest text-white/30 lg:block">
-            {String(idx + 1).padStart(2, "0")} / {String(chapters.length + 4).padStart(2, "0")}
+            {String(idx + 1).padStart(2, "0")} / {String(chapters.length + 5).padStart(2, "0")}
           </div>
         </section>
       ))}
@@ -199,7 +199,7 @@ export default function JourneyContent() {
       <section id="projects" className="px-6 py-24">
         <div className="mx-auto w-full max-w-5xl">
           <Reveal>
-            <Kicker index="06">Chapter Six</Kicker>
+            <Kicker index="05">Chapter Five</Kicker>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -231,7 +231,7 @@ export default function JourneyContent() {
       <section id="skills" className="px-6 py-24">
         <div className="mx-auto w-full max-w-5xl">
           <Reveal>
-            <Kicker index="07">Chapter Seven</Kicker>
+            <Kicker index="06">Chapter Six</Kicker>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -270,7 +270,7 @@ export default function JourneyContent() {
       <section id="experience" className="px-6 py-24">
         <div className="mx-auto w-full max-w-5xl">
           <Reveal>
-            <Kicker index="08">Chapter Eight</Kicker>
+            <Kicker index="07">Chapter Seven</Kicker>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -300,7 +300,7 @@ export default function JourneyContent() {
       <section className="flex min-h-[90svh] items-center justify-center px-6 py-24 text-center">
         <div className="mx-auto max-w-3xl">
           <Reveal>
-            <Kicker index="09">The Horizon</Kicker>
+            <Kicker index="08">The Horizon</Kicker>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-8 text-3xl font-medium leading-snug text-white sm:text-4xl">
@@ -318,7 +318,7 @@ export default function JourneyContent() {
       <section id="contact" className="px-6 pb-32 pt-8">
         <div className="mx-auto w-full max-w-3xl">
           <Reveal className={`${glass} p-8 sm:p-12`}>
-            <Kicker index="10">Get in touch</Kicker>
+            <Kicker index="09">Get in touch</Kicker>
             <h2 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
               Let&apos;s build something.
             </h2>

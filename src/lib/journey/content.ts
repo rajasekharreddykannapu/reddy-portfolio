@@ -4,8 +4,8 @@
 export const hero = {
   greeting: "Hi, I'm",
   name: "Rajasekhar Reddy",
-  roles: ["Principal Engineering Manager", "AI Builder", "Runner", "Problem Solver"],
-  tagline: "A journey through engineering, AI, leadership, and the long road.",
+  roles: ["Principal Engineering Manager", "AI Builder", "Problem Solver"],
+  tagline: "A journey through engineering, AI, and leadership.",
 };
 
 export type Chapter = {
@@ -73,20 +73,6 @@ export const chapters: Chapter[] = [
       "Focus on API design, performance optimization, and high-availability systems.",
     ],
     tags: ["AI Platforms", "Azure", "Microservices", ".NET 8", "Redis"],
-  },
-  {
-    id: "marathon",
-    index: "05",
-    kicker: "Chapter Five",
-    title: "The Long Road",
-    lede: "The same discipline that ships systems shows up on the road — one milestone at a time.",
-    points: [
-      "5K — the first step, where consistency beats intensity.",
-      "10K — building an aerobic base and mental endurance.",
-      "Half Marathon — pacing, patience, and negative splits.",
-      "Full Marathon — the goal on the horizon.",
-    ],
-    tags: ["Endurance", "Discipline", "Consistency"],
   },
 ];
 

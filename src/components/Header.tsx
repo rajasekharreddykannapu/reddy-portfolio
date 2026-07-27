@@ -28,8 +28,19 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-1">
-          <SocialLinks />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href="/journey"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+            Journey
+            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+          <SocialLinks className="hidden sm:flex" />
           <ThemeToggle />
         </div>
       </div>
