@@ -20,6 +20,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
 
     const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    // Expose for anchor-link jumps and debugging.
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);

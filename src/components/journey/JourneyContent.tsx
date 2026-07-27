@@ -235,14 +235,14 @@ export default function JourneyContent() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-6 text-4xl font-semibold tracking-tight text-white sm:text-6xl">
-              Skills Galaxy
+              Skills Constellation
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/70">
               {low
                 ? "The tools and disciplines I work in."
-                : "A living system of the tools and disciplines I work in. Hover a planet to name it."}
+                : "A neural map of the tools and disciplines I work in — hover a node to trace its connections."}
             </p>
           </Reveal>
           {low ? (
