@@ -1,21 +1,23 @@
 import ThemeToggle from "@/components/ThemeToggle";
-import SocialLinks from "@/components/SocialLinks";
 
 const links = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-  { href: "#impact", label: "Impact" },
-  { href: "#contact", label: "Contact" },
-  { href: "/running", label: "Running" },
+  { href: "#journey", label: "Journey" },
+  { href: "#races", label: "Races" },
+  { href: "#log", label: "Every run" },
+  { href: "#gear", label: "Gear" },
+  { href: "#next", label: "Next up" },
 ];
 
-export default function Header() {
+export default function RunningHeader() {
   return (
     <header className="vt-header sticky top-0 z-50 animate-[fade-down_0.6s_ease-out] border-b border-border/80 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#top" className="font-mono text-sm font-medium tracking-tight text-foreground">
-          RRK<span className="text-accent">.</span>
+        <a
+          href="/"
+          className="group flex items-center gap-2 font-mono text-sm font-medium tracking-tight text-muted transition-colors hover:text-foreground"
+        >
+          <span className="transition-transform group-hover:-translate-x-0.5">←</span>
+          Portfolio
         </a>
         <nav className="hidden items-center gap-7 text-sm text-muted sm:flex">
           {links.map((link) => (
@@ -29,10 +31,7 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-1">
-          <SocialLinks />
-          <ThemeToggle />
-        </div>
+        <ThemeToggle />
       </div>
     </header>
   );

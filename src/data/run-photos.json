@@ -1,0 +1,3 @@
+{
+  "_comment": "Attach your photos to any run. Key = Strava activity id (visible in the run's 'View on Strava' link and in runs.json). Value = list of image filenames placed in public/running/photos/. Example: \"18817317833\": [\"telangana-finish.jpg\", \"medal.jpg\"]. This file is safe to edit — it is NOT overwritten when run data is refreshed."
+}

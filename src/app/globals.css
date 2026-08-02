@@ -174,3 +174,130 @@ body::after {
     animation: none;
   }
 }
+
+/* ============================================================
+   Modern UI layer — motion, depth & interaction
+   ============================================================ */
+
+/* Smooth cross-document (MPA) morph when navigating between the
+   portfolio and the running page. Zero JS. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Shared elements morph across the page transition. */
+.vt-header {
+  view-transition-name: site-header;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Living accent gradient — metrics gently shift hue. */
+.text-gradient {
+  background-size: 200% 100%;
+  animation: gradient-move 9s ease-in-out infinite;
+}
+
+@keyframes gradient-move {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Animated conic gradient border (uses ::after so it composes with .card). */
+.gradient-border::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 15%,
+    color-mix(in srgb, var(--accent) 90%, transparent) 42%,
+    color-mix(in srgb, var(--accent-2) 90%, transparent) 58%,
+    transparent 85%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-spin 7s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* Cursor-tracking spotlight for cards. Content is raised above it. */
+.card-glow {
+  position: relative;
+}
+.card-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 20%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.card-glow:hover::after {
+  opacity: 1;
+}
+.card-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Scroll-driven line drawing for GPS routes and mini-charts.
+   Paths carry pathLength="1" so a single rule fits every shape. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .route-line {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw-line linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 38%;
+    }
+    .chart-line {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw-line linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 32%;
+    }
+  }
+}
+
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Reduced-motion: hold everything still. */
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient,
+  .gradient-border::after {
+    animation: none;
+  }
+}
