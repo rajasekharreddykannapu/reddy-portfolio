@@ -226,7 +226,7 @@ export const upcoming: UpcomingEvent[] = [
   },
   {
     date: "25 Oct 2026",
-    name: "Times International Half Marathon",
+    name: "Times Internet Half Marathon",
     distance: "Half marathon",
     status: "registered",
   },
