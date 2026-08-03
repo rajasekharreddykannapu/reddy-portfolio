@@ -203,20 +203,54 @@ export type UpcomingEvent = {
 };
 
 export const upcoming: UpcomingEvent[] = [
-  // Example shape — replace with your real races and prep plans:
+  // Add goalTime and a prep[] to any event as your plans firm up.
   {
-    date: "TBD",
-    name: "Next full marathon",
-    distance: "42.2 km",
-    status: "target",
-    goalTime: "Sub-4:00",
-    note: "The next frontier — turning a sub-2:00 half into a strong first full.",
-    prep: [
-      "Extend the long run past 30 km",
-      "Build to 45–50 km weeks",
-      "Marathon-pace blocks inside the long runs",
-      "Dial in race-day fuelling & hydration",
-    ],
+    date: "16 Aug 2026",
+    name: "Hyderabad Monsoon Run",
+    distance: "16.1 km",
+    location: "Hyderabad",
+    status: "registered",
+  },
+  {
+    date: "30 Aug 2026",
+    name: "NMDC Half Marathon",
+    distance: "Half marathon",
+    status: "registered",
+  },
+  {
+    date: "18 Oct 2026",
+    name: "Vedanta Delhi Half Marathon",
+    distance: "Half marathon",
+    location: "New Delhi",
+    status: "registered",
+  },
+  {
+    date: "25 Oct 2026",
+    name: "Times International Half Marathon",
+    distance: "Half marathon",
+    status: "registered",
+  },
+  {
+    date: "1 Nov 2026",
+    name: "Hyderabad Hitech Marathon",
+    distance: "Full marathon",
+    location: "Hyderabad",
+    status: "registered",
+    note: "First full marathon — the big one of the season.",
+  },
+  {
+    date: "20 Dec 2026",
+    name: "Tata Steel Kolkata 25K",
+    distance: "25 km",
+    location: "Kolkata",
+    status: "registered",
+  },
+  {
+    date: "17 Jan 2027",
+    name: "Tata Mumbai Marathon",
+    distance: "Full marathon",
+    location: "Mumbai",
+    status: "registered",
   },
 ];
 

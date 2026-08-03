@@ -29,22 +29,31 @@ export default function Upcoming() {
     >
       <SectionHeading index="05">What&apos;s next</SectionHeading>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-2">
+      <div className="mt-10 space-y-14">
         {/* Upcoming events */}
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted">
-            Upcoming events
-          </h3>
-          <div className="mt-4 space-y-4">
-            {upcoming.length === 0 && (
-              <p className="text-muted">No races on the calendar right now — watch this space.</p>
+          <div className="flex items-baseline justify-between gap-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted">
+              Upcoming events
+            </h3>
+            {upcoming.length > 0 && (
+              <p className="font-mono text-sm text-muted">
+                <span className="text-accent">{upcoming.length}</span> on the calendar
+              </p>
             )}
-            {upcoming.map((event) => (
-              <motion.div
-                key={`${event.date}-${event.name}`}
-                variants={fadeUp}
-                className="card p-5"
-              >
+          </div>
+          {upcoming.length === 0 ? (
+            <p className="mt-4 text-muted">
+              No races on the calendar right now — watch this space.
+            </p>
+          ) : (
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {upcoming.map((event) => (
+                <motion.div
+                  key={`${event.date}-${event.name}`}
+                  variants={fadeUp}
+                  className="card card-glow p-5 transition-transform duration-300 hover:-translate-y-1"
+                >
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h4 className="text-lg font-semibold text-foreground">{event.name}</h4>
@@ -90,27 +99,28 @@ export default function Upcoming() {
                   </div>
                 )}
               </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Goals & preparation */}
+        {/* Standing targets */}
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted">
             Standing targets
           </h3>
-          <motion.ol
-            variants={staggerContainer}
-            className="relative mt-4 space-y-6 pl-8 before:absolute before:left-0 before:top-1 before:bottom-1 before:w-px before:bg-gradient-to-b before:from-accent/60 before:via-border before:to-transparent"
-          >
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {goals.map((goal) => (
-              <motion.li key={goal.title} variants={fadeUp} className="relative">
-                <span className="absolute -left-[2.29rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent" />
+              <motion.div
+                key={goal.title}
+                variants={fadeUp}
+                className="card card-glow p-5"
+              >
                 <h4 className="text-base font-semibold text-foreground">{goal.title}</h4>
-                <p className="mt-1 leading-relaxed text-muted">{goal.detail}</p>
-              </motion.li>
+                <p className="mt-2 leading-relaxed text-muted">{goal.detail}</p>
+              </motion.div>
             ))}
-          </motion.ol>
+          </div>
         </div>
       </div>
     </motion.section>
