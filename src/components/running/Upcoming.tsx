@@ -77,6 +77,25 @@ export default function Upcoming() {
                   )}
                 </div>
                 {event.note && <p className="mt-2 leading-relaxed text-muted">{event.note}</p>}
+                {event.url && (
+                  <a
+                    href={event.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 font-mono text-xs text-muted transition-colors hover:text-accent"
+                  >
+                    Event page
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="h-3 w-3"
+                    >
+                      <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </a>
+                )}
                 {event.prep && event.prep.length > 0 && (
                   <div className="mt-3 border-t border-border pt-3">
                     <p className="text-[0.7rem] uppercase tracking-wider text-muted">Prep plan</p>

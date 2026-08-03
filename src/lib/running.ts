@@ -200,6 +200,7 @@ export type UpcomingEvent = {
   goalTime?: string;
   note?: string;
   prep?: string[];
+  url?: string; // official event / registration page
 };
 
 export const upcoming: UpcomingEvent[] = [
@@ -210,12 +211,15 @@ export const upcoming: UpcomingEvent[] = [
     distance: "16.1 km",
     location: "Hyderabad",
     status: "registered",
+    url: "https://www.ifinish.in/running/HCS16K",
   },
   {
     date: "30 Aug 2026",
     name: "NMDC Half Marathon",
     distance: "Half marathon",
+    location: "Hyderabad",
     status: "registered",
+    url: "https://nmdchyderabadmarathon.com/",
   },
   {
     date: "18 Oct 2026",
@@ -223,12 +227,14 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Half marathon",
     location: "New Delhi",
     status: "registered",
+    url: "https://vedantadelhihalfmarathon.procam.in/",
   },
   {
     date: "25 Oct 2026",
     name: "Times Internet Half Marathon",
     distance: "Half marathon",
     status: "registered",
+    url: "https://timesofindia.indiatimes.com/times-events/marathon",
   },
   {
     date: "1 Nov 2026",
@@ -237,6 +243,7 @@ export const upcoming: UpcomingEvent[] = [
     location: "Hyderabad",
     status: "registered",
     note: "First full marathon — the big one of the season.",
+    url: "https://hyderabadhitecmarathon.com/",
   },
   {
     date: "20 Dec 2026",
@@ -244,6 +251,7 @@ export const upcoming: UpcomingEvent[] = [
     distance: "25 km",
     location: "Kolkata",
     status: "registered",
+    url: "https://tatasteelworld25k.procam.in/",
   },
   {
     date: "17 Jan 2027",
@@ -251,6 +259,7 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Full marathon",
     location: "Mumbai",
     status: "registered",
+    url: "https://tatamumbaimarathon.procam.in/",
   },
 ];
 
