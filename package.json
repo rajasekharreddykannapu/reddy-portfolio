@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "strava:sync": "node scripts/fetch-strava.mjs",
+    "strava:webhook": "node scripts/strava-webhook-subscribe.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

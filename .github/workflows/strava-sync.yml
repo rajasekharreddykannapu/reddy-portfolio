@@ -1,0 +1,56 @@
+name: Strava sync
+
+on:
+  # Fired by /api/strava/webhook when Strava pushes an activity event
+  repository_dispatch:
+    types: [strava-activity]
+  # Manual re-sync from the Actions tab
+  workflow_dispatch:
+  # Safety net if a webhook is missed
+  schedule:
+    - cron: "30 23 * * *" # ~05:00 IST
+
+permissions:
+  contents: write
+
+concurrency:
+  group: strava-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch Strava activities
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: node scripts/fetch-strava.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/runs.json
+          if git diff --staged --quiet; then
+            echo "No changes to runs.json"
+          else
+            EVENT="${{ github.event.client_payload.object_id }}"
+            MSG="Sync Strava activities"
+            if [ -n "$EVENT" ] && [ "$EVENT" != "" ]; then
+              MSG="Sync Strava activity ${EVENT}"
+            fi
+            git commit -m "$MSG"
+            git push
+          fi
