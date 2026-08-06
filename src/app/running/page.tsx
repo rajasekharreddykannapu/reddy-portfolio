@@ -3,11 +3,13 @@ import { profile } from "@/lib/resume";
 import { runningProfile } from "@/lib/running";
 import RunningHeader from "@/components/running/RunningHeader";
 import RunningHero from "@/components/running/RunningHero";
-import Timeline from "@/components/running/Timeline";
+import Origin from "@/components/running/Origin";
+import ProgressionChart from "@/components/running/ProgressionChart";
 import Races from "@/components/running/Races";
+import TrainingEngine from "@/components/running/TrainingEngine";
+import Upcoming from "@/components/running/Upcoming";
 import RunLog from "@/components/running/RunLog";
 import Gear from "@/components/running/Gear";
-import Upcoming from "@/components/running/Upcoming";
 import PointerSpotlight from "@/components/running/PointerSpotlight";
 import Footer from "@/components/Footer";
 
@@ -40,11 +42,13 @@ export default function RunningPage() {
       <RunningHeader />
       <main className="flex-1">
         <RunningHero />
-        <Timeline />
+        <Origin />
+        <ProgressionChart />
         <Races />
+        <TrainingEngine />
+        <Upcoming />
         <RunLog />
         <Gear />
-        <Upcoming />
       </main>
       <Footer />
     </>

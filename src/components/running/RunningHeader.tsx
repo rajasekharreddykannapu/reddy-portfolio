@@ -1,11 +1,12 @@
 import ThemeToggle from "@/components/ThemeToggle";
 
 const links = [
-  { href: "#journey", label: "Journey" },
-  { href: "#races", label: "Races" },
-  { href: "#log", label: "Every run" },
-  { href: "#gear", label: "Gear" },
-  { href: "#next", label: "Next up" },
+  { href: "#origin", label: "Origin" },
+  { href: "#arc", label: "Arc" },
+  { href: "#races", label: "Breakthrough" },
+  { href: "#engine", label: "Engine" },
+  { href: "#next", label: "Season" },
+  { href: "#log", label: "Archive" },
 ];
 
 export default function RunningHeader() {
@@ -19,7 +20,7 @@ export default function RunningHeader() {
           <span className="transition-transform group-hover:-translate-x-0.5">←</span>
           Portfolio
         </a>
-        <nav className="hidden items-center gap-7 text-sm text-muted sm:flex">
+        <nav className="hidden items-center gap-6 text-sm text-muted lg:flex">
           {links.map((link) => (
             <a
               key={link.href}

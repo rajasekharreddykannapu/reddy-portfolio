@@ -1,32 +1,26 @@
 // ---------------------------------------------------------------------------
-// Running journey content.
+// Running journey content — single source of truth for /running.
 //
-// This is the single place to edit everything on the /running page. The stats,
-// timeline milestones, races and gear below were seeded from Strava data
-// (athlete 202080481) covering the journey from Jan 2026 → Aug 2026.
-//
-// The `upcoming` and `goals` sections are yours to grow — add races as you
-// register for them and update the goals as they change. See the comments on
-// each section for the shape to follow.
+// Stats/timeline/races were seeded from Strava (athlete 202080481),
+// Jan 2026 → Aug 2026. Photos plug in later via src/data/run-photos.json
+// (filenames in public/running/photos/) without touching this file.
 // ---------------------------------------------------------------------------
 
+import { profile } from "@/lib/resume";
+
 export const runningProfile = {
-  // Small kicker shown above the headline.
+  brand: "Running",
+  name: profile.name,
   kicker: "The running journey",
-  // Big headline on the running page hero.
   headline: "From one hard loop to marathon distance.",
-  // One or two sentences of context under the headline.
   intro:
-    "Twelve months ago, one lap of the park left me walking. In early 2026 I started logging every run — first walks, then a stubborn 8K, then 10Ks, then a half marathon under two hours. No coach, no shortcuts: just showing up before sunrise, most days of the week. Every kilometre below is real, pulled straight from Strava — and the story is still being written.",
-  // Link to the public Strava profile (Strava attribution).
+    "Twelve months ago one park lap left me walking. By June I had a sub-2 half — no coach, just sunrise miles logged on Strava.",
   stravaUrl: "https://www.strava.com/athletes/202080481",
-  // Range label shown as a chip.
   since: "Logging since Jan 2026",
+  /** Strava activity id for hero route art when runs.json is populated. */
+  heroRunId: undefined as string | undefined,
 };
 
-// ── Headline stats (animated counters) ──────────────────────────────────────
-// Keep `value` parseable by the Counter component: an optional prefix, a
-// number (commas allowed), then an optional suffix — e.g. "683 km", "4,255 m".
 export type RunStat = { value: string; label: string; hint?: string };
 
 export const runStats: RunStat[] = [
@@ -36,7 +30,6 @@ export const runStats: RunStat[] = [
   { value: "4,255 m", label: "Elevation climbed", hint: "≈ half of Everest" },
 ];
 
-// ── Personal records (static highlight strip) ───────────────────────────────
 export type RunRecord = { value: string; label: string; note: string };
 
 export const records: RunRecord[] = [
@@ -46,14 +39,45 @@ export const records: RunRecord[] = [
   { value: "5:03 /km", label: "10K race pace", note: "Fastest sustained effort" },
 ];
 
-// ── The journey timeline ────────────────────────────────────────────────────
-// kind drives the accent: "start" | "milestone" | "race" | "present".
+// ── Origin chapter (day zero → first double digits) ─────────────────────────
+export type OriginBeat = {
+  date: string;
+  title: string;
+  detail: string;
+  stat?: string;
+};
+
+export const originBeats: OriginBeat[] = [
+  {
+    date: "Jan 2026",
+    title: "Lacing up",
+    detail:
+      "The honest starting line. Walks, one easy ride, and a body that couldn't finish a loop of the park. The only plan: keep showing up.",
+    stat: "Day 0",
+  },
+  {
+    date: "1 Feb 2026",
+    title: "First real run — 8 km",
+    detail:
+      "Opened the account with an 8 km morning run. Slow and heavy-legged — proof the engine just needed building.",
+    stat: "8.0 km",
+  },
+  {
+    date: "8 Feb 2026",
+    title: "First 10K",
+    detail:
+      "Double digits before breakfast. A number that had felt impossible a month earlier.",
+    stat: "10.0 km",
+  },
+];
+
+// ── Full journey timeline (kept for reference / archive chapters) ───────────
 export type TimelineEntry = {
-  date: string; // display label, e.g. "1 Feb 2026"
+  date: string;
   kind: "start" | "milestone" | "race" | "present";
   title: string;
   detail: string;
-  stat?: string; // small mono badge, e.g. "8.0 km"
+  stat?: string;
 };
 
 export const timeline: TimelineEntry[] = [
@@ -147,24 +171,60 @@ export const timeline: TimelineEntry[] = [
   },
 ];
 
-// ── Races (results table) ───────────────────────────────────────────────────
+// ── Month-by-month progression (fallback when runs.json is empty) ───────────
+export type ProgressionMonth = {
+  key: string;
+  label: string;
+  km: number;
+  longestKm: number;
+};
+
+export const progressionFallback: ProgressionMonth[] = [
+  { key: "2026-01", label: "Jan '26", km: 12, longestKm: 5 },
+  { key: "2026-02", label: "Feb '26", km: 78, longestKm: 14.5 },
+  { key: "2026-03", label: "Mar '26", km: 95, longestKm: 12 },
+  { key: "2026-04", label: "Apr '26", km: 88, longestKm: 12 },
+  { key: "2026-05", label: "May '26", km: 110, longestKm: 16.1 },
+  { key: "2026-06", label: "Jun '26", km: 105, longestKm: 21.1 },
+  { key: "2026-07", label: "Jul '26", km: 150, longestKm: 19 },
+  { key: "2026-08", label: "Aug '26", km: 45, longestKm: 21.3 },
+];
+
+// ── Races ───────────────────────────────────────────────────────────────────
 export type Race = {
   date: string;
   name: string;
   distance: string;
   time: string;
   note?: string;
+  featured?: boolean;
+  story?: string;
+  /** Optional Strava activity id to pull a route map when available. */
+  runId?: string;
 };
 
 export const races: Race[] = [
-  { date: "29 Mar 2026", name: "The IT-Run Sprint", distance: "10K", time: "55:17" },
-  { date: "26 Apr 2026", name: "TCS World 10K", distance: "10K", time: "59:25" },
+  {
+    date: "29 Mar 2026",
+    name: "The IT-Run Sprint",
+    distance: "10K",
+    time: "55:17",
+    note: "First bib",
+  },
+  {
+    date: "26 Apr 2026",
+    name: "TCS World 10K",
+    distance: "10K",
+    time: "59:25",
+    note: "Heat lesson",
+  },
   {
     date: "24 May 2026",
     name: "Hyderabad Summer City Slam",
     distance: "10K",
     time: "51:11",
     note: "Personal best",
+    story: "Four minutes faster than the same distance a month before — 5:03/km in brutal summer heat.",
   },
   {
     date: "7 Jun 2026",
@@ -172,10 +232,87 @@ export const races: Race[] = [
     distance: "Half marathon",
     time: "1:59:15",
     note: "First HM · sub-2:00",
+    featured: true,
+    story:
+      "From a body that couldn't finish a park loop to 21.1 km under two hours — five months, one stubborn habit, and a first half that broke the tape.",
   },
 ];
 
-// ── Shoe rotation (from Strava gear) ────────────────────────────────────────
+export const featuredRace = races.find((r) => r.featured)!;
+export const supportingRaces = races.filter((r) => !r.featured);
+
+// ── Training engine beats ───────────────────────────────────────────────────
+export type EngineBeat = {
+  date: string;
+  title: string;
+  detail: string;
+  stat?: string;
+};
+
+export const engineBeats: EngineBeat[] = [
+  {
+    date: "31 May 2026",
+    title: "Learning to run easy",
+    detail:
+      "A deliberate 16 km held in Zone 2 — training the body to stay relaxed for two hours. The unglamorous easy miles became the foundation.",
+    stat: "16.1 km",
+  },
+  {
+    date: "Jul 2026",
+    title: "Building the base",
+    detail:
+      "Speed sessions (8×800, 8×400), progression runs, a 19 km long run, and weeks around 26 km. Training with intent, not just mileage.",
+    stat: "≈ 150 km",
+  },
+  {
+    date: "2 Aug 2026",
+    title: "NMDC dry run",
+    detail:
+      "Back out to 21.3 km with 254 m of climbing. The base is set — next work is the start line, and faster times.",
+    stat: "21.3 km · 254 m",
+  },
+];
+
+/** Highlight cards for the training chapter when live run data is thin. */
+export type FeaturedRunHighlight = {
+  title: string;
+  date: string;
+  distance: string;
+  pace?: string;
+  note: string;
+  runId?: string;
+};
+
+export const featuredRunHighlights: FeaturedRunHighlight[] = [
+  {
+    title: "Hyderabad City Slam",
+    date: "24 May 2026",
+    distance: "10.0 km",
+    pace: "5:03",
+    note: "10K PB",
+  },
+  {
+    title: "Telangana Run",
+    date: "7 Jun 2026",
+    distance: "21.1 km",
+    pace: "5:39",
+    note: "First half · sub-2",
+  },
+  {
+    title: "NMDC dry run",
+    date: "2 Aug 2026",
+    distance: "21.3 km",
+    note: "Longest · 254 m ↑",
+  },
+];
+
+// Crafted hero route silhouette (no GPS required) — reads as a winding long run.
+export const heroRouteSilhouette = {
+  viewBox: "0 0 800 420",
+  path: "M40 320 C80 280 100 200 160 180 C220 160 240 240 300 220 C360 200 380 120 440 100 C500 80 520 160 580 150 C640 140 680 80 720 60 C740 50 760 70 780 90",
+};
+
+// ── Shoe rotation ───────────────────────────────────────────────────────────
 export type Gear = { name: string; model: string; km: number; role: string };
 
 export const gear: Gear[] = [
@@ -185,32 +322,29 @@ export const gear: Gear[] = [
   { name: "Barefoot", model: "No shoes", km: 19, role: "Hikes & giri pradakshina" },
 ];
 
-// ── Upcoming events — ADD YOUR RACES HERE ───────────────────────────────────
-// As you register for a race, add an entry:
-//   • status:   "registered" | "target" | "planned"  (drives the chip)
-//   • goalTime: the time you're chasing, e.g. "Sub-1:50"
-//   • prep:     the plan to hit that time — one bullet per line
-// Add or remove fields freely; goalTime, note and prep are all optional.
+// ── Season roadmap ──────────────────────────────────────────────────────────
 export type UpcomingEvent = {
   date: string;
   name: string;
   distance: string;
   location?: string;
   status: "registered" | "target" | "planned";
+  /** Visual weight on the path: next | build | peak | close */
+  chapter: "next" | "build" | "peak" | "close";
   goalTime?: string;
   note?: string;
   prep?: string[];
-  url?: string; // official event / registration page
+  url?: string;
 };
 
 export const upcoming: UpcomingEvent[] = [
-  // Add goalTime and a prep[] to any event as your plans firm up.
   {
     date: "16 Aug 2026",
     name: "Hyderabad Monsoon Run",
     distance: "16.1 km",
     location: "Hyderabad",
     status: "registered",
+    chapter: "next",
     url: "https://www.ifinish.in/running/HCS16K",
   },
   {
@@ -219,6 +353,8 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Half marathon",
     location: "Hyderabad",
     status: "registered",
+    chapter: "build",
+    goalTime: "Sub-1:55",
     url: "https://nmdchyderabadmarathon.com/",
   },
   {
@@ -227,6 +363,8 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Half marathon",
     location: "New Delhi",
     status: "registered",
+    chapter: "build",
+    goalTime: "Sub-1:50",
     url: "https://vedantadelhihalfmarathon.procam.in/",
   },
   {
@@ -234,6 +372,7 @@ export const upcoming: UpcomingEvent[] = [
     name: "Times Internet Half Marathon",
     distance: "Half marathon",
     status: "registered",
+    chapter: "build",
     url: "https://timesofindia.indiatimes.com/times-events/marathon",
   },
   {
@@ -242,7 +381,13 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Full marathon",
     location: "Hyderabad",
     status: "registered",
+    chapter: "peak",
     note: "First full marathon — the big one of the season.",
+    prep: [
+      "Long runs past 30 km through October",
+      "Hold ~30 km easy weeks as the base",
+      "Respect the heat — practice race-day fueling",
+    ],
     url: "https://hyderabadhitecmarathon.com/",
   },
   {
@@ -251,6 +396,7 @@ export const upcoming: UpcomingEvent[] = [
     distance: "25 km",
     location: "Kolkata",
     status: "registered",
+    chapter: "close",
     url: "https://tatasteelworld25k.procam.in/",
   },
   {
@@ -259,27 +405,24 @@ export const upcoming: UpcomingEvent[] = [
     distance: "Full marathon",
     location: "Mumbai",
     status: "registered",
+    chapter: "close",
     url: "https://tatamumbaimarathon.procam.in/",
   },
 ];
 
-// ── Standing targets — EDIT FREELY ──────────────────────────────────────────
 export type Goal = { title: string; detail: string };
 
 export const goals: Goal[] = [
   {
     title: "Half marathon under 1:50",
-    detail:
-      "Take roughly nine minutes off the current 1:59 — built on weekly tempo runs and 800m repeats to lift threshold pace.",
+    detail: "Take ~9 minutes off 1:59 — tempo runs and 800m repeats to lift threshold.",
   },
   {
     title: "First full marathon",
-    detail:
-      "Carry the half-marathon base up to 42.2 km: long runs beyond 30 km and a patient climb in weekly volume.",
+    detail: "Carry the half base to 42.2 km: long runs beyond 30 km, patient weekly volume.",
   },
   {
     title: "Run every week, all year",
-    detail:
-      "Consistency over heroics — around 30 km a week of mostly easy Zone 2 miles as the engine under everything.",
+    detail: "Consistency over heroics — ~30 km a week of mostly easy Zone 2 miles.",
   },
 ];

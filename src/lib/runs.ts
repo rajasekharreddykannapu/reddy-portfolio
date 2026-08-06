@@ -3,6 +3,9 @@
 // runs.json is generated from Strava (route maps decoded from GPS polylines,
 // elevation/heart-rate profiles from activity streams). To refresh or enrich
 // more runs, see scripts/README-strava.md.
+//
+// Photos attach separately via src/data/run-photos.json → public/running/photos/
+// and are never overwritten by a Strava refresh.
 
 import runsData from "@/data/runs.json";
 import runPhotos from "@/data/run-photos.json";
@@ -55,16 +58,19 @@ export type Run = {
 };
 
 // Merge user-supplied photos (keyed by Strava activity id) onto each run.
-// Kept separate from the generated dataset so a data refresh never wipes them.
 const photoMap = runPhotos as unknown as Record<string, string[]>;
 
-export const runs = (runsData as Run[]).map((r) => ({
+const rawRuns = (Array.isArray(runsData) ? runsData : []) as Omit<Run, "photos">[];
+
+export const runs: Run[] = rawRuns.map((r) => ({
   ...r,
   photos: Array.isArray(photoMap[r.id]) ? photoMap[r.id] : [],
 }));
 
 // Runs only (excludes the handful of walks/hikes/rides also on Strava).
 export const runsOnly = runs.filter((r) => r.sport === "Run");
+
+export const hasRunData = runsOnly.length > 0;
 
 // Shoe metadata keyed by Strava gear id.
 export const gearById: Record<string, { model: string; label: string }> = {
@@ -84,8 +90,18 @@ export type RunMonth = {
 };
 
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 // Group a list of runs into months, newest month first.
@@ -111,6 +127,28 @@ export function groupByMonth(list: Run[]): RunMonth[] {
     });
 }
 
+/** Month-by-month distance (km) from live Strava data, chronological. */
+export function monthlyDistanceKm(list: Run[] = runsOnly): { key: string; label: string; km: number; longestKm: number }[] {
+  const months = groupByMonth(list).slice().reverse();
+  return months.map((m) => ({
+    key: m.key,
+    label: m.label.replace(/ 20/, " '"),
+    km: Math.round(m.distanceKm),
+    longestKm: Math.round(Math.max(...m.runs.map((r) => r.distance / 1000), 0) * 10) / 10,
+  }));
+}
+
+/** Pick a run by Strava id, or the longest run as a fallback for hero route art. */
+export function findRunById(id: string | undefined): Run | undefined {
+  if (!id) return undefined;
+  return runs.find((r) => r.id === id);
+}
+
+export function longestRun(): Run | undefined {
+  if (runsOnly.length === 0) return undefined;
+  return runsOnly.reduce((best, r) => (r.distance > best.distance ? r : best));
+}
+
 // Formatting helpers.
 export const fmtKm = (m: number) => (m / 1000).toFixed(2);
 
@@ -120,7 +158,6 @@ export function fmtDay(iso: string): string {
 }
 
 export function fmtTimeOfDay(iso: string): string {
-  // iso is local wall-clock; read the hour directly.
   const hour = Number(iso.slice(11, 13));
   if (hour < 12) return "Morning";
   if (hour < 17) return "Afternoon";

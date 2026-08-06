@@ -294,6 +294,17 @@ body::after {
   }
 }
 
+/* Hero route plane — soft fade at the text edge on small screens. */
+.hero-route-svg {
+  transform: translate3d(8%, 4%, 0) scale(1.05);
+}
+
+@media (min-width: 640px) {
+  .hero-route-svg {
+    transform: translate3d(4%, 0, 0) scale(1.08);
+  }
+}
+
 /* Reduced-motion: hold everything still. */
 @media (prefers-reduced-motion: reduce) {
   .text-gradient,

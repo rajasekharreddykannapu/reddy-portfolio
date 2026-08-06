@@ -9,30 +9,28 @@ export default function Gear() {
   return (
     <motion.section
       id="gear"
-      className="mx-auto max-w-5xl px-6 py-20"
+      className="mx-auto max-w-5xl px-6 py-16"
       initial="hidden"
       whileInView="visible"
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      <SectionHeading index="04">The shoe rotation</SectionHeading>
-      <div className="mt-10 grid gap-5 sm:grid-cols-2">
+      <SectionHeading index="07">Shoe rotation</SectionHeading>
+      <motion.div
+        variants={fadeUp}
+        className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4"
+      >
         {gear.map((shoe) => (
-          <motion.div
-            key={shoe.model}
-            variants={fadeUp}
-            whileHover={{ y: -4 }}
-            className="card card-glow group p-6 transition-[border-color,box-shadow] duration-300 hover:border-accent hover:shadow-[0_16px_40px_-16px_var(--accent)]"
-          >
-            <div className="flex items-baseline justify-between gap-4">
-              <p className="text-gradient font-mono text-sm font-semibold">{shoe.name}</p>
-              <p className="font-mono text-sm text-muted tabular-nums">{shoe.km} km</p>
+          <div key={shoe.model} className="border-t border-border pt-4">
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="font-mono text-xs text-accent">{shoe.name}</p>
+              <p className="font-mono text-xs text-muted tabular-nums">{shoe.km} km</p>
             </div>
-            <h3 className="mt-3 text-lg font-semibold text-foreground">{shoe.model}</h3>
-            <p className="mt-2 leading-relaxed text-muted">{shoe.role}</p>
-          </motion.div>
+            <h3 className="mt-2 text-sm font-semibold text-foreground">{shoe.model}</h3>
+            <p className="mt-1 text-xs leading-relaxed text-muted">{shoe.role}</p>
+          </div>
         ))}
-      </div>
+      </motion.div>
     </motion.section>
   );
 }
