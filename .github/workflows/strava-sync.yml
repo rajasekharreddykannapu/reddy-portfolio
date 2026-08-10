@@ -1,12 +1,9 @@
 name: Strava sync
 
 on:
-  # Fired by /api/strava/webhook when Strava pushes an activity event
   repository_dispatch:
     types: [strava-activity]
-  # Manual re-sync from the Actions tab
   workflow_dispatch:
-  # Safety net if a webhook is missed
   schedule:
     - cron: "30 23 * * *" # ~05:00 IST
 
@@ -23,19 +20,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
+      # Prefer Secrets; fall back to Actions Variables in case they were added on the Variables tab.
+      - name: Check Strava credentials
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID || vars.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET || vars.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN || vars.STRAVA_REFRESH_TOKEN }}
+        run: |
+          echo "STRAVA_CLIENT_ID length: ${#STRAVA_CLIENT_ID}"
+          echo "STRAVA_CLIENT_SECRET length: ${#STRAVA_CLIENT_SECRET}"
+          echo "STRAVA_REFRESH_TOKEN length: ${#STRAVA_REFRESH_TOKEN}"
+          missing=0
+          for name in STRAVA_CLIENT_ID STRAVA_CLIENT_SECRET STRAVA_REFRESH_TOKEN; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is empty. Create a Repository secret with this exact name."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::Go to Settings → Secrets and variables → Actions → Secrets (Repository secrets). Names must be exact."
+            exit 1
+          fi
+          echo "All three credentials are present."
+
       - name: Fetch Strava activities
         env:
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID || vars.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET || vars.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN || vars.STRAVA_REFRESH_TOKEN }}
         run: node scripts/fetch-strava.mjs
 
       - name: Commit if changed

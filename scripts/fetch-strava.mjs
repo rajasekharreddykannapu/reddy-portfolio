@@ -27,11 +27,18 @@ const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 const REFRESH_TOKEN = process.env.STRAVA_REFRESH_TOKEN;
 const ENRICH_LIMIT = Number(process.env.STRAVA_ENRICH_LIMIT || 40);
 
-if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
-  console.error(
-    "Missing STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, or STRAVA_REFRESH_TOKEN",
-  );
-  process.exit(1);
+{
+  const missing = [];
+  if (!CLIENT_ID) missing.push("STRAVA_CLIENT_ID");
+  if (!CLIENT_SECRET) missing.push("STRAVA_CLIENT_SECRET");
+  if (!REFRESH_TOKEN) missing.push("STRAVA_REFRESH_TOKEN");
+  if (missing.length) {
+    console.error(`Missing: ${missing.join(", ")}`);
+    console.error(
+      "Add them as Repository secrets (Settings → Secrets and variables → Actions → Secrets), not Variables or Environments.",
+    );
+    process.exit(1);
+  }
 }
 
 async function refreshAccessToken() {
