@@ -16,7 +16,7 @@ export default function TrainingEngine() {
         viewport={viewportOnce}
         variants={staggerContainer}
       >
-        <SectionHeading index="04">The training engine</SectionHeading>
+        <SectionHeading index="05">The training engine</SectionHeading>
         <motion.p
           variants={fadeUp}
           className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"

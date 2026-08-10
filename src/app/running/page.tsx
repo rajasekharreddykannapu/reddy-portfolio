@@ -5,6 +5,7 @@ import RunningHeader from "@/components/running/RunningHeader";
 import RunningHero from "@/components/running/RunningHero";
 import Origin from "@/components/running/Origin";
 import ProgressionChart from "@/components/running/ProgressionChart";
+import JourneyCharts from "@/components/running/JourneyCharts";
 import Races from "@/components/running/Races";
 import TrainingEngine from "@/components/running/TrainingEngine";
 import Upcoming from "@/components/running/Upcoming";
@@ -44,6 +45,7 @@ export default function RunningPage() {
         <RunningHero />
         <Origin />
         <ProgressionChart />
+        <JourneyCharts />
         <Races />
         <TrainingEngine />
         <Upcoming />

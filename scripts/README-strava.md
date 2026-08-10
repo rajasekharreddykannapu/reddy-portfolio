@@ -1,5 +1,31 @@
 # Strava sync (near real-time)
 
+## Your next steps (do once)
+
+1. **Strava API app** → [strava.com/settings/api](https://www.strava.com/settings/api) → copy Client ID + Secret  
+2. **Refresh token** — authorize with `read,activity:read_all`, exchange the `code` for a `refresh_token` (commands below)  
+3. **GitHub secrets** (repo → Settings → Secrets → Actions):  
+   `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN`  
+4. **Vercel env** (Production + Preview), then redeploy:  
+   `STRAVA_VERIFY_TOKEN` (any random string),  
+   `GITHUB_DISPATCH_TOKEN` (GitHub PAT with `repo` scope),  
+   `GITHUB_REPO` = `rajasekharreddykannapu/reddy-portfolio` (optional)  
+5. **Register webhook** (after deploy is live):
+
+```powershell
+$env:STRAVA_CLIENT_ID="…"
+$env:STRAVA_CLIENT_SECRET="…"
+$env:STRAVA_VERIFY_TOKEN="…"   # same as Vercel
+$env:STRAVA_CALLBACK_URL="https://krajasekharreddy.com/api/strava/webhook"
+npm run strava:webhook
+```
+
+6. **Test** — Actions → **Strava sync** → Run workflow, or upload a run on Strava → check `/running` in ~1–2 min  
+
+**Easier alternative:** skip steps 4–5. Keep only the three GitHub secrets; the daily cron still syncs once a day. Webhooks are what make it near real-time.
+
+---
+
 When you save an activity on Strava, the site updates within a couple of minutes:
 
 ```text
@@ -15,7 +41,7 @@ Photos stay in [`src/data/run-photos.json`](../src/data/run-photos.json) and are
 
 A daily cron (~05:00 IST) is a safety net if a webhook is missed.
 
-## One-time setup
+## One-time setup (detail)
 
 ### 1. Create a Strava API application
 
@@ -68,8 +94,7 @@ Redeploy after saving env vars so `/api/strava/webhook` is live.
 
 With the site deployed and env vars set:
 
-```bash
-# PowerShell
+```powershell
 $env:STRAVA_CLIENT_ID="…"
 $env:STRAVA_CLIENT_SECRET="…"
 $env:STRAVA_VERIFY_TOKEN="…"   # must match Vercel
@@ -94,7 +119,7 @@ Strava will GET your callback to verify, then return a subscription `id`.
 
 ## Local sync
 
-```bash
+```powershell
 $env:STRAVA_CLIENT_ID="…"
 $env:STRAVA_CLIENT_SECRET="…"
 $env:STRAVA_REFRESH_TOKEN="…"
@@ -108,3 +133,4 @@ Writes [`src/data/runs.json`](../src/data/runs.json).
 - **Route maps** — decoded GPS polylines → inline SVG (`map.path` + `map.viewBox`)
 - **Elevation / HR** — streams for races, PRs, and long runs (capped per run)
 - **Stats** — distance, pace, duration, elevation, kudos, PRs, etc.
+- **Charts on /running** — monthly distance, median pace, longest-run PRs, weekly consistency days

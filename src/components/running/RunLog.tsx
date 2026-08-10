@@ -18,7 +18,7 @@ export default function RunLog() {
         viewport={viewportOnce}
         variants={staggerContainer}
       >
-        <SectionHeading index="06">Every run</SectionHeading>
+        <SectionHeading index="07">Every run</SectionHeading>
         <motion.p variants={fadeUp} className="mt-4 max-w-2xl text-muted">
           {hasRunData ? (
             <>

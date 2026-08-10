@@ -18,7 +18,7 @@ export default function Races() {
         viewport={viewportOnce}
         variants={staggerContainer}
       >
-        <SectionHeading index="03">Breakthrough</SectionHeading>
+        <SectionHeading index="04">Breakthrough</SectionHeading>
         <motion.p
           variants={fadeUp}
           className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"

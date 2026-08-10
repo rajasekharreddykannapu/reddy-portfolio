@@ -15,7 +15,7 @@ export default function Gear() {
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      <SectionHeading index="07">Shoe rotation</SectionHeading>
+      <SectionHeading index="08">Shoe rotation</SectionHeading>
       <motion.div
         variants={fadeUp}
         className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4"

@@ -138,6 +138,119 @@ export function monthlyDistanceKm(list: Run[] = runsOnly): { key: string; label:
   }));
 }
 
+/** "5:03" → seconds per km */
+export function parsePace(pace: string | null): number | null {
+  if (!pace) return null;
+  const parts = pace.split(":").map(Number);
+  if (parts.length !== 2 || parts.some((n) => Number.isNaN(n))) return null;
+  return parts[0] * 60 + parts[1];
+}
+
+export function formatPace(secPerKm: number): string {
+  const m = Math.floor(secPerKm / 60);
+  const s = Math.round(secPerKm % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function median(nums: number[]): number {
+  const s = [...nums].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+
+/** Monthly median pace (sec/km) for runs ≥ minKm — chronological. */
+export function monthlyMedianPace(
+  list: Run[] = runsOnly,
+  minKm = 5,
+): { key: string; label: string; paceSec: number; pace: string; count: number }[] {
+  const byMonth = new Map<string, number[]>();
+  for (const r of list) {
+    if (r.distance < minKm * 1000) continue;
+    const sec = parsePace(r.pace);
+    if (sec == null) continue;
+    const key = r.date.slice(0, 7);
+    if (!byMonth.has(key)) byMonth.set(key, []);
+    byMonth.get(key)!.push(sec);
+  }
+  return [...byMonth.entries()]
+    .sort((a, b) => (a[0] < b[0] ? -1 : 1))
+    .map(([key, secs]) => {
+      const [y, m] = key.split("-");
+      const paceSec = Math.round(median(secs));
+      return {
+        key,
+        label: `${MONTHS[Number(m) - 1].slice(0, 3)} '${y.slice(2)}`,
+        paceSec,
+        pace: formatPace(paceSec),
+        count: secs.length,
+      };
+    });
+}
+
+/** Chronological distance PRs (each time the longest run grows). */
+export function longestRunProgression(
+  list: Run[] = runsOnly,
+): { date: string; label: string; km: number; name: string }[] {
+  const sorted = [...list].sort((a, b) => (a.date < b.date ? -1 : 1));
+  let max = 0;
+  const out: { date: string; label: string; km: number; name: string }[] = [];
+  for (const r of sorted) {
+    const km = r.distance / 1000;
+    if (km > max + 0.05) {
+      max = km;
+      out.push({
+        date: r.date.slice(0, 10),
+        label: fmtDay(r.date),
+        km: Math.round(km * 10) / 10,
+        name: r.name,
+      });
+    }
+  }
+  return out;
+}
+
+/** ISO-week buckets for the last `weeks` weeks (oldest → newest). */
+export function weeklyConsistency(
+  list: Run[] = runsOnly,
+  weeks = 16,
+): { key: string; label: string; days: number; count: number; km: number }[] {
+  const byWeek = new Map<string, { days: Set<string>; count: number; km: number }>();
+
+  for (const r of list) {
+    const d = new Date(r.date.slice(0, 10) + "T12:00:00");
+    if (Number.isNaN(d.getTime())) continue;
+    // ISO week: Thursday-based year
+    const tmp = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const dayNum = tmp.getUTCDay() || 7;
+    tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil(((tmp.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+    const key = `${tmp.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+    if (!byWeek.has(key)) byWeek.set(key, { days: new Set(), count: 0, km: 0 });
+    const bucket = byWeek.get(key)!;
+    bucket.days.add(r.date.slice(0, 10));
+    bucket.count += 1;
+    bucket.km += r.distance / 1000;
+  }
+
+  const keys = [...byWeek.keys()].sort();
+  const recent = keys.slice(-weeks);
+  // Fill gaps so empty weeks show as 0
+  if (recent.length === 0) return [];
+
+  return recent.map((key) => {
+    const b = byWeek.get(key)!;
+    const weekNum = key.split("-W")[1];
+    return {
+      key,
+      label: `W${weekNum}`,
+      days: b.days.size,
+      count: b.count,
+      km: Math.round(b.km),
+    };
+  });
+}
+
 /** Pick a run by Strava id, or the longest run as a fallback for hero route art. */
 export function findRunById(id: string | undefined): Run | undefined {
   if (!id) return undefined;

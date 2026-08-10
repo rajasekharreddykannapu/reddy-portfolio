@@ -43,7 +43,7 @@ export default function Upcoming() {
         viewport={viewportOnce}
         variants={staggerContainer}
       >
-        <SectionHeading index="05">Path to the marathon</SectionHeading>
+        <SectionHeading index="06">Path to the marathon</SectionHeading>
         <motion.p
           variants={fadeUp}
           className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"

@@ -3,6 +3,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 const links = [
   { href: "#origin", label: "Origin" },
   { href: "#arc", label: "Arc" },
+  { href: "#charts", label: "Charts" },
   { href: "#races", label: "Breakthrough" },
   { href: "#engine", label: "Engine" },
   { href: "#next", label: "Season" },
