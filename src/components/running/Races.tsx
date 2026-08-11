@@ -29,7 +29,7 @@ export default function Races() {
         {/* Featured moment */}
         <motion.article
           variants={fadeUp}
-          className="relative mt-10 overflow-hidden border-y border-border py-12 sm:py-16"
+          className="card relative mt-10 overflow-hidden px-6 py-10 sm:px-8 sm:py-14"
         >
           <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div>

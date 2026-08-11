@@ -19,10 +19,10 @@ function buildLine(
   meta: { key: string; label: string; valueLabel: string }[],
   opts: { invert?: boolean; w?: number; h?: number; padX?: number; padY?: number } = {},
 ) {
-  const w = opts.w ?? 320;
-  const h = opts.h ?? 140;
-  const padX = opts.padX ?? 16;
-  const padY = opts.padY ?? 18;
+  const w = opts.w ?? 640;
+  const h = opts.h ?? 180;
+  const padX = opts.padX ?? 20;
+  const padY = opts.padY ?? 22;
   const invert = opts.invert ?? false;
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -50,18 +50,20 @@ function buildLine(
 
 function ChartCard({
   title,
-  subtitle,
+  kicker,
   children,
+  className = "",
 }: {
   title: string;
-  subtitle: string;
+  kicker: string;
   children: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface/50 p-4 sm:p-5">
-      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-muted">{subtitle}</p>
-      <div className="mt-4">{children}</div>
+    <div className={`card overflow-hidden p-5 sm:p-6 ${className}`}>
+      <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted">{kicker}</p>
+      <h3 className="mt-1.5 text-lg font-semibold text-foreground">{title}</h3>
+      <div className="mt-5">{children}</div>
     </div>
   );
 }
@@ -69,17 +71,15 @@ function ChartCard({
 function LineChart({
   chart,
   ariaLabel,
-  invertStroke,
 }: {
   chart: ReturnType<typeof buildLine>;
   ariaLabel: string;
-  invertStroke?: boolean;
 }) {
   return (
     <>
       <svg
         viewBox={chart.viewBox}
-        className="h-36 w-full"
+        className="h-44 w-full sm:h-52"
         preserveAspectRatio="none"
         role="img"
         aria-label={ariaLabel}
@@ -89,8 +89,8 @@ function LineChart({
           return (
             <line
               key={t}
-              x1="16"
-              x2={chart.w - 16}
+              x1="20"
+              x2={chart.w - 20}
               y1={y}
               y2={y}
               stroke="var(--border)"
@@ -98,13 +98,13 @@ function LineChart({
             />
           );
         })}
-        <path d={chart.area} fill="var(--accent)" opacity="0.1" />
+        <path d={chart.area} fill="var(--accent)" opacity="0.12" />
         <path
           className="chart-line"
           pathLength={1}
           d={chart.line}
-          stroke={invertStroke ? "var(--accent-2)" : "var(--accent)"}
-          strokeWidth="2.25"
+          stroke="var(--accent)"
+          strokeWidth="2.5"
           strokeLinejoin="round"
           strokeLinecap="round"
           fill="none"
@@ -115,21 +115,21 @@ function LineChart({
             key={p.key}
             cx={p.x}
             cy={p.y}
-            r="3.5"
+            r="4"
             fill="var(--accent)"
             stroke="var(--surface)"
-            strokeWidth="1.5"
+            strokeWidth="2"
           />
         ))}
       </svg>
       <div
-        className="mt-1 grid gap-1"
-        style={{ gridTemplateColumns: `repeat(${Math.min(chart.points.length, 8)}, minmax(0, 1fr))` }}
+        className="mt-2 grid gap-1"
+        style={{ gridTemplateColumns: `repeat(${chart.points.length}, minmax(0, 1fr))` }}
       >
         {chart.points.map((p) => (
-          <div key={p.key} className="text-center">
-            <p className="font-mono text-[0.6rem] text-muted truncate">{p.label}</p>
-            <p className="mt-0.5 font-mono text-[0.65rem] font-semibold tabular-nums text-foreground">
+          <div key={p.key} className="min-w-0 text-center">
+            <p className="truncate font-mono text-[0.65rem] text-muted">{p.label}</p>
+            <p className="mt-0.5 font-mono text-xs font-semibold tabular-nums text-foreground">
               {p.valueLabel}
             </p>
           </div>
@@ -145,18 +145,18 @@ function BarChart({
   bars: { key: string; label: string; value: number; max: number; valueLabel: string }[];
 }) {
   return (
-    <div className="flex h-36 items-end gap-1.5 px-1">
+    <div className="flex h-44 items-end gap-2 px-1 sm:h-52">
       {bars.map((b) => {
-        const h = Math.max(8, (b.value / b.max) * 100);
+        const h = Math.max(10, (b.value / b.max) * 100);
         return (
-          <div key={b.key} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1">
-            <span className="font-mono text-[0.6rem] tabular-nums text-muted">{b.valueLabel}</span>
+          <div key={b.key} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1.5">
+            <span className="font-mono text-[0.65rem] tabular-nums text-muted">{b.valueLabel}</span>
             <div
-              className="w-full rounded-t-sm bg-accent/80 transition-colors hover:bg-accent"
+              className="w-full rounded-t-md bg-gradient-to-t from-accent to-accent-2/80"
               style={{ height: `${h}%` }}
-              title={`${b.label}: ${b.valueLabel}`}
+              title={`${b.label}: ${b.valueLabel} days`}
             />
-            <span className="font-mono text-[0.55rem] text-muted truncate w-full text-center">
+            <span className="w-full truncate text-center font-mono text-[0.6rem] text-muted">
               {b.label}
             </span>
           </div>
@@ -170,32 +170,38 @@ export default function JourneyCharts() {
   const paceMonths = useMemo(() => {
     if (!hasRunData) {
       return [
-        { key: "2026-02", label: "Feb '26", paceSec: 404, pace: "6:44", count: 16 },
-        { key: "2026-03", label: "Mar '26", paceSec: 391, pace: "6:31", count: 13 },
-        { key: "2026-05", label: "May '26", paceSec: 397, pace: "6:37", count: 12 },
-        { key: "2026-06", label: "Jun '26", paceSec: 399, pace: "6:39", count: 19 },
-        { key: "2026-07", label: "Jul '26", paceSec: 409, pace: "6:49", count: 21 },
+        { key: "2026-02", label: "Feb", paceSec: 404, pace: "6:44", count: 16 },
+        { key: "2026-03", label: "Mar", paceSec: 391, pace: "6:31", count: 13 },
+        { key: "2026-05", label: "May", paceSec: 397, pace: "6:37", count: 12 },
+        { key: "2026-06", label: "Jun", paceSec: 399, pace: "6:39", count: 19 },
+        { key: "2026-07", label: "Jul", paceSec: 409, pace: "6:49", count: 21 },
       ];
     }
-    return monthlyMedianPace();
+    return monthlyMedianPace().map((m) => ({
+      ...m,
+      label: m.label.split(" ")[0],
+    }));
   }, []);
 
   const longest = useMemo(() => {
     if (!hasRunData) {
       return [
-        { date: "2026-02-01", label: "1 Feb", km: 8, name: "First real run" },
-        { date: "2026-02-08", label: "8 Feb", km: 10, name: "First 10K" },
-        { date: "2026-02-15", label: "15 Feb", km: 14.5, name: "Long run" },
-        { date: "2026-06-07", label: "7 Jun", km: 21.1, name: "Telangana Run" },
-        { date: "2026-08-02", label: "2 Aug", km: 21.3, name: "NMDC dry run" },
+        { date: "2026-02-01", label: "Feb", km: 8, name: "First real run" },
+        { date: "2026-02-08", label: "Feb", km: 10, name: "First 10K" },
+        { date: "2026-02-15", label: "Feb", km: 14.5, name: "Long run" },
+        { date: "2026-06-07", label: "Jun", km: 21.1, name: "Telangana Run" },
+        { date: "2026-08-02", label: "Aug", km: 21.3, name: "NMDC dry run" },
       ];
     }
-    return longestRunProgression();
+    return longestRunProgression().map((p) => ({
+      ...p,
+      label: p.label.replace(/^\d+\s/, ""),
+    }));
   }, []);
 
   const weeks = useMemo(() => {
     if (!hasRunData) return [];
-    return weeklyConsistency(undefined, 12);
+    return weeklyConsistency(undefined, 10);
   }, []);
 
   const paceChart = useMemo(
@@ -207,7 +213,7 @@ export default function JourneyCharts() {
           label: m.label,
           valueLabel: m.pace,
         })),
-        { invert: true }, // faster (lower sec) = higher on chart
+        { invert: true, w: 640, h: 180 },
       ),
     [paceMonths],
   );
@@ -221,6 +227,7 @@ export default function JourneyCharts() {
           label: p.label,
           valueLabel: `${p.km}`,
         })),
+        { w: 640, h: 180 },
       ),
     [longest],
   );
@@ -230,7 +237,7 @@ export default function JourneyCharts() {
     const max = Math.max(...weeks.map((w) => w.days), 1);
     return weeks.map((w) => ({
       key: w.key,
-      label: w.label,
+      label: w.label.replace(/^W0?/, "W"),
       value: w.days,
       max,
       valueLabel: String(w.days),
@@ -245,81 +252,65 @@ export default function JourneyCharts() {
       : null;
 
   return (
-    <section id="charts" className="mx-auto max-w-5xl px-6 py-20">
+    <section id="charts" className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={viewportOnce}
         variants={staggerContainer}
       >
-        <SectionHeading index="03">More of the proof</SectionHeading>
+        <SectionHeading index="03">How it compounds</SectionHeading>
         <motion.p
           variants={fadeUp}
           className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
         >
-          Pace, longest run, and weekly consistency — the same story, three angles.
+          Distance first — then pace, then the habit of showing up.
         </motion.p>
 
-        <motion.div
-          variants={fadeUp}
-          className="mt-10 grid gap-5 lg:grid-cols-3"
-        >
+        <motion.div variants={fadeUp} className="mt-10 grid gap-5 lg:grid-cols-5">
           <ChartCard
-            title="Pace trend"
-            subtitle={`Monthly median (≥5 km). Best month ${bestPace.pace}/km · ${bestPace.label}.`}
+            className="lg:col-span-3"
+            kicker={`Best month ${bestPace.pace}/km`}
+            title="Median pace, month by month"
           >
-            <LineChart
-              chart={paceChart}
-              ariaLabel="Monthly median pace chart"
-              invertStroke
-            />
+            <LineChart chart={paceChart} ariaLabel="Monthly median pace chart" />
           </ChartCard>
 
           <ChartCard
-            title="Longest run"
-            subtitle={
-              peakLong
-                ? `Distance PRs from ${longest[0]?.km ?? "—"} km → ${peakLong.km} km.`
-                : "How far the long run has stretched."
-            }
-          >
-            <LineChart chart={longestChart} ariaLabel="Longest run progression chart" />
-          </ChartCard>
-
-          <ChartCard
+            className="lg:col-span-2"
+            kicker={avgDays ? `${avgDays} days / week` : "Days out"}
             title="Weekly consistency"
-            subtitle={
-              avgDays
-                ? `Last ${weeks.length} weeks · avg ${avgDays} days out per week.`
-                : "Days run each week — showing up, not heroics."
-            }
           >
             {weekBars ? (
               <BarChart bars={weekBars} />
             ) : (
-              <p className="py-10 text-center font-mono text-xs text-muted">
+              <p className="py-16 text-center font-mono text-xs text-muted">
                 Sync Strava to unlock weekly bars
               </p>
             )}
           </ChartCard>
-        </motion.div>
 
-        {peakLong && (
-          <motion.p
-            variants={fadeUp}
-            className="mt-6 font-mono text-xs text-muted"
+          <ChartCard
+            className="lg:col-span-5"
+            kicker={peakLong ? `${longest[0]?.km ?? "—"} → ${peakLong.km} km` : "Distance PRs"}
+            title="Longest run, stretching out"
           >
-            Latest distance PR · {peakLong.label} · {peakLong.name} ·{" "}
-            <span className="text-accent">{peakLong.km} km</span>
-            {paceMonths.length > 0 && (
-              <>
-                {" "}
-                · Fastest month median ·{" "}
-                <span className="text-accent">{formatPace(bestPace.paceSec)}/km</span>
-              </>
+            <LineChart chart={longestChart} ariaLabel="Longest run progression chart" />
+            {peakLong && (
+              <p className="mt-4 font-mono text-xs text-muted">
+                Latest PR · {peakLong.name} ·{" "}
+                <span className="text-accent">{peakLong.km} km</span>
+                {paceMonths.length > 0 && (
+                  <>
+                    {" "}
+                    · Fastest median ·{" "}
+                    <span className="text-accent">{formatPace(bestPace.paceSec)}/km</span>
+                  </>
+                )}
+              </p>
             )}
-          </motion.p>
-        )}
+          </ChartCard>
+        </motion.div>
       </motion.div>
     </section>
   );

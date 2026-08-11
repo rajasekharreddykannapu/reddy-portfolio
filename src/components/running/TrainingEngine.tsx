@@ -52,7 +52,7 @@ export default function TrainingEngine() {
               return (
                 <div
                   key={run.title}
-                  className="flex overflow-hidden rounded-2xl border border-border bg-surface/40 transition-colors hover:border-accent/40"
+                  className="card card-glow flex overflow-hidden transition-colors hover:border-accent/40"
                 >
                   <div className="relative w-[38%] shrink-0 bg-surface-2 sm:w-36">
                     <RouteMap

@@ -294,14 +294,14 @@ body::after {
   }
 }
 
-/* Hero route plane — soft fade at the text edge on small screens. */
+/* Hero route plane — real GPS tracks sit slightly off-center. */
 .hero-route-svg {
-  transform: translate3d(8%, 4%, 0) scale(1.05);
+  transform: translate3d(2%, 6%, 0) scale(1.18);
 }
 
 @media (min-width: 640px) {
   .hero-route-svg {
-    transform: translate3d(4%, 0, 0) scale(1.08);
+    transform: translate3d(6%, 2%, 0) scale(1.28);
   }
 }
 

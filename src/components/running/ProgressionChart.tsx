@@ -73,7 +73,7 @@ export default function ProgressionChart() {
             </p>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-surface/50 px-2 pt-6 pb-2 sm:px-4">
+          <div className="card relative overflow-hidden px-2 pt-6 pb-2 sm:px-4">
             <svg
               viewBox={chart.viewBox}
               className="h-48 w-full sm:h-56"

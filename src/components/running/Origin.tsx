@@ -23,12 +23,12 @@ export default function Origin() {
           and a simple rule: show up.
         </motion.p>
 
-        <ol className="relative mt-12 space-y-0 pl-0 sm:pl-4">
+        <ol className="relative mt-12 space-y-0 border-l border-border pl-6 sm:pl-8">
           {originBeats.map((beat, i) => (
             <motion.li
               key={beat.title}
               variants={fadeUp}
-              className="relative grid gap-4 border-t border-border py-10 sm:grid-cols-[7rem_1fr] sm:gap-10"
+              className="relative grid gap-3 py-8 first:pt-0 last:pb-0 sm:grid-cols-[7.5rem_1fr] sm:gap-10"
             >
               <div className="flex items-baseline gap-3 sm:flex-col sm:gap-1">
                 <span className="font-mono text-xs text-muted">{beat.date}</span>
@@ -42,8 +42,9 @@ export default function Origin() {
                 <div className="flex items-center gap-3">
                   <span
                     aria-hidden
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-accent/40 font-mono text-[0.65rem] text-accent"
-                  >
+                    className="absolute -left-[1.55rem] top-9 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-background sm:-left-[2.05rem] sm:top-9"
+                  />
+                  <span className="font-mono text-[0.65rem] text-accent">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-xl font-semibold text-foreground">{beat.title}</h3>

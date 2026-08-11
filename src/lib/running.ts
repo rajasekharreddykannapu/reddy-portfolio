@@ -18,7 +18,7 @@ export const runningProfile = {
   stravaUrl: "https://www.strava.com/athletes/202080481",
   since: "Logging since Jan 2026",
   /** Strava activity id for hero route art when runs.json is populated. */
-  heroRunId: undefined as string | undefined,
+  heroRunId: "18817317833",
 };
 
 export type RunStat = { value: string; label: string; hint?: string };
@@ -210,6 +210,7 @@ export const races: Race[] = [
     distance: "10K",
     time: "55:17",
     note: "First bib",
+    runId: "17895204432",
   },
   {
     date: "26 Apr 2026",
@@ -217,6 +218,7 @@ export const races: Race[] = [
     distance: "10K",
     time: "59:25",
     note: "Heat lesson",
+    runId: "18259820429",
   },
   {
     date: "24 May 2026",
@@ -225,6 +227,7 @@ export const races: Race[] = [
     time: "51:11",
     note: "Personal best",
     story: "Four minutes faster than the same distance a month before — 5:03/km in brutal summer heat.",
+    runId: "18628386726",
   },
   {
     date: "7 Jun 2026",
@@ -235,6 +238,7 @@ export const races: Race[] = [
     featured: true,
     story:
       "From a body that couldn't finish a park loop to 21.1 km under two hours — five months, one stubborn habit, and a first half that broke the tape.",
+    runId: "18817317833",
   },
 ];
 
@@ -290,19 +294,22 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     distance: "10.0 km",
     pace: "5:03",
     note: "10K PB",
+    runId: "18628386726",
   },
   {
     title: "Telangana Run",
     date: "7 Jun 2026",
     distance: "21.1 km",
-    pace: "5:39",
+    pace: "5:37",
     note: "First half · sub-2",
+    runId: "18817317833",
   },
   {
     title: "NMDC dry run",
     date: "2 Aug 2026",
     distance: "21.3 km",
     note: "Longest · 254 m ↑",
+    runId: "19563722110",
   },
 ];
 

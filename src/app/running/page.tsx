@@ -44,13 +44,19 @@ export default function RunningPage() {
       <main className="flex-1">
         <RunningHero />
         <Origin />
-        <ProgressionChart />
-        <JourneyCharts />
+        <div className="border-y border-border/70 bg-surface-2/55">
+          <ProgressionChart />
+          <JourneyCharts />
+        </div>
         <Races />
-        <TrainingEngine />
+        <div className="border-y border-border/70 bg-surface-2/55">
+          <TrainingEngine />
+        </div>
         <Upcoming />
-        <RunLog />
-        <Gear />
+        <div className="border-t border-border/70 bg-surface-2/55">
+          <RunLog />
+          <Gear />
+        </div>
       </main>
       <Footer />
     </>

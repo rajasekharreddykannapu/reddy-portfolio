@@ -25,80 +25,74 @@ export default function RunningHero() {
 
   return (
     <>
-      <section
-        id="top"
-        className="relative overflow-hidden border-b border-border/60"
-      >
+      <section id="top" className="relative min-h-[78vh] overflow-hidden">
         <div aria-hidden className="hero-glow" />
 
-        {/* Full-bleed route plane — dominant visual, edge-anchored */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 w-full sm:w-[62%] lg:w-[58%]"
+          className="pointer-events-none absolute inset-0 sm:inset-y-0 sm:left-[28%] sm:right-[-8%]"
         >
           <svg
             viewBox={map.viewBox}
-            className="hero-route-svg h-full w-full opacity-90"
+            className="hero-route-svg h-full w-full opacity-80"
             fill="none"
-            preserveAspectRatio="xMaxYMid slice"
+            preserveAspectRatio="xMidYMid slice"
           >
             <path
               d={map.path}
               stroke="var(--accent)"
-              strokeWidth="14"
+              strokeWidth="12"
               strokeLinejoin="round"
               strokeLinecap="round"
-              opacity="0.12"
+              opacity="0.14"
             />
             <motion.path
               d={map.path}
               stroke="var(--accent)"
-              strokeWidth="3.5"
+              strokeWidth="2.8"
               strokeLinejoin="round"
               strokeLinecap="round"
-              initial={reduce ? false : { pathLength: 0, opacity: 0.4 }}
+              initial={reduce ? false : { pathLength: 0, opacity: 0.35 }}
               animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+              transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             />
           </svg>
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent sm:via-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/20 sm:via-background/55 sm:to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
         </div>
 
         <motion.div
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="relative z-10 mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-24 sm:pb-28"
+          className="relative z-10 mx-auto flex max-w-5xl flex-col justify-end px-6 pt-20 pb-16 sm:min-h-[78vh] sm:pt-28 sm:pb-24"
         >
           <motion.p
             variants={fadeUp}
-            className="text-sheen text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl"
+            className="inline-flex items-center gap-2 font-mono text-sm text-accent"
           >
-            {runningProfile.brand}
-          </motion.p>
-
-          <motion.p
-            variants={fadeUp}
-            className="mt-3 max-w-xl font-mono text-sm text-accent sm:text-base"
-          >
-            {runningProfile.name}
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            </span>
+            {runningProfile.kicker}
           </motion.p>
 
           <motion.h1
             variants={fadeUp}
-            className="mt-8 max-w-xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+            className="text-sheen mt-5 max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl"
           >
             {runningProfile.headline}
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
-            className="mt-4 max-w-md text-base leading-relaxed text-muted sm:text-lg"
+            className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg"
           >
             {runningProfile.intro}
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-9 flex flex-wrap gap-3">
+          <motion.div variants={fadeUp} className="mt-9 flex flex-wrap items-center gap-3">
             <motion.a
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
@@ -116,21 +110,14 @@ export default function RunningHero() {
               <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
               Strava
             </a>
+            <span className="font-mono text-xs text-muted">{runningProfile.since}</span>
           </motion.div>
-
-          <motion.p
-            variants={fadeUp}
-            className="mt-6 font-mono text-xs text-muted"
-          >
-            {runningProfile.since}
-          </motion.p>
         </motion.div>
       </section>
 
-      {/* Below-fold: by the numbers */}
       <section
         id="stats"
-        className="mx-auto max-w-5xl px-6 py-14 sm:py-16"
+        className="mx-auto max-w-5xl px-6 pb-6 pt-2 sm:pb-8"
         aria-label="By the numbers"
       >
         <motion.div
@@ -139,16 +126,9 @@ export default function RunningHero() {
           viewport={{ once: true, margin: "-60px" }}
           variants={staggerContainer}
         >
-          <motion.p
-            variants={fadeUp}
-            className="font-mono text-xs uppercase tracking-widest text-muted"
-          >
-            By the numbers
-          </motion.p>
-
           <motion.dl
             variants={fadeUp}
-            className="card gradient-border mt-5 grid grid-cols-2 divide-border overflow-hidden sm:grid-cols-4 sm:divide-x"
+            className="card gradient-border grid grid-cols-2 divide-border overflow-hidden sm:grid-cols-4 sm:divide-x"
           >
             {runStats.map((stat) => (
               <div key={stat.label} className="px-5 py-6">
@@ -175,11 +155,8 @@ export default function RunningHero() {
             className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"
           >
             {records.map((rec) => (
-              <li
-                key={rec.label}
-                className="border-b border-border px-1 py-3 sm:px-2"
-              >
-                <p className="font-mono text-lg font-semibold text-foreground tabular-nums">
+              <li key={rec.label} className="card card-glow px-4 py-4">
+                <p className="font-mono text-lg font-semibold tabular-nums text-foreground">
                   {rec.value}
                 </p>
                 <p className="mt-0.5 text-sm font-medium text-accent">{rec.label}</p>
