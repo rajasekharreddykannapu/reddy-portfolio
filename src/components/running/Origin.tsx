@@ -7,7 +7,7 @@ import SectionHeading from "@/components/SectionHeading";
 
 export default function Origin() {
   return (
-    <section id="origin" className="mx-auto max-w-5xl px-6 py-20">
+    <section id="origin" className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="visible"

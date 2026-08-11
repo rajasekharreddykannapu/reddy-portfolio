@@ -262,6 +262,67 @@ export function longestRun(): Run | undefined {
   return runsOnly.reduce((best, r) => (r.distance > best.distance ? r : best));
 }
 
+export type HeadlineStat = { value: string; label: string; hint?: string };
+export type HeadlineRecord = { value: string; label: string; note: string };
+
+/** Live totals from runs.json — used by the hero so Strava syncs update the page. */
+export function headlineStats(list: Run[] = runsOnly): HeadlineStat[] {
+  if (list.length === 0) return [];
+
+  const km = list.reduce((s, r) => s + r.distance, 0) / 1000;
+  const elev = Math.round(list.reduce((s, r) => s + r.elevationGain, 0));
+  const hours = list.reduce((s, r) => s + r.movingTime, 0) / 3600;
+  const days = new Set(list.map((r) => r.date.slice(0, 10))).size;
+  const dates = list.map((r) => r.date.slice(0, 10)).sort();
+  const spanMs =
+    new Date(`${dates[dates.length - 1]}T12:00:00`).getTime() -
+    new Date(`${dates[0]}T12:00:00`).getTime();
+  const weeks = Math.max(1, spanMs / (7 * 86400000));
+  const kmPerWeek = Math.round(km / weeks);
+
+  return [
+    {
+      value: `${Math.round(km)} km`,
+      label: "Distance run",
+      hint: `Across ${list.length} runs`,
+    },
+    {
+      value: `${list.length}`,
+      label: "Runs logged",
+      hint: `${days} different days out`,
+    },
+    {
+      value: `${Math.round(hours)} h`,
+      label: "Time on feet",
+      hint: `~${kmPerWeek} km every week`,
+    },
+    {
+      value: `${elev.toLocaleString("en-US")} m`,
+      label: "Elevation climbed",
+      hint: "≈ half of Everest",
+    },
+  ];
+}
+
+/** Overlay the live longest run onto the static PR strip. */
+export function withLiveLongest(
+  records: HeadlineRecord[],
+  list: Run[] = runsOnly,
+): HeadlineRecord[] {
+  const longest = longestRun();
+  if (!longest) return records;
+  const km = (longest.distance / 1000).toFixed(1);
+  return records.map((rec) =>
+    rec.label === "Longest run"
+      ? {
+          value: `${km} km`,
+          label: rec.label,
+          note: `${longest.name} · ${fmtDay(longest.date)}`,
+        }
+      : rec,
+  );
+}
+
 // Formatting helpers.
 export const fmtKm = (m: number) => (m / 1000).toFixed(2);
 

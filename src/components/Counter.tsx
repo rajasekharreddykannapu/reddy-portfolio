@@ -14,7 +14,7 @@ function parse(value: string) {
   };
 }
 
-export default function Counter({ value }: { value: string }) {
+export default function Counter({ value, className = "" }: { value: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduce = useReducedMotion();
@@ -36,11 +36,15 @@ export default function Counter({ value }: { value: string }) {
   }, [inView, reduce, parsed]);
 
   if (!parsed) {
-    return <span ref={ref}>{value}</span>;
+    return (
+      <span ref={ref} className={className}>
+        {value}
+      </span>
+    );
   }
 
   return (
-    <span ref={ref} className="tabular-nums">
+    <span ref={ref} className={`tabular-nums ${className}`.trim()}>
       {parsed.prefix}
       {typeof display === "number" ? display.toLocaleString() : display}
       {parsed.suffix}

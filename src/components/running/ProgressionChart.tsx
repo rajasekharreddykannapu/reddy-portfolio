@@ -47,7 +47,7 @@ export default function ProgressionChart() {
   const total = months.reduce((s, m) => s + m.km, 0);
 
   return (
-    <section id="arc" className="mx-auto max-w-5xl px-6 py-20">
+    <section id="arc" className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="visible"

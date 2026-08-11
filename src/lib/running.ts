@@ -23,6 +23,7 @@ export const runningProfile = {
 
 export type RunStat = { value: string; label: string; hint?: string };
 
+// Fallback only — the hero prefers live totals from runs.json (see headlineStats).
 export const runStats: RunStat[] = [
   { value: "683 km", label: "Distance run", hint: "Across 88 runs" },
   { value: "88", label: "Runs logged", hint: "80 different days out" },

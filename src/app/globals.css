@@ -294,16 +294,6 @@ body::after {
   }
 }
 
-/* Hero route plane — real GPS tracks sit slightly off-center. */
-.hero-route-svg {
-  transform: translate3d(2%, 6%, 0) scale(1.18);
-}
-
-@media (min-width: 640px) {
-  .hero-route-svg {
-    transform: translate3d(6%, 2%, 0) scale(1.28);
-  }
-}
 
 /* Reduced-motion: hold everything still. */
 @media (prefers-reduced-motion: reduce) {

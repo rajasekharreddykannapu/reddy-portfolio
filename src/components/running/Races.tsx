@@ -66,9 +66,9 @@ export default function Races() {
               )}
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-surface-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#0b0e14]">
               {route ? (
-                <RouteMap map={route} className="h-full w-full p-6" />
+                <RouteMap map={route} tone="dark" className="h-full w-full p-6" />
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
                   <svg

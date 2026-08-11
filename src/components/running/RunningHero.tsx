@@ -7,66 +7,43 @@ import {
   records,
   heroRouteSilhouette,
 } from "@/lib/running";
-import { findRunById, longestRun } from "@/lib/runs";
+import {
+  findRunById,
+  longestRun,
+  hasRunData,
+  headlineStats,
+  withLiveLongest,
+} from "@/lib/runs";
 import { staggerContainer, fadeUp } from "@/lib/motion";
 import Counter from "@/components/Counter";
+import RouteMap from "./RouteMap";
 
-function resolveHeroMap() {
+function resolveHeroRun() {
   const fromId = findRunById(runningProfile.heroRunId);
-  if (fromId?.map) return fromId.map;
+  if (fromId?.map) return fromId;
   const longest = longestRun();
-  if (longest?.map) return longest.map;
-  return heroRouteSilhouette;
+  if (longest?.map) return longest;
+  return null;
 }
 
 export default function RunningHero() {
   const reduce = useReducedMotion();
-  const map = resolveHeroMap();
+  const heroRun = resolveHeroRun();
+  const map = heroRun?.map ?? heroRouteSilhouette;
+  const stats = hasRunData ? headlineStats() : runStats;
+  const prs = hasRunData ? withLiveLongest(records) : records;
 
   return (
-    <>
-      <section id="top" className="relative min-h-[78vh] overflow-hidden">
-        <div aria-hidden className="hero-glow" />
+    <section id="top" className="relative overflow-hidden">
+      <div aria-hidden className="hero-glow opacity-40" />
 
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 sm:inset-y-0 sm:left-[28%] sm:right-[-8%]"
-        >
-          <svg
-            viewBox={map.viewBox}
-            className="hero-route-svg h-full w-full opacity-80"
-            fill="none"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <path
-              d={map.path}
-              stroke="var(--accent)"
-              strokeWidth="12"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              opacity="0.14"
-            />
-            <motion.path
-              d={map.path}
-              stroke="var(--accent)"
-              strokeWidth="2.8"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              initial={reduce ? false : { pathLength: 0, opacity: 0.35 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            />
-          </svg>
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/20 sm:via-background/55 sm:to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
-        </div>
-
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="relative z-10 mx-auto flex max-w-5xl flex-col justify-end px-6 pt-20 pb-16 sm:min-h-[78vh] sm:pt-28 sm:pb-24"
-        >
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="relative z-10 mx-auto grid max-w-5xl items-center gap-10 px-6 pt-14 pb-10 sm:pt-20 sm:pb-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14"
+      >
+        <div>
           <motion.p
             variants={fadeUp}
             className="inline-flex items-center gap-2 font-mono text-sm text-accent"
@@ -80,22 +57,22 @@ export default function RunningHero() {
 
           <motion.h1
             variants={fadeUp}
-            className="text-sheen mt-5 max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl"
+            className="text-sheen mt-4 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
           >
             {runningProfile.headline}
           </motion.h1>
 
           <motion.p
             variants={fadeUp}
-            className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg"
+            className="mt-5 max-w-md text-base leading-relaxed text-muted sm:text-lg"
           >
             {runningProfile.intro}
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.a
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={reduce ? undefined : { scale: 1.04 }}
+              whileTap={reduce ? undefined : { scale: 0.97 }}
               href="#origin"
               className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground shadow-[0_8px_30px_-8px_var(--accent)]"
             >
@@ -110,62 +87,68 @@ export default function RunningHero() {
               <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
               Strava
             </a>
-            <span className="font-mono text-xs text-muted">{runningProfile.since}</span>
           </motion.div>
-        </motion.div>
-      </section>
+        </div>
 
-      <section
-        id="stats"
-        className="mx-auto max-w-5xl px-6 pb-6 pt-2 sm:pb-8"
-        aria-label="By the numbers"
-      >
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          variants={staggerContainer}
-        >
-          <motion.dl
-            variants={fadeUp}
-            className="card gradient-border grid grid-cols-2 divide-border overflow-hidden sm:grid-cols-4 sm:divide-x"
-          >
-            {runStats.map((stat) => (
-              <div key={stat.label} className="px-5 py-6">
-                <dt className="sr-only">{stat.label}</dt>
-                <dd>
-                  <span className="text-gradient block text-2xl font-semibold tracking-tight sm:text-3xl">
-                    <Counter value={stat.value} />
-                  </span>
-                  <span className="mt-1 block text-sm font-medium text-foreground">
-                    {stat.label}
-                  </span>
-                  {stat.hint && (
-                    <span className="mt-0.5 block text-xs leading-snug text-muted">
-                      {stat.hint}
-                    </span>
-                  )}
-                </dd>
-              </div>
-            ))}
-          </motion.dl>
-
-          <motion.ul
-            variants={fadeUp}
-            className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"
-          >
-            {records.map((rec) => (
-              <li key={rec.label} className="card card-glow px-4 py-4">
-                <p className="font-mono text-lg font-semibold tabular-nums text-foreground">
-                  {rec.value}
+        <motion.div variants={fadeUp} className="relative">
+          <div className="relative overflow-hidden rounded-3xl bg-[#0b0e14] shadow-[0_24px_80px_-32px_rgba(0,0,0,0.55)]">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-40"
+              style={{
+                background:
+                  "radial-gradient(80% 60% at 70% 20%, rgba(251,191,36,0.18), transparent 60%)",
+              }}
+            />
+            <RouteMap map={map} tone="dark" className="aspect-[5/4] h-auto w-full p-8 sm:p-10" />
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/70 to-transparent px-5 pb-5 pt-16">
+              <div>
+                <p className="font-mono text-[0.65rem] uppercase tracking-widest text-amber-200/70">
+                  Featured route
                 </p>
-                <p className="mt-0.5 text-sm font-medium text-accent">{rec.label}</p>
-                <p className="mt-0.5 text-xs leading-snug text-muted">{rec.note}</p>
-              </li>
-            ))}
-          </motion.ul>
+                <p className="mt-1 text-sm font-medium text-amber-50">
+                  {heroRun?.name ?? "Long run"}
+                </p>
+              </div>
+              <p className="font-mono text-xs tabular-nums text-amber-200/80">
+                {heroRun
+                  ? `${(heroRun.distance / 1000).toFixed(1)} km`
+                  : runningProfile.since}
+              </p>
+            </div>
+          </div>
         </motion.div>
-      </section>
-    </>
+      </motion.div>
+
+      <div id="stats" className="mx-auto max-w-5xl px-6 pb-12" aria-label="By the numbers">
+        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="bg-surface px-4 py-5 sm:px-5">
+              <dt className="text-xs font-medium text-muted">{stat.label}</dt>
+              <dd className="mt-1">
+                <Counter
+                  value={stat.value}
+                  className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+                />
+                {stat.hint && (
+                  <span className="mt-1 block text-xs leading-snug text-muted">{stat.hint}</span>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <ul className="mt-3 flex gap-6 overflow-x-auto border-t border-border pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {prs.map((rec) => (
+            <li key={rec.label} className="min-w-[9.5rem] shrink-0">
+              <p className="font-mono text-base font-semibold tabular-nums text-foreground">
+                {rec.value}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-accent">{rec.label}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }

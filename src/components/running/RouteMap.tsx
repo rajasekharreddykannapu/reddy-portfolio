@@ -1,14 +1,17 @@
 import type { RunMap } from "@/lib/runs";
 
-// Inline SVG route drawn from a decoded GPS polyline. No external map tiles —
-// works inside the static export and respects the theme accent colour.
 export default function RouteMap({
   map,
   className = "",
+  tone = "light",
 }: {
   map: RunMap | null;
   className?: string;
+  tone?: "light" | "dark";
 }) {
+  const stroke = tone === "dark" ? "#fbbf24" : "var(--accent)";
+  const startStroke = tone === "dark" ? "#0c0f14" : "var(--surface)";
+
   if (!map) {
     return (
       <div
@@ -33,21 +36,20 @@ export default function RouteMap({
       preserveAspectRatio="xMidYMid meet"
       aria-label="Route map"
     >
-      {/* soft under-glow */}
       <path
         d={map.path}
-        stroke="var(--accent)"
-        strokeWidth="7"
+        stroke={stroke}
+        strokeWidth="8"
         strokeLinejoin="round"
         strokeLinecap="round"
-        opacity="0.18"
+        opacity={tone === "dark" ? 0.22 : 0.18}
       />
       <path
         className="route-line"
         pathLength={1}
         d={map.path}
-        stroke="var(--accent)"
-        strokeWidth="3"
+        stroke={stroke}
+        strokeWidth="2.6"
         strokeLinejoin="round"
         strokeLinecap="round"
       />
@@ -56,8 +58,8 @@ export default function RouteMap({
           cx={start[1]}
           cy={start[2]}
           r="4.5"
-          fill="var(--accent)"
-          stroke="var(--surface)"
+          fill={stroke}
+          stroke={startStroke}
           strokeWidth="2"
         />
       )}
