@@ -60,9 +60,9 @@ function ChartCard({
   className?: string;
 }) {
   return (
-    <div className={`card overflow-hidden p-5 sm:p-6 ${className}`}>
-      <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted">{kicker}</p>
-      <h3 className="mt-1.5 text-lg font-semibold text-foreground">{title}</h3>
+    <div className={`overflow-hidden rounded-2xl border border-border bg-surface p-5 sm:p-6 ${className}`}>
+      <p className="kicker">{kicker}</p>
+      <h3 className="mt-2 text-base font-semibold tracking-tight text-foreground">{title}</h3>
       <div className="mt-5">{children}</div>
     </div>
   );
@@ -195,7 +195,7 @@ export default function JourneyCharts() {
     }
     return longestRunProgression().map((p) => ({
       ...p,
-      label: p.label.replace(/^\d+\s/, ""),
+      label: p.label,
     }));
   }, []);
 
@@ -262,7 +262,7 @@ export default function JourneyCharts() {
         <SectionHeading index="03">How it compounds</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           Distance first — then pace, then the habit of showing up.
         </motion.p>

@@ -19,7 +19,7 @@ export default function TrainingEngine() {
         <SectionHeading index="05">The training engine</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           Easy miles, speed work, and a longest run that proved the base was real.
         </motion.p>

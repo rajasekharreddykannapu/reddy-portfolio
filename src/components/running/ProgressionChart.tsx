@@ -57,17 +57,15 @@ export default function ProgressionChart() {
         <SectionHeading index="02">The distance arc</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           Month by month, the kilometres stack. Proof that showing up compounds.
         </motion.p>
 
         <motion.div variants={fadeUp} className="mt-10">
-          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
-            <p className="font-mono text-sm text-muted">
-              <span className="text-gradient text-2xl font-semibold">{total}</span>
-              <span className="ml-2">km across {months.length} months</span>
-            </p>
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <p className="metric text-[1.65rem] text-foreground">{total}</p>
+            <p className="mt-0.5 text-sm text-muted">km across {months.length} months</p>
             <p className="font-mono text-xs text-muted">
               Peak · {peak.label} · {peak.km} km
             </p>

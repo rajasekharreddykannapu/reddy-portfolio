@@ -17,39 +17,34 @@ export default function Origin() {
         <SectionHeading index="01">Day zero</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           The honest starting line — a body that couldn&apos;t finish a park loop,
           and a simple rule: show up.
         </motion.p>
 
-        <ol className="relative mt-12 space-y-0 border-l border-border pl-6 sm:pl-8">
-          {originBeats.map((beat, i) => (
+        <ol className="relative mt-10 space-y-0 border-l border-border pl-6 sm:pl-8">
+          {originBeats.map((beat) => (
             <motion.li
               key={beat.title}
               variants={fadeUp}
-              className="relative grid gap-3 py-8 first:pt-0 last:pb-0 sm:grid-cols-[7.5rem_1fr] sm:gap-10"
+              className="relative grid gap-2 py-7 first:pt-1 last:pb-0 sm:grid-cols-[6.5rem_1fr] sm:gap-10"
             >
               <div className="flex items-baseline gap-3 sm:flex-col sm:gap-1">
-                <span className="font-mono text-xs text-muted">{beat.date}</span>
+                <span className="kicker">{beat.date}</span>
                 {beat.stat && (
-                  <span className="text-gradient font-mono text-sm font-semibold">
-                    {beat.stat}
-                  </span>
+                  <span className="metric text-sm text-accent">{beat.stat}</span>
                 )}
               </div>
               <div>
                 <div className="flex items-center gap-3">
                   <span
                     aria-hidden
-                    className="absolute -left-[1.55rem] top-9 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-background sm:-left-[2.05rem] sm:top-9"
+                    className="absolute -left-[1.45rem] top-9 h-2 w-2 rounded-full bg-accent ring-[3px] ring-background sm:-left-[2.05rem]"
                   />
-                  <span className="font-mono text-[0.65rem] text-accent">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="text-xl font-semibold text-foreground">{beat.title}</h3>
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground">{beat.title}</h3>
                 </div>
-                <p className="mt-3 max-w-xl leading-relaxed text-muted">{beat.detail}</p>
+                <p className="mt-2 max-w-xl text-[0.95rem] leading-7 text-muted">{beat.detail}</p>
               </div>
             </motion.li>
           ))}

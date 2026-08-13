@@ -7,8 +7,8 @@ import MiniChart from "./MiniChart";
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="font-mono text-sm font-semibold tabular-nums text-foreground">{value}</p>
-      <p className="text-[0.7rem] uppercase tracking-wider text-muted">{label}</p>
+      <p className="metric text-[0.8125rem] text-foreground">{value}</p>
+      <p className="kicker mt-0.5">{label}</p>
     </div>
   );
 }
@@ -22,11 +22,11 @@ export default function RunCard({ run }: { run: Run }) {
     run.elevation || run.hr || run.description || run.photos.length > 0 || run.calories;
 
   return (
-    <div className="card card-glow group overflow-hidden transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-accent/50">
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-surface-2">
+    <div className="card group overflow-hidden transition-[border-color] duration-300 hover:border-accent/35">
+      <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-[#f3f1ee] dark:bg-surface-2">
         <RouteMap
           map={run.map}
-          className="h-full w-full p-3 transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+          className="h-full w-full p-3"
         />
         <div className="absolute left-3 top-3 flex gap-1.5">
           <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[0.65rem] text-muted backdrop-blur">
@@ -42,7 +42,7 @@ export default function RunCard({ run }: { run: Run }) {
 
       <div className="p-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h4 className="truncate font-semibold text-foreground" title={run.name}>
+          <h4 className="truncate text-sm font-semibold tracking-tight text-foreground" title={run.name}>
             {run.name}
           </h4>
           <span className="shrink-0 font-mono text-xs text-muted">{fmtDay(run.date)}</span>

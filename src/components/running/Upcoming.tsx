@@ -46,7 +46,7 @@ export default function Upcoming() {
         <SectionHeading index="06">Path to the marathon</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           The season climbs toward one start line — then keeps going.
         </motion.p>

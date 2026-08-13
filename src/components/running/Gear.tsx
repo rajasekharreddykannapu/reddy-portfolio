@@ -24,7 +24,7 @@ export default function Gear() {
           <div key={shoe.model} className="border-t border-border pt-4">
             <div className="flex items-baseline justify-between gap-3">
               <p className="font-mono text-xs text-accent">{shoe.name}</p>
-              <p className="font-mono text-xs text-muted tabular-nums">{shoe.km} km</p>
+              <p className="metric text-sm text-muted">{shoe.km} km</p>
             </div>
             <h3 className="mt-2 text-sm font-semibold text-foreground">{shoe.model}</h3>
             <p className="mt-1 text-xs leading-relaxed text-muted">{shoe.role}</p>

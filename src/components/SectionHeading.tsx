@@ -11,10 +11,11 @@ export default function SectionHeading({
   children: React.ReactNode;
 }) {
   return (
-    <motion.div variants={fadeUp} className="flex items-center gap-3">
-      <span className="font-mono text-sm text-accent">{index}</span>
-      <span className="h-px w-8 bg-gradient-to-r from-accent to-transparent" />
-      <h2 className="font-mono text-sm uppercase tracking-widest text-muted">{children}</h2>
+    <motion.div variants={fadeUp}>
+      <p className="kicker text-accent">{index}</p>
+      <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]">
+        {children}
+      </h2>
     </motion.div>
   );
 }

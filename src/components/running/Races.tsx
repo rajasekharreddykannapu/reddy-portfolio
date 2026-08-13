@@ -11,7 +11,7 @@ export default function Races() {
   const route = featuredRace.runId ? findRunById(featuredRace.runId)?.map ?? null : null;
 
   return (
-    <section id="races" className="mx-auto max-w-5xl px-6 py-20">
+    <section id="races" className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -21,7 +21,7 @@ export default function Races() {
         <SectionHeading index="04">Breakthrough</SectionHeading>
         <motion.p
           variants={fadeUp}
-          className="mt-4 max-w-2xl text-lg leading-relaxed text-muted"
+          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
         >
           One race that rewrote what felt possible — and the steps that led there.
         </motion.p>
@@ -33,19 +33,19 @@ export default function Races() {
         >
           <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-accent">
+              <p className="kicker text-accent">
                 Featured · {featuredRace.date}
               </p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]">
                 {featuredRace.name}
               </h3>
-              <p className="mt-1 font-mono text-sm text-muted">
+              <p className="mt-1 text-sm text-muted">
                 {featuredRace.distance}
                 {featuredRace.note ? ` · ${featuredRace.note}` : ""}
               </p>
 
               <p
-                className="text-gradient mt-8 font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-7xl"
+                className="metric mt-8 text-5xl text-foreground sm:text-6xl"
                 aria-label={`Finish time ${featuredRace.time}`}
               >
                 <motion.span

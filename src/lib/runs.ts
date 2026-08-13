@@ -132,7 +132,7 @@ export function monthlyDistanceKm(list: Run[] = runsOnly): { key: string; label:
   const months = groupByMonth(list).slice().reverse();
   return months.map((m) => ({
     key: m.key,
-    label: m.label.replace(/ 20/, " '"),
+    label: `${MONTHS[Number(m.key.split("-")[1]) - 1].slice(0, 3)} '${m.key.slice(2, 4)}`,
     km: Math.round(m.distanceKm),
     longestKm: Math.round(Math.max(...m.runs.map((r) => r.distance / 1000), 0) * 10) / 10,
   }));
