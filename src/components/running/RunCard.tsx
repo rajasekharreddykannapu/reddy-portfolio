@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { Run } from "@/lib/runs";
 import { gearById, fmtKm, fmtDay, fmtTimeOfDay, primaryPhoto, photoSrc } from "@/lib/runs";
+import { resultUrlForRunId } from "@/lib/running";
 import RouteMap from "./RouteMap";
 import MiniChart from "./MiniChart";
 import RunPhotos from "./RunPhotos";
@@ -25,6 +26,7 @@ export default function RunCard({ run }: { run: Run }) {
   const cadence = run.avgCadence ? Math.round(run.avgCadence * 2) : null;
   const maxKmh = run.maxSpeed ? (run.maxSpeed * 3.6).toFixed(1) : null;
   const stravaUrl = `https://www.strava.com/activities/${run.id}`;
+  const resultUrl = resultUrlForRunId(run.id);
   const cover = primaryPhoto(run.photos);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -184,15 +186,27 @@ export default function RunCard({ run }: { run: Run }) {
                 </p>
               )}
 
-              <a
-                href={stravaUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
-                View on Strava
-              </a>
+              <div className="flex flex-wrap gap-3">
+                {resultUrl && (
+                  <a
+                    href={resultUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
+                  >
+                    Official result
+                  </a>
+                )}
+                <a
+                  href={stravaUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
+                  View on Strava
+                </a>
+              </div>
             </div>
           </details>
         )}

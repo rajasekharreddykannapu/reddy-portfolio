@@ -206,6 +206,8 @@ export type Race = {
   runId?: string;
   /** Override cover image in public/running/photos/ */
   coverPhoto?: string;
+  /** Official chip-time / results page when available. */
+  resultUrl?: string;
 };
 
 export const races: Race[] = [
@@ -256,12 +258,20 @@ export const races: Race[] = [
       "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
     runId: "19762807960",
     coverPhoto: "monsoon-finish.jpg",
+    resultUrl:
+      "https://www.ifinish.in/myresultdetail/LR8npB5a1C3nK6gWWd9yzuB7mUTtOEw1kbqlTQ96UBhkBxZ1PKViEowlGnrEJB3IO_-bzn7H-vrNywW9mH0DuA",
   },
 ];
 
 export const featuredRace = races.find((r) => r.featured)!;
 export const spotlightRace = races.find((r) => r.spotlight);
 export const supportingRaces = races.filter((r) => !r.featured && !r.spotlight);
+
+/** Official results link keyed by Strava activity id. */
+export function resultUrlForRunId(runId: string | undefined): string | undefined {
+  if (!runId) return undefined;
+  return races.find((r) => r.runId === runId)?.resultUrl;
+}
 
 // ── Training engine beats ───────────────────────────────────────────────────
 export type EngineBeat = {
