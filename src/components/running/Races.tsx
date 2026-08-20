@@ -97,7 +97,7 @@ export default function Races() {
         {/* Supporting results */}
         <motion.div variants={fadeUp} className="mt-10">
           <h4 className="font-mono text-xs uppercase tracking-widest text-muted">
-            The path to the half
+            The path so far
           </h4>
           <ul className="mt-4 divide-y divide-border border-y border-border">
             {supportingRaces.map((race) => (

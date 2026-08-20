@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code (local machine settings)
 .claude/settings.local.json
+
+# local photo review dumps
+.tmp-monsoon-photos/

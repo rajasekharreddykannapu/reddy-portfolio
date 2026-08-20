@@ -241,6 +241,16 @@ export const races: Race[] = [
       "From a body that couldn't finish a park loop to 21.1 km under two hours — five months, one stubborn habit, and a first half that broke the tape.",
     runId: "18817317833",
   },
+  {
+    date: "16 Aug 2026",
+    name: "Hyderabad Monsoon Run",
+    distance: "16.1 km",
+    time: "1:22:35",
+    note: "Held 10K PB pace",
+    story:
+      "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
+    runId: "19762807960",
+  },
 ];
 
 export const featuredRace = races.find((r) => r.featured)!;
@@ -275,6 +285,13 @@ export const engineBeats: EngineBeat[] = [
     detail:
       "Back out to 21.3 km with 254 m of climbing. The base is set — next work is the start line, and faster times.",
     stat: "21.3 km · 254 m",
+  },
+  {
+    date: "16 Aug 2026",
+    title: "Monsoon 16.1K",
+    detail:
+      "Held 5:03/km — the City Slam 10K pace — for 16.4 km at T-Works. Same effort, longer tape.",
+    stat: "1:22:35 · 5:03/km",
   },
 ];
 
@@ -312,6 +329,14 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     note: "Longest · 254 m ↑",
     runId: "19563722110",
   },
+  {
+    title: "Hyderabad Monsoon Run",
+    date: "16 Aug 2026",
+    distance: "16.4 km",
+    pace: "5:03",
+    note: "Held 10K pace",
+    runId: "19762807960",
+  },
 ];
 
 // Crafted hero route silhouette (no GPS required) — reads as a winding long run.
@@ -347,21 +372,12 @@ export type UpcomingEvent = {
 
 export const upcoming: UpcomingEvent[] = [
   {
-    date: "16 Aug 2026",
-    name: "Hyderabad Monsoon Run",
-    distance: "16.1 km",
-    location: "Hyderabad",
-    status: "registered",
-    chapter: "next",
-    url: "https://www.ifinish.in/running/HCS16K",
-  },
-  {
     date: "30 Aug 2026",
     name: "NMDC Half Marathon",
     distance: "Half marathon",
     location: "Hyderabad",
     status: "registered",
-    chapter: "build",
+    chapter: "next",
     goalTime: "Sub-1:55",
     url: "https://nmdchyderabadmarathon.com/",
   },

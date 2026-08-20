@@ -14,7 +14,9 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 export default function RunCard({ run }: { run: Run }) {
-  const shoe = run.gearId ? gearById[run.gearId] : null;
+  const shoe = run.gearId
+    ? gearById[run.gearId] ?? gearById[run.gearId.replace(/^g/, "")]
+    : null;
   const cadence = run.avgCadence ? Math.round(run.avgCadence * 2) : null;
   const maxKmh = run.maxSpeed ? (run.maxSpeed * 3.6).toFixed(1) : null;
   const stravaUrl = `https://www.strava.com/activities/${run.id}`;
