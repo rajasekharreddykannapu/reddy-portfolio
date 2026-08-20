@@ -1,8 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { Run } from "@/lib/runs";
-import { gearById, fmtKm, fmtDay, fmtTimeOfDay } from "@/lib/runs";
+import { gearById, fmtKm, fmtDay, fmtTimeOfDay, primaryPhoto, photoSrc } from "@/lib/runs";
 import RouteMap from "./RouteMap";
 import MiniChart from "./MiniChart";
+import RunPhotos from "./RunPhotos";
+import PhotoLightbox from "./PhotoLightbox";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -20,31 +25,74 @@ export default function RunCard({ run }: { run: Run }) {
   const cadence = run.avgCadence ? Math.round(run.avgCadence * 2) : null;
   const maxKmh = run.maxSpeed ? (run.maxSpeed * 3.6).toFixed(1) : null;
   const stravaUrl = `https://www.strava.com/activities/${run.id}`;
+  const cover = primaryPhoto(run.photos);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const hasDetail =
     run.elevation || run.hr || run.description || run.photos.length > 0 || run.calories;
 
   return (
-    <div className="card group overflow-hidden transition-[border-color] duration-300 hover:border-accent/35">
-      <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-[#f3f1ee] dark:bg-surface-2">
-        <RouteMap
-          map={run.map}
-          className="h-full w-full p-3"
-        />
-        <div className="absolute left-3 top-3 flex gap-1.5">
-          <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[0.65rem] text-muted backdrop-blur">
-            {fmtTimeOfDay(run.date)}
-          </span>
-          {run.prCount > 0 && (
-            <span className="rounded-full bg-accent/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-accent-foreground">
-              {run.prCount} PR
-            </span>
+    <div className="card card-glow group overflow-hidden transition-[border-color] duration-300 hover:border-accent/35">
+      {cover ? (
+        <button
+          type="button"
+          className="photo-cover relative block aspect-[16/9] w-full cursor-zoom-in border-b border-border text-left"
+          onClick={() => {
+            setLightboxIndex(Math.max(0, run.photos.indexOf(cover)));
+            setLightboxOpen(true);
+          }}
+          aria-label={`View photos from ${run.name}`}
+        >
+          <Image
+            src={photoSrc(cover)}
+            alt={run.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+          {run.map && (
+            <div className="photo-map-inset absolute bottom-3 right-3 h-16 w-24 overflow-hidden rounded-lg">
+              <RouteMap map={run.map} tone="dark" className="h-full w-full p-1.5" />
+            </div>
           )}
+          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+            <span className="rounded-full bg-black/55 px-2 py-0.5 font-mono text-[0.65rem] text-amber-50 backdrop-blur">
+              {fmtTimeOfDay(run.date)}
+            </span>
+            {run.photos.length > 1 && (
+              <span className="rounded-full bg-accent/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-accent-foreground">
+                {run.photos.length} photos
+              </span>
+            )}
+            {run.prCount > 0 && (
+              <span className="rounded-full bg-black/55 px-2 py-0.5 font-mono text-[0.65rem] text-amber-100 backdrop-blur">
+                {run.prCount} PR
+              </span>
+            )}
+          </div>
+        </button>
+      ) : (
+        <div className="relative aspect-[16/9] overflow-hidden border-b border-border bg-[#f3f1ee] dark:bg-surface-2">
+          <RouteMap map={run.map} className="h-full w-full p-3" />
+          <div className="absolute left-3 top-3 flex gap-1.5">
+            <span className="rounded-full bg-background/70 px-2 py-0.5 font-mono text-[0.65rem] text-muted backdrop-blur">
+              {fmtTimeOfDay(run.date)}
+            </span>
+            {run.prCount > 0 && (
+              <span className="rounded-full bg-accent/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-accent-foreground">
+                {run.prCount} PR
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="p-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h4 className="truncate text-sm font-semibold tracking-tight text-foreground" title={run.name}>
+          <h4
+            className="truncate text-sm font-semibold tracking-tight text-foreground"
+            title={run.name}
+          >
             {run.name}
           </h4>
           <span className="shrink-0 font-mono text-xs text-muted">{fmtDay(run.date)}</span>
@@ -56,6 +104,12 @@ export default function RunCard({ run }: { run: Run }) {
           <Stat label="time" value={run.duration ?? "—"} />
           <Stat label="elev" value={`${Math.round(run.elevationGain)}m`} />
         </div>
+
+        {run.photos.length > 0 && (
+          <div className="mt-3 border-t border-border pt-3">
+            <RunPhotos photos={run.photos} alt={run.name} layout="strip" />
+          </div>
+        )}
 
         {hasDetail && (
           <details className="group/d mt-3 border-t border-border pt-3">
@@ -107,6 +161,12 @@ export default function RunCard({ run }: { run: Run }) {
                 </div>
               )}
 
+              {!cover && run.map && (
+                <div className="overflow-hidden rounded-xl border border-border bg-surface-2 p-2">
+                  <RouteMap map={run.map} className="aspect-[2/1] w-full" />
+                </div>
+              )}
+
               <div className="grid grid-cols-3 gap-y-3 gap-x-2">
                 {run.calories != null && <Stat label="cal" value={`${run.calories}`} />}
                 {cadence && <Stat label="spm" value={`${cadence}`} />}
@@ -117,21 +177,6 @@ export default function RunCard({ run }: { run: Run }) {
                 {run.achievements > 0 && <Stat label="awards" value={`${run.achievements}`} />}
                 {run.kudos > 0 && <Stat label="kudos" value={`${run.kudos}`} />}
               </div>
-
-              {run.photos.length > 0 && (
-                <div className="grid grid-cols-3 gap-2">
-                  {run.photos.map((src) => (
-                    <Image
-                      key={src}
-                      src={`/running/photos/${src}`}
-                      alt={run.name}
-                      width={300}
-                      height={300}
-                      className="aspect-square w-full rounded-lg object-cover"
-                    />
-                  ))}
-                </div>
-              )}
 
               {shoe && (
                 <p className="text-xs text-muted">
@@ -152,6 +197,17 @@ export default function RunCard({ run }: { run: Run }) {
           </details>
         )}
       </div>
+
+      {run.photos.length > 0 && (
+        <PhotoLightbox
+          photos={run.photos}
+          alt={run.name}
+          open={lightboxOpen}
+          index={lightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+          onIndexChange={setLightboxIndex}
+        />
+      )}
     </div>
   );
 }

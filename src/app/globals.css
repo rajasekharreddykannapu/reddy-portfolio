@@ -351,3 +351,143 @@ body::after {
     animation: none;
   }
 }
+
+/* Run photo surfaces */
+.photo-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #000 10%, transparent) 0%,
+    color-mix(in srgb, #000 55%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+.photo-map-inset {
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+  background: color-mix(in srgb, #0b0e14 88%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.65);
+}
+
+.photo-thumb {
+  cursor: zoom-in;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.photo-thumb-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 0%, transparent) 40%,
+    color-mix(in srgb, var(--accent) 18%, transparent) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.photo-thumb:hover .photo-thumb-shine,
+.photo-thumb:focus-visible .photo-thumb-shine {
+  opacity: 1;
+}
+
+.photo-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: color-mix(in srgb, #080b10 92%, transparent);
+  backdrop-filter: blur(12px);
+  animation: fade-down 0.25s ease;
+}
+
+.photo-lightbox-frame {
+  position: relative;
+  max-height: min(88vh, 960px);
+  max-width: min(96vw, 1200px);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, #ffffff 12%, transparent);
+  box-shadow: 0 32px 80px -24px rgba(0, 0, 0, 0.75);
+}
+
+.photo-lightbox-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: min(88vh, 960px);
+  max-width: min(96vw, 1200px);
+  object-fit: contain;
+}
+
+.photo-lightbox-close,
+.photo-lightbox-nav {
+  position: fixed;
+  z-index: 101;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, #ffffff 16%, transparent);
+  background: color-mix(in srgb, #12161d 80%, transparent);
+  color: #f4f4f5;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.photo-lightbox-close:hover,
+.photo-lightbox-nav:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.photo-lightbox-close {
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.photo-lightbox-nav {
+  top: 50%;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.75rem;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.photo-lightbox-nav-prev {
+  left: 1rem;
+}
+
+.photo-lightbox-nav-next {
+  right: 1rem;
+}
+
+.photo-lightbox-count {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  z-index: 101;
+  transform: translateX(-50%);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #ffffff 72%, transparent);
+}

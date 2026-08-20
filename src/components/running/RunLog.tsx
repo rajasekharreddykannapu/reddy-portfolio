@@ -29,8 +29,8 @@ export default function RunLog() {
         <motion.p variants={fadeUp} className="mt-4 max-w-2xl text-muted">
           {hasRunData ? (
             <>
-              Latest efforts from Strava. Open <span className="text-foreground">Details</span> for
-              elevation, heart rate and the GPS track.
+              Latest efforts from Strava. Tap a photo to zoom — open{" "}
+              <span className="text-foreground">Details</span> for elevation and the GPS track.
             </>
           ) : (
             <>The full Strava archive lives here once run data is synced.</>

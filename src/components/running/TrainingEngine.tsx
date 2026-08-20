@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { engineBeats, featuredRunHighlights } from "@/lib/running";
-import { findRunById } from "@/lib/runs";
+import { findRunById, photoSrc, primaryPhoto } from "@/lib/runs";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
 import SectionHeading from "@/components/SectionHeading";
 import RouteMap from "./RouteMap";
@@ -49,16 +50,31 @@ export default function TrainingEngine() {
             {featuredRunHighlights.map((run) => {
               const live = run.runId ? findRunById(run.runId) : undefined;
               const map = live?.map ?? null;
+              const cover = live ? primaryPhoto(live.photos) : null;
               return (
                 <div
                   key={run.title}
                   className="card card-glow flex overflow-hidden transition-colors hover:border-accent/40"
                 >
                   <div className="relative w-[38%] shrink-0 bg-surface-2 sm:w-36">
-                    <RouteMap
-                      map={map}
-                      className="h-full min-h-[5.5rem] w-full p-2.5"
-                    />
+                    {cover ? (
+                      <>
+                        <Image
+                          src={photoSrc(cover)}
+                          alt={run.title}
+                          fill
+                          sizes="144px"
+                          className="object-cover"
+                        />
+                        {map && (
+                          <div className="photo-map-inset absolute bottom-2 right-2 h-11 w-16 overflow-hidden rounded-md">
+                            <RouteMap map={map} tone="dark" className="h-full w-full p-1" />
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <RouteMap map={map} className="h-full min-h-[5.5rem] w-full p-2.5" />
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col justify-center p-4">
                     <div className="flex items-baseline justify-between gap-2">
@@ -69,8 +85,19 @@ export default function TrainingEngine() {
                     </div>
                     <p className="mt-1 font-mono text-sm text-accent">{run.note}</p>
                     <p className="mt-1 font-mono text-xs text-muted">
-                      {run.distance}
-                      {run.pace ? ` · ${run.pace}/km` : ""}
+                      {run.finishTime ? (
+                        <>
+                          <span className="text-foreground">{run.finishTime}</span>
+                          {" · "}
+                          {run.distance}
+                          {run.pace ? ` · ${run.pace}/km` : ""}
+                        </>
+                      ) : (
+                        <>
+                          {run.distance}
+                          {run.pace ? ` · ${run.pace}/km` : ""}
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>

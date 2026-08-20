@@ -257,6 +257,20 @@ export function findRunById(id: string | undefined): Run | undefined {
   return runs.find((r) => r.id === id);
 }
 
+/** Prefer finish-line photo, then medal, otherwise first attached photo. */
+export function primaryPhoto(photos: string[]): string | null {
+  if (photos.length === 0) return null;
+  return (
+    photos.find((p) => /finish/i.test(p)) ??
+    photos.find((p) => /medal/i.test(p)) ??
+    photos[0]
+  );
+}
+
+export function photoSrc(filename: string): string {
+  return `/running/photos/${filename}`;
+}
+
 export function longestRun(): Run | undefined {
   if (runsOnly.length === 0) return undefined;
   return runsOnly.reduce((best, r) => (r.distance > best.distance ? r : best));

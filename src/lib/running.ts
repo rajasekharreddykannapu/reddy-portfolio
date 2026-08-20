@@ -37,7 +37,7 @@ export const records: RunRecord[] = [
   { value: "1:59:15", label: "Half marathon", note: "Telangana Run · 7 Jun 2026" },
   { value: "51:11", label: "10K", note: "Hyderabad City Slam · 24 May 2026" },
   { value: "21.3 km", label: "Longest run", note: "NMDC dry run · 2 Aug 2026" },
-  { value: "5:03 /km", label: "10K race pace", note: "Fastest sustained effort" },
+  { value: "5:03 /km", label: "10K race pace", note: "Hyderabad City Slam · 24 May 2026" },
 ];
 
 // ── Origin chapter (day zero → first double digits) ─────────────────────────
@@ -199,9 +199,13 @@ export type Race = {
   time: string;
   note?: string;
   featured?: boolean;
+  /** Second hero card — usually the latest race with photos. */
+  spotlight?: boolean;
   story?: string;
   /** Optional Strava activity id to pull a route map when available. */
   runId?: string;
+  /** Override cover image in public/running/photos/ */
+  coverPhoto?: string;
 };
 
 export const races: Race[] = [
@@ -246,15 +250,18 @@ export const races: Race[] = [
     name: "Hyderabad Monsoon Run",
     distance: "16.1 km",
     time: "1:22:35",
-    note: "Held 10K PB pace",
+    note: "Same pace as City Slam 10K",
+    spotlight: true,
     story:
       "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
     runId: "19762807960",
+    coverPhoto: "monsoon-finish.jpg",
   },
 ];
 
 export const featuredRace = races.find((r) => r.featured)!;
-export const supportingRaces = races.filter((r) => !r.featured);
+export const spotlightRace = races.find((r) => r.spotlight);
+export const supportingRaces = races.filter((r) => !r.featured && !r.spotlight);
 
 // ── Training engine beats ───────────────────────────────────────────────────
 export type EngineBeat = {
@@ -300,6 +307,7 @@ export type FeaturedRunHighlight = {
   title: string;
   date: string;
   distance: string;
+  finishTime?: string;
   pace?: string;
   note: string;
   runId?: string;
@@ -310,6 +318,7 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     title: "Hyderabad City Slam",
     date: "24 May 2026",
     distance: "10.0 km",
+    finishTime: "51:11",
     pace: "5:03",
     note: "10K PB",
     runId: "18628386726",
@@ -333,8 +342,9 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     title: "Hyderabad Monsoon Run",
     date: "16 Aug 2026",
     distance: "16.4 km",
+    finishTime: "1:22:35",
     pace: "5:03",
-    note: "Held 10K pace",
+    note: "Latest race",
     runId: "19762807960",
   },
 ];
