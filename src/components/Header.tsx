@@ -8,6 +8,7 @@ const links = [
   { href: "#impact", label: "Impact" },
   { href: "#contact", label: "Contact" },
   { href: "/running", label: "Running" },
+  { href: "/learning", label: "Learning" },
 ];
 
 export default function Header() {
