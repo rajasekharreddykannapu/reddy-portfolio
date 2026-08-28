@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { profile } from "@/lib/resume";
+import {
+  defaultOgImage,
+  learningDescription,
+  siteName,
+  siteUrl,
+} from "@/lib/seo";
 import {
   learningProfile,
   dailyRitual,
@@ -13,18 +18,23 @@ import Footer from "@/components/Footer";
 
 export const revalidate = 14400; // 4 hours — ISR + scheduled ping
 
-const title = `Field notes — ${profile.name}`;
-
 export const metadata: Metadata = {
-  title,
-  description: learningProfile.intro,
+  title: "Field notes",
+  description: learningDescription,
   alternates: { canonical: "/learning" },
   openGraph: {
     type: "website",
-    url: "https://krajasekharreddy.com/learning",
-    title,
-    description: learningProfile.intro,
-    siteName: profile.name,
+    url: `${siteUrl}/learning`,
+    title: "Field notes",
+    description: learningDescription,
+    siteName,
+    images: [defaultOgImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Field notes",
+    description: learningDescription,
+    images: [defaultOgImage.url],
   },
 };
 

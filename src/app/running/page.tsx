@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { profile } from "@/lib/resume";
+import { runningDescription, runningOgImage, siteUrl } from "@/lib/seo";
 import { runningProfile } from "@/lib/running";
 import RunningHeader from "@/components/running/RunningHeader";
 import RunningHero from "@/components/running/RunningHero";
@@ -14,25 +14,25 @@ import Gear from "@/components/running/Gear";
 import PointerSpotlight from "@/components/running/PointerSpotlight";
 import Footer from "@/components/Footer";
 
-const title = `Running — ${profile.name}`;
-
 export const metadata: Metadata = {
-  title,
-  description: runningProfile.intro,
+  title: "Running",
+  description: runningDescription,
   alternates: {
     canonical: "/running",
   },
   openGraph: {
     type: "website",
-    url: "https://krajasekharreddy.com/running",
-    title,
-    description: runningProfile.intro,
-    siteName: profile.name,
+    url: `${siteUrl}/running`,
+    title: "Running",
+    description: runningDescription,
+    siteName: runningProfile.name,
+    images: [runningOgImage],
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description: runningProfile.intro,
+    title: "Running",
+    description: runningDescription,
+    images: [runningOgImage.url],
   },
 };
 

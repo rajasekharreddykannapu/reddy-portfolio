@@ -36,7 +36,7 @@ export type RunRecord = { value: string; label: string; note: string };
 export const records: RunRecord[] = [
   { value: "1:59:15", label: "Half marathon", note: "Telangana Run · 7 Jun 2026" },
   { value: "51:11", label: "10K", note: "Hyderabad City Slam · 24 May 2026" },
-  { value: "21.3 km", label: "Longest run", note: "NMDC dry run · 2 Aug 2026" },
+  { value: "22.4 km", label: "Longest run", note: "Sunday long run · 23 Aug 2026" },
   { value: "5:03 /km", label: "10K race pace", note: "Hyderabad City Slam · 24 May 2026" },
 ];
 
@@ -170,6 +170,14 @@ export const timeline: TimelineEntry[] = [
       "Back out to 21.3 km with 254 m of climbing and 36 personal records in a single morning. The base is set. Now the work turns toward the next start line — and faster times.",
     stat: "21.3 km · 254 m",
   },
+  {
+    date: "23 Aug 2026",
+    kind: "present",
+    title: "Sunday long run — new distance PR",
+    detail:
+      "22.4 km before breakfast on a humid Hyderabad morning. Easy effort, two and a half hours on feet, and a new longest run — proof the base can stretch when the calendar asks.",
+    stat: "22.4 km · 2:27",
+  },
 ];
 
 // ── Month-by-month progression (fallback when runs.json is empty) ───────────
@@ -267,6 +275,16 @@ export const featuredRace = races.find((r) => r.featured)!;
 export const spotlightRace = races.find((r) => r.spotlight);
 export const supportingRaces = races.filter((r) => !r.featured && !r.spotlight);
 
+/** Featured video card in the training chapter. */
+export const videoSpotlight = {
+  runId: "19858726882",
+  title: "Sunday long run",
+  date: "23 Aug 2026",
+  stat: "22.4 km · 2:26:59",
+  story:
+    "A humid Hyderabad morning, easy effort, and a new longest run — captured in a short recap from the road.",
+};
+
 /** Official results link keyed by Strava activity id. */
 export function resultUrlForRunId(runId: string | undefined): string | undefined {
   if (!runId) return undefined;
@@ -309,6 +327,13 @@ export const engineBeats: EngineBeat[] = [
     detail:
       "Held 5:03/km — the City Slam 10K pace — for 16.4 km at T-Works. Same effort, longer tape.",
     stat: "1:22:35 · 5:03/km",
+  },
+  {
+    date: "23 Aug 2026",
+    title: "Sunday 22.4K",
+    detail:
+      "A new longest run at easy effort — 22.4 km in 2:27 before the NMDC half. The engine is stretching, not sprinting.",
+    stat: "22.4 km · 6:34/km",
   },
 ];
 
@@ -356,6 +381,15 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     pace: "5:03",
     note: "Latest race",
     runId: "19762807960",
+  },
+  {
+    title: "Sunday long run",
+    date: "23 Aug 2026",
+    distance: "22.4 km",
+    finishTime: "2:26:59",
+    pace: "6:34",
+    note: "Longest · video",
+    runId: "19858726882",
   },
 ];
 

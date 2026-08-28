@@ -1,0 +1,7 @@
+{
+  "_comment": "Attach YouTube videos to any run. Key = Strava activity id. youtubeId = the id from youtube.com/watch?v=ID or youtube.com/shorts/ID. This file is safe to edit — it is NOT overwritten when run data is refreshed.",
+  "19858726882": {
+    "youtubeId": "7E3FlSnPVI4",
+    "label": "Sunday long run recap"
+  }
+}

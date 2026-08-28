@@ -37,7 +37,7 @@ Strava activity create/update/delete
   → Vercel redeploys
 ```
 
-Photos stay in [`src/data/run-photos.json`](../src/data/run-photos.json) and are never overwritten.
+Photos stay in [`src/data/run-photos.json`](../src/data/run-photos.json) and are never overwritten. YouTube links stay in [`src/data/run-videos.json`](../src/data/run-videos.json) the same way.
 
 A daily cron (~05:00 IST) is a safety net if a webhook is missed.
 

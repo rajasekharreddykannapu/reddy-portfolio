@@ -2,9 +2,16 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { profile } from "@/lib/resume";
+import {
+  defaultOgImage,
+  defaultTitle,
+  homeDescription,
+  siteUrl,
+  titleTemplate,
+} from "@/lib/seo";
 import MotionProvider from "@/components/MotionProvider";
 import ScrollProgress from "@/components/ScrollProgress";
+import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,12 +24,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = `${profile.name} — ${profile.title}`;
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://krajasekharreddy.com"),
-  title: siteTitle,
-  description: profile.summary,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: defaultTitle,
+    template: titleTemplate,
+  },
+  description: homeDescription,
   keywords: [
     "Engineering Manager",
     "Principal Engineer",
@@ -32,23 +40,25 @@ export const metadata: Metadata = {
     ".NET",
     "Azure",
     "Angular",
-    profile.name,
+    "Kannapu Rajasekhar Reddy",
   ],
-  authors: [{ name: profile.name }],
+  authors: [{ name: "Kannapu Rajasekhar Reddy", url: siteUrl }],
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
-    url: "https://krajasekharreddy.com",
-    title: siteTitle,
-    description: profile.valueProp,
-    siteName: profile.name,
+    url: siteUrl,
+    title: defaultTitle,
+    description: homeDescription,
+    siteName: "Kannapu Rajasekhar Reddy",
+    images: [defaultOgImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteTitle,
-    description: profile.valueProp,
+    title: defaultTitle,
+    description: homeDescription,
+    images: [defaultOgImage.url],
   },
 };
 
@@ -78,6 +88,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <JsonLd />
         <MotionProvider>
           <ScrollProgress />
           {children}

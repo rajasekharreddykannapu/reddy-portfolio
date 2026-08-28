@@ -2,13 +2,16 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { engineBeats, featuredRunHighlights } from "@/lib/running";
+import { engineBeats, featuredRunHighlights, videoSpotlight } from "@/lib/running";
 import { findRunById, photoSrc, primaryPhoto } from "@/lib/runs";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
 import SectionHeading from "@/components/SectionHeading";
 import RouteMap from "./RouteMap";
+import RunVideo from "./RunVideo";
 
 export default function TrainingEngine() {
+  const spotlightRun = videoSpotlight.runId ? findRunById(videoSpotlight.runId) : undefined;
+
   return (
     <section id="engine" className="mx-auto max-w-5xl px-6 py-20">
       <motion.div
@@ -24,6 +27,36 @@ export default function TrainingEngine() {
         >
           Easy miles, speed work, and a longest run that proved the base was real.
         </motion.p>
+
+        {spotlightRun?.video && (
+          <motion.article
+            variants={fadeUp}
+            className="card gradient-border mt-10 overflow-hidden"
+          >
+            <div className="grid items-center gap-8 p-6 sm:p-8 lg:grid-cols-[1fr_auto]">
+              <div>
+                <p className="kicker text-accent">Latest long run · {videoSpotlight.date}</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
+                  {videoSpotlight.title}
+                </h3>
+                <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
+                  {videoSpotlight.story}
+                </p>
+                <p className="metric mt-6 text-4xl text-foreground">{videoSpotlight.stat}</p>
+                <a
+                  href={`https://www.strava.com/activities/${spotlightRun.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-6 inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
+                  View on Strava
+                </a>
+              </div>
+              <RunVideo video={spotlightRun.video} title={spotlightRun.name} />
+            </div>
+          </motion.article>
+        )}
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
           <motion.ol variants={fadeUp} className="space-y-8">

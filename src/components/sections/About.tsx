@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
@@ -21,6 +22,16 @@ export default function About() {
         className="mt-6 max-w-3xl text-xl leading-relaxed text-foreground sm:text-2xl"
       >
         {profile.summary}
+      </motion.p>
+      <motion.p variants={fadeUp} className="mt-6 text-sm text-muted">
+        Also:{" "}
+        <Link href="/running" className="text-accent transition-colors hover:underline">
+          running journey
+        </Link>
+        {" · "}
+        <Link href="/learning" className="text-accent transition-colors hover:underline">
+          field notes
+        </Link>
       </motion.p>
     </motion.section>
   );

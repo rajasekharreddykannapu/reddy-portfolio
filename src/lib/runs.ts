@@ -9,6 +9,8 @@
 
 import runsData from "@/data/runs.json";
 import runPhotos from "@/data/run-photos.json";
+import runVideosData from "@/data/run-videos.json";
+import { parseRunVideos, type RunVideo } from "@/lib/run-videos";
 
 export type RunMap = { viewBox: string; path: string };
 
@@ -55,16 +57,19 @@ export type Run = {
   elevation: ElevationProfile | null;
   hr: HeartRateProfile | null;
   photos: string[]; // filenames in public/running/photos/
+  video: RunVideo | null;
 };
 
 // Merge user-supplied photos (keyed by Strava activity id) onto each run.
 const photoMap = runPhotos as unknown as Record<string, string[]>;
+const videoMap = parseRunVideos(runVideosData as Record<string, unknown>);
 
-const rawRuns = (Array.isArray(runsData) ? runsData : []) as Omit<Run, "photos">[];
+const rawRuns = (Array.isArray(runsData) ? runsData : []) as Omit<Run, "photos" | "video">[];
 
 export const runs: Run[] = rawRuns.map((r) => ({
   ...r,
   photos: Array.isArray(photoMap[r.id]) ? photoMap[r.id] : [],
+  video: videoMap[r.id] ?? null,
 }));
 
 // Runs only (excludes the handful of walks/hikes/rides also on Strava).

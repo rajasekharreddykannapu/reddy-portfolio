@@ -9,6 +9,7 @@ import RouteMap from "./RouteMap";
 import MiniChart from "./MiniChart";
 import RunPhotos from "./RunPhotos";
 import PhotoLightbox from "./PhotoLightbox";
+import RunVideo from "./RunVideo";
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -31,7 +32,7 @@ export default function RunCard({ run }: { run: Run }) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const hasDetail =
-    run.elevation || run.hr || run.description || run.photos.length > 0 || run.calories;
+    run.elevation || run.hr || run.description || run.photos.length > 0 || run.video || run.calories;
 
   return (
     <div className="card card-glow group overflow-hidden transition-[border-color] duration-300 hover:border-accent/35">
@@ -66,6 +67,11 @@ export default function RunCard({ run }: { run: Run }) {
                 {run.photos.length} photos
               </span>
             )}
+            {run.video && (
+              <span className="rounded-full bg-red-600/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-white">
+                video
+              </span>
+            )}
             {run.prCount > 0 && (
               <span className="rounded-full bg-black/55 px-2 py-0.5 font-mono text-[0.65rem] text-amber-100 backdrop-blur">
                 {run.prCount} PR
@@ -83,6 +89,11 @@ export default function RunCard({ run }: { run: Run }) {
             {run.prCount > 0 && (
               <span className="rounded-full bg-accent/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-accent-foreground">
                 {run.prCount} PR
+              </span>
+            )}
+            {run.video && (
+              <span className="rounded-full bg-red-600/90 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-white">
+                video
               </span>
             )}
           </div>
@@ -129,6 +140,8 @@ export default function RunCard({ run }: { run: Run }) {
             </summary>
 
             <div className="mt-4 space-y-4">
+              {run.video && <RunVideo video={run.video} title={run.name} />}
+
               {run.description && (
                 <p className="border-l-2 border-accent/50 pl-3 text-sm italic leading-relaxed text-muted">
                   {run.description}
