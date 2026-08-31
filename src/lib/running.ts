@@ -34,7 +34,7 @@ export const runStats: RunStat[] = [
 export type RunRecord = { value: string; label: string; note: string };
 
 export const records: RunRecord[] = [
-  { value: "1:59:15", label: "Half marathon", note: "Telangana Run · 7 Jun 2026" },
+  { value: "1:49:01", label: "Half marathon", note: "NMDC Hyderabad · 30 Aug 2026" },
   { value: "51:11", label: "10K", note: "Hyderabad City Slam · 24 May 2026" },
   { value: "22.4 km", label: "Longest run", note: "Sunday long run · 23 Aug 2026" },
   { value: "5:03 /km", label: "10K race pace", note: "Hyderabad City Slam · 24 May 2026" },
@@ -178,6 +178,14 @@ export const timeline: TimelineEntry[] = [
       "22.4 km before breakfast on a humid Hyderabad morning. Easy effort, two and a half hours on feet, and a new longest run — proof the base can stretch when the calendar asks.",
     stat: "22.4 km · 2:27",
   },
+  {
+    date: "30 Aug 2026",
+    kind: "present",
+    title: "NMDC half — sub-1:50",
+    detail:
+      "Chip time 1:49:01 at the 15th NMDC Hyderabad Half Marathon. Ten minutes faster than the first half in June — the season goal landed on race morning.",
+    stat: "21.1 km · 1:49:01",
+  },
 ];
 
 // ── Month-by-month progression (fallback when runs.json is empty) ───────────
@@ -214,6 +222,8 @@ export type Race = {
   runId?: string;
   /** Override cover image in public/running/photos/ */
   coverPhoto?: string;
+  /** Editorial photos when Strava id is not synced yet (or as override). */
+  photos?: string[];
   /** Official chip-time / results page when available. */
   resultUrl?: string;
 };
@@ -261,13 +271,28 @@ export const races: Race[] = [
     distance: "16.1 km",
     time: "1:22:35",
     note: "Same pace as City Slam 10K",
-    spotlight: true,
     story:
       "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
     runId: "19762807960",
     coverPhoto: "monsoon-finish.jpg",
+    photos: ["monsoon-stride.jpg", "monsoon-finish.jpg", "monsoon-medals.jpg"],
     resultUrl:
       "https://www.ifinish.in/myresultdetail/LR8npB5a1C3nK6gWWd9yzuB7mUTtOEw1kbqlTQ96UBhkBxZ1PKViEowlGnrEJB3IO_-bzn7H-vrNywW9mH0DuA",
+  },
+  {
+    date: "30 Aug 2026",
+    name: "NMDC Hyderabad Half Marathon",
+    distance: "Half marathon",
+    time: "1:49:01",
+    note: "Half marathon PB · sub-1:50",
+    spotlight: true,
+    story:
+      "Ten minutes off the first half — 1:49:01 in humid Hyderabad air. The sub-1:50 goal from the season plan, crossed at the 15th edition start line.",
+    runId: "19956634788",
+    coverPhoto: "nmdc-finish.jpg",
+    photos: ["nmdc-finish.jpg", "nmdc-medal.jpg", "nmdc-celebrate.jpg"],
+    resultUrl:
+      "https://sportstimingsolutions.in/results?q=eyJlX25hbWUiOiJOTURDIEh5ZGVyYWJhZCBNYXJhdGhvbiAyMDI2IiwiZV9pZCI6OTQxMzUsImJpYk5vIjoiMjM5NzgifQ%3D%3D",
   },
 ];
 
@@ -335,6 +360,13 @@ export const engineBeats: EngineBeat[] = [
       "A new longest run at easy effort — 22.4 km in 2:27 before the NMDC half. The engine is stretching, not sprinting.",
     stat: "22.4 km · 6:34/km",
   },
+  {
+    date: "30 Aug 2026",
+    title: "NMDC half marathon",
+    detail:
+      "1:49:01 — ten minutes off the June half and under the 1:50 target. Corral A, humid air, and a finish-line medal that tasted like the whole season.",
+    stat: "1:49:01 · 5:10/km",
+  },
 ];
 
 /** Highlight cards for the training chapter when live run data is thin. */
@@ -379,7 +411,7 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     distance: "16.4 km",
     finishTime: "1:22:35",
     pace: "5:03",
-    note: "Latest race",
+    note: "16K at 10K pace",
     runId: "19762807960",
   },
   {
@@ -390,6 +422,15 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     pace: "6:34",
     note: "Longest · video",
     runId: "19858726882",
+  },
+  {
+    title: "NMDC Hyderabad Half",
+    date: "30 Aug 2026",
+    distance: "21.1 km",
+    finishTime: "1:49:01",
+    pace: "5:10",
+    note: "Half PB · sub-1:50",
+    runId: "19956634788",
   },
 ];
 
@@ -426,22 +467,12 @@ export type UpcomingEvent = {
 
 export const upcoming: UpcomingEvent[] = [
   {
-    date: "30 Aug 2026",
-    name: "NMDC Half Marathon",
-    distance: "Half marathon",
-    location: "Hyderabad",
-    status: "registered",
-    chapter: "next",
-    goalTime: "Sub-1:55",
-    url: "https://nmdchyderabadmarathon.com/",
-  },
-  {
     date: "18 Oct 2026",
     name: "Vedanta Delhi Half Marathon",
     distance: "Half marathon",
     location: "New Delhi",
     status: "registered",
-    chapter: "build",
+    chapter: "next",
     goalTime: "Sub-1:50",
     url: "https://vedantadelhihalfmarathon.procam.in/",
   },
@@ -492,8 +523,8 @@ export type Goal = { title: string; detail: string };
 
 export const goals: Goal[] = [
   {
-    title: "Half marathon under 1:50",
-    detail: "Take ~9 minutes off 1:59 — tempo runs and 800m repeats to lift threshold.",
+    title: "Half marathon under 1:45",
+    detail: "NMDC landed at 1:49 — next target is carving another four minutes with tempo and threshold work.",
   },
   {
     title: "First full marathon",

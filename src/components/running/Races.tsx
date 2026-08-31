@@ -9,16 +9,20 @@ import SectionHeading from "@/components/SectionHeading";
 import RouteMap from "./RouteMap";
 import RunPhotos from "./RunPhotos";
 
-function resolveCoverPhoto(race: { runId?: string; coverPhoto?: string }) {
-  if (race.coverPhoto) return race.coverPhoto;
+function resolveRacePhotos(race: { runId?: string; photos?: string[] }) {
+  if (race.photos?.length) return race.photos;
   const live = race.runId ? findRunById(race.runId) : undefined;
-  return live ? primaryPhoto(live.photos) : null;
+  return live?.photos ?? [];
+}
+
+function resolveCoverPhoto(race: { runId?: string; coverPhoto?: string; photos?: string[] }) {
+  if (race.coverPhoto) return race.coverPhoto;
+  return primaryPhoto(resolveRacePhotos(race));
 }
 
 export default function Races() {
   const route = featuredRace.runId ? findRunById(featuredRace.runId)?.map ?? null : null;
-  const spotlightPhotos =
-    (spotlightRace?.runId ? findRunById(spotlightRace.runId)?.photos : []) ?? [];
+  const spotlightPhotos = spotlightRace ? resolveRacePhotos(spotlightRace) : [];
   const spotlightCover = spotlightRace ? resolveCoverPhoto(spotlightRace) : null;
 
   return (
@@ -163,8 +167,7 @@ export default function Races() {
           </h4>
           <ul className="mt-4 divide-y divide-border border-y border-border">
             {supportingRaces.map((race) => {
-              const live = race.runId ? findRunById(race.runId) : undefined;
-              const thumb = live ? primaryPhoto(live.photos) : null;
+              const thumb = resolveCoverPhoto(race);
               return (
                 <li
                   key={`${race.date}-${race.name}`}

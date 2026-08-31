@@ -29,10 +29,10 @@ export const defaultOgImage = {
 };
 
 export const runningOgImage = {
-  url: "/running/photos/monsoon-finish.jpg",
+  url: "/running/photos/nmdc-finish.jpg",
   width: 1200,
   height: 800,
-  alt: "Hyderabad Monsoon Run finish line",
+  alt: "NMDC Hyderabad Half Marathon finish",
 };
 
 export function personJsonLd() {
