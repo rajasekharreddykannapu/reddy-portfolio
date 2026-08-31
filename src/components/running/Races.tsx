@@ -77,6 +77,30 @@ export default function Races() {
                   {featuredRace.story}
                 </p>
               )}
+
+              {featuredRace.resultUrl && (
+                <div className="mt-8 flex flex-wrap gap-2.5">
+                  <a
+                    href={featuredRace.resultUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary inline-flex items-center gap-1.5"
+                  >
+                    Official result
+                  </a>
+                  {featuredRace.runId && (
+                    <a
+                      href={`https://www.strava.com/activities/${featuredRace.runId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-ghost inline-flex items-center gap-1.5"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
+                      Strava
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#0b0e14]">

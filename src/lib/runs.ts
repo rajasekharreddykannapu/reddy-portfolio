@@ -11,6 +11,7 @@ import runsData from "@/data/runs.json";
 import runPhotos from "@/data/run-photos.json";
 import runVideosData from "@/data/run-videos.json";
 import { parseRunVideos, type RunVideo } from "@/lib/run-videos";
+import { races } from "@/lib/running";
 
 export type RunMap = { viewBox: string; path: string };
 
@@ -337,6 +338,44 @@ export function withLiveLongest(
           value: `${km} km`,
           label: rec.label,
           note: `${longest.name} · ${fmtDay(longest.date)}`,
+        }
+      : rec,
+  );
+}
+
+function parseRaceTime(time: string): number {
+  const parts = time.split(":").map(Number);
+  if (parts.length === 3 && parts.every((n) => !Number.isNaN(n))) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+  if (parts.length === 2 && parts.every((n) => !Number.isNaN(n))) {
+    return parts[0] * 60 + parts[1];
+  }
+  return Number.POSITIVE_INFINITY;
+}
+
+/** Best chip-time half marathon from the editorial race list. */
+export function withLiveHalfMarathon(records: HeadlineRecord[]): HeadlineRecord[] {
+  const halves = races.filter((race) => /half/i.test(race.distance));
+  let best = halves[0];
+  let bestSec = best ? parseRaceTime(best.time) : Number.POSITIVE_INFINITY;
+
+  for (const race of halves.slice(1)) {
+    const sec = parseRaceTime(race.time);
+    if (sec < bestSec) {
+      best = race;
+      bestSec = sec;
+    }
+  }
+
+  if (!best) return records;
+
+  return records.map((rec) =>
+    rec.label === "Half marathon"
+      ? {
+          value: best.time,
+          label: rec.label,
+          note: `${best.name} · ${best.date}`,
         }
       : rec,
   );

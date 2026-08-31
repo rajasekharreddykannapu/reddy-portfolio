@@ -14,11 +14,11 @@ export const runningProfile = {
   kicker: "The running journey",
   headline: "From one hard loop to marathon distance.",
   intro:
-    "Twelve months ago one park lap left me walking. By June I had a sub-2 half — no coach, just sunrise miles logged on Strava.",
+    "Twelve months ago one park lap left me walking. By June a sub-2 half — by August, 1:49 at NMDC. No coach, just sunrise miles logged on Strava.",
   stravaUrl: "https://www.strava.com/athletes/202080481",
   since: "Logging since Jan 2026",
   /** Strava activity id for hero route art when runs.json is populated. */
-  heroRunId: "18817317833",
+  heroRunId: "19956634788",
 };
 
 export type RunStat = { value: string; label: string; hint?: string };
@@ -260,7 +260,6 @@ export const races: Race[] = [
     distance: "Half marathon",
     time: "1:59:15",
     note: "First HM · sub-2:00",
-    featured: true,
     story:
       "From a body that couldn't finish a park loop to 21.1 km under two hours — five months, one stubborn habit, and a first half that broke the tape.",
     runId: "18817317833",
@@ -271,6 +270,7 @@ export const races: Race[] = [
     distance: "16.1 km",
     time: "1:22:35",
     note: "Same pace as City Slam 10K",
+    spotlight: true,
     story:
       "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
     runId: "19762807960",
@@ -285,7 +285,7 @@ export const races: Race[] = [
     distance: "Half marathon",
     time: "1:49:01",
     note: "Half marathon PB · sub-1:50",
-    spotlight: true,
+    featured: true,
     story:
       "Ten minutes off the first half — 1:49:01 in humid Hyderabad air. The sub-1:50 goal from the season plan, crossed at the 15th edition start line.",
     runId: "19956634788",
