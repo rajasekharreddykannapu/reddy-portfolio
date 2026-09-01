@@ -226,6 +226,13 @@ export type Race = {
   photos?: string[];
   /** Official chip-time / results page when available. */
   resultUrl?: string;
+  /** External event photo gallery (e.g. Memzo finish-line album). */
+  eventGallery?: {
+    url: string;
+    bannerPhoto: string;
+    title: string;
+    subtitle: string;
+  };
 };
 
 export const races: Race[] = [
@@ -293,6 +300,13 @@ export const races: Race[] = [
     photos: ["nmdc-finish.jpg", "nmdc-medal.jpg", "nmdc-celebrate.jpg"],
     resultUrl:
       "https://sportstimingsolutions.in/results?q=eyJlX25hbWUiOiJOTURDIEh5ZGVyYWJhZCBNYXJhdGhvbiAyMDI2IiwiZV9pZCI6OTQxMzUsImJpYk5vIjoiMjM5NzgifQ%3D%3D",
+    eventGallery: {
+      url: "https://event.memzo.ai/m/my-photo/22723/194999/al35135_B2088775",
+      bannerPhoto: "nmdc-memzo-banner.jpg",
+      title: "Finish line photos",
+      subtitle:
+        "Relive the best moments from NMDC Hyderabad Marathon 2026 — tap to browse the full gallery.",
+    },
   },
 ];
 

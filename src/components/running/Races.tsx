@@ -8,6 +8,7 @@ import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
 import SectionHeading from "@/components/SectionHeading";
 import RouteMap from "./RouteMap";
 import RunPhotos from "./RunPhotos";
+import EventGalleryBanner from "./EventGalleryBanner";
 
 function resolveRacePhotos(race: { runId?: string; photos?: string[] }) {
   if (race.photos?.length) return race.photos;
@@ -114,6 +115,10 @@ export default function Races() {
             </div>
           </div>
         </motion.article>
+
+        {featuredRace.eventGallery && (
+          <EventGalleryBanner gallery={featuredRace.eventGallery} />
+        )}
 
         {/* Latest race — photo spotlight */}
         {spotlightRace && spotlightCover && (
