@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
@@ -11,6 +12,12 @@ const links = [
   ...(profile.linkedin
     ? [{ label: "LinkedIn", href: profile.linkedin, value: profile.linkedin.replace("https://", "") }]
     : []),
+  {
+    label: "Instagram",
+    href: profile.instagram,
+    value: profile.instagram.replace("https://www.", "").replace(/\/$/, ""),
+    event: "instagram_click" as const,
+  },
 ];
 
 export default function Contact() {
@@ -37,6 +44,11 @@ export default function Contact() {
             href={link.href}
             target={link.href.startsWith("http") ? "_blank" : undefined}
             rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+            onClick={
+              "event" in link && link.event
+                ? () => track(link.event, { source: "contact" })
+                : undefined
+            }
             whileHover={{ y: -2 }}
             className="card flex w-full min-w-0 items-center justify-between gap-6 px-5 py-3.5 text-sm transition-colors hover:border-accent sm:w-auto sm:min-w-[15rem]"
           >

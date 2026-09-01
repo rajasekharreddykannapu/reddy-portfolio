@@ -5,6 +5,7 @@ export const profile = {
   email: "rajasekhar.sachin@gmail.com",
   linkedin: "https://www.linkedin.com/in/kannapurajasekharreddy/" as string | null,
   github: "https://github.com/rajasekharreddykannapu",
+  instagram: "https://www.instagram.com/krsreddy200/",
   valueProp:
     "Building scalable, distributed, cloud-native SaaS platforms — and the teams that ship them.",
   summary:

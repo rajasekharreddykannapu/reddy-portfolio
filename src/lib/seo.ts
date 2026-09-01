@@ -17,7 +17,7 @@ export const runningDescription =
 export const learningDescription =
   "Daily reading OS for .NET, Azure, Angular, Elastic, and AI product engineering — field notes from the desk.";
 
-export const sameAs = [profile.linkedin, profile.github].filter(
+export const sameAs = [profile.linkedin, profile.github, profile.instagram].filter(
   (url): url is string => Boolean(url),
 );
 
