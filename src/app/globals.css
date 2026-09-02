@@ -1,31 +1,42 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* ============================================================
+   Modernist — flat, architectural, near-mono red on a light ground.
+   Zero radius, 2px rules, Archivo throughout.
+   Single theme: the system has no dark variant.
+   ============================================================ */
 
 :root {
-  --background: #fafaf9;
-  --surface: #ffffff;
-  --surface-2: #f4f4f3;
-  --foreground: #14181f;
-  --muted: #5b6472;
-  --border: #e4e6ea;
-  --accent: #b45309;
-  --accent-2: #c2410c;
+  --background: #f3f2f2;
+  --surface: #eae9e9;
+  --surface-2: #eae7e7;
+  --foreground: #201e1d;
+  --muted: #605d5d;
+  --border: rgba(32, 30, 29, 0.4);
+  --accent: #ec3013;
+  --accent-2: #ec3013; /* mono scheme — one accent voice */
   --accent-foreground: #ffffff;
-  --hairline: rgba(15, 23, 32, 0.06);
-}
+  --hairline: rgba(32, 30, 29, 0.12);
 
-.dark {
-  --background: #080b10;
-  --surface: #12161d;
-  --surface-2: #161b23;
-  --foreground: #e9edf3;
-  --muted: #8b95a3;
-  --border: #232933;
-  --accent: #fbbf24;
-  --accent-2: #fb923c;
-  --accent-foreground: #080b10;
-  --hairline: rgba(255, 255, 255, 0.08);
+  --neutral-100: #f8f4f4;
+  --neutral-200: #eae7e7;
+  --neutral-300: #d7d3d3;
+  --neutral-400: #bab6b6;
+  --neutral-500: #9b9797;
+  --neutral-600: #7d7979;
+  --neutral-700: #605d5d;
+  --neutral-800: #444141;
+  --neutral-900: #2d2b2b;
+
+  --accent-100: #fff2ef;
+  --accent-200: #ffe0d9;
+  --accent-300: #ffc4b8;
+  --accent-400: #ff9783;
+  --accent-500: #ff563c;
+  --accent-600: #dd2b0f;
+  --accent-700: #ae1800;
+  --accent-800: #7c1405;
+  --accent-900: #4d170e;
 }
 
 @theme inline {
@@ -38,8 +49,24 @@
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
   --color-accent-foreground: var(--accent-foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+
+  --font-sans: var(--font-archivo);
+  --radius-none: 0px;
 }
 
 html {
@@ -50,40 +77,20 @@ body {
   position: relative;
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-archivo), system-ui, sans-serif;
 }
 
-/* Cinematic ambient depth — a soft aurora anchored to the top of the page.
-   Kept very faint in light mode; richer in dark mode. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background:
-    radial-gradient(60% 40% at 15% -5%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%),
-    radial-gradient(50% 40% at 90% 0%, color-mix(in srgb, var(--accent-2) 5%, transparent), transparent 70%);
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-.dark body::before {
-  background:
-    radial-gradient(60% 40% at 15% -5%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
-    radial-gradient(50% 40% at 90% 0%, color-mix(in srgb, var(--accent-2) 13%, transparent), transparent 70%);
-}
-
-/* Fine film grain for a premium, non-flat surface — subtler in light mode. */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.dark body::after {
-  opacity: 0.04;
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -91,199 +98,195 @@ body::after {
   color: var(--accent-foreground);
 }
 
-/* Large display text stays solid and crisp in light mode. */
-.text-sheen {
-  color: var(--foreground);
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-/* Subtle vertical sheen only in dark mode — sophistication without color. */
-.dark .text-sheen {
-  background: linear-gradient(180deg, var(--foreground) 35%, color-mix(in srgb, var(--foreground) 72%, transparent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Signature accent gradient for metrics and highlights. */
-.text-gradient {
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Elevated surface with a top hairline highlight — reads as lit from above. */
-.card {
-  position: relative;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--foreground) 3%, transparent), transparent 40%),
-    var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding-top: 1px;
-  background: linear-gradient(180deg, var(--hairline), transparent 30%);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.hero-glow {
-  position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 480px;
-  background:
-    radial-gradient(circle at 25% 30%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 60%),
-    radial-gradient(circle at 75% 65%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 55%);
-  filter: blur(60px);
-  opacity: 0.55;
-  pointer-events: none;
-  z-index: 0;
-  animation: glow-drift 16s ease-in-out infinite alternate;
-}
-
-@keyframes glow-drift {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  to {
-    transform: translate3d(3%, 4%, 0) scale(1.1);
-  }
-}
-
-@keyframes fade-down {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-glow {
-    animation: none;
-  }
-}
-
-/* ============================================================
-   Modern UI layer — motion, depth & interaction
-   ============================================================ */
-
-/* Smooth cross-document (MPA) morph when navigating between the
-   portfolio and the running page. Zero JS. */
+/* Cross-document morph between the portfolio and the running page. */
 @view-transition {
   navigation: auto;
 }
 
-/* Shared elements morph across the page transition. */
 .vt-header {
   view-transition-name: site-header;
 }
 
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
+/* ---------- Type roles ---------- */
+
+/* Uppercase label — section kickers, stat labels, meta rows. */
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-/* Living accent gradient — metrics gently shift hue. */
-.text-gradient {
-  background-size: 200% 100%;
-  animation: gradient-move 9s ease-in-out infinite;
+/* Large figures: Archivo 800, tight, tabular. */
+.metric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  font-weight: 800;
 }
 
-@keyframes gradient-move {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+/* ---------- Surfaces ---------- */
+
+/* Flat panel with a 2px edge. No elevation, no highlight. */
+.card {
+  position: relative;
+  background: var(--background);
+  border: 2px solid var(--border);
 }
 
-/* Animated conic gradient border (uses ::after so it composes with .card). */
-.gradient-border::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(
-    from var(--angle),
-    transparent 15%,
-    color-mix(in srgb, var(--accent) 90%, transparent) 42%,
-    color-mix(in srgb, var(--accent-2) 90%, transparent) 58%,
-    transparent 85%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: border-spin 7s linear infinite;
-  pointer-events: none;
-  z-index: 2;
+/* A grid whose 2px gap IS the divider: set on the wrapper, cells opt in. */
+.rule-grid {
+  display: grid;
+  gap: 2px;
+  background: var(--border);
 }
 
-@keyframes border-spin {
-  to {
-    --angle: 360deg;
-  }
+.rule-grid > * {
+  background: var(--background);
 }
 
-/* Cursor-tracking spotlight for cards. Content is raised above it. */
-.card-glow {
+/* Row hover tint for ruled lists and tables. */
+.rule-row {
+  transition: background 0.18s ease;
+}
+
+.rule-row:hover {
+  background: var(--neutral-200);
+}
+
+/* ---------- Actions ---------- */
+
+/* Labels are flush left even when the button is wider than its text. */
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0.75rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border: 2px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-600);
+  border-color: var(--accent-600);
+}
+
+.btn-ghost {
+  border: 2px solid var(--border);
+  color: var(--foreground);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent-700);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* Square tag. Variants tint from the ramps. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tag-neutral {
+  background: var(--neutral-200);
+  color: var(--neutral-900);
+}
+
+.tag-accent {
+  background: var(--accent-100);
+  color: var(--accent-700);
+}
+
+.tag-outline {
+  border: 2px solid var(--border);
+  color: var(--muted);
+}
+
+/* Nav link with a 2px underline that scales in from the left. */
+.link-line {
   position: relative;
 }
-.card-glow::after {
+
+.link-line::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    240px circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--accent) 20%, transparent),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: 0;
-}
-.card-glow:hover::after {
-  opacity: 1;
-}
-.card-glow > * {
-  position: relative;
-  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
 }
 
-/* Scroll-driven line drawing for GPS routes and mini-charts.
-   Paths carry pathLength="1" so a single rule fits every shape. */
+.link-line:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Imagery: black and white, never tinted ---------- */
+
+.grayscale-photo {
+  filter: grayscale(1);
+}
+
+.photo-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-thumb {
+  cursor: zoom-in;
+  border: 2px solid var(--border);
+  background: var(--neutral-200);
+  filter: grayscale(1);
+  transition: filter 0.25s ease;
+}
+
+.photo-thumb:hover,
+.photo-thumb:focus-visible {
+  filter: grayscale(1) contrast(1.08);
+}
+
+/* ---------- Charts ---------- */
+
+/* Bars grow on entry; heights/widths come from the component. */
+.bar {
+  transition: height 0.9s cubic-bezier(0.22, 1, 0.36, 1), width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Scroll-driven line drawing for GPS routes. Paths carry pathLength="1". */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .route-line {
-      stroke-dasharray: 1;
-      stroke-dashoffset: 1;
-      animation: draw-line linear both;
-      animation-timeline: view();
-      animation-range: entry 4% cover 38%;
-    }
+    .route-line,
     .chart-line {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
       animation: draw-line linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 32%;
+      animation-range: entry 4% cover 38%;
     }
   }
 }
@@ -294,112 +297,24 @@ body::after {
   }
 }
 
-
-/* Precision metrics — large numbers stay crisp, never gradient-clipped. */
-.metric {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
-  font-weight: 600;
-}
-
-.kicker {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.btn-primary {
-  border-radius: 9999px;
-  background: var(--accent);
-  color: var(--accent-foreground);
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent);
-}
-
-.btn-ghost {
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--foreground);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.btn-ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.panel-dark {
-  background: #0b0e14;
-  border: 1px solid color-mix(in srgb, #fbbf24 18%, transparent);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, #ffffff 6%, transparent) inset,
-    0 28px 64px -36px rgba(8, 11, 16, 0.7);
-}
-
-/* Reduced-motion: hold everything still. */
-@media (prefers-reduced-motion: reduce) {
-  .text-gradient,
-  .gradient-border::after {
-    animation: none;
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Run photo surfaces */
-.photo-cover {
-  position: relative;
-  overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
 }
 
-.photo-cover::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, #000 10%, transparent) 0%,
-    color-mix(in srgb, #000 55%, transparent) 100%
-  );
-  pointer-events: none;
-}
-
-.photo-map-inset {
-  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
-  background: color-mix(in srgb, #0b0e14 88%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.65);
-}
-
-.photo-thumb {
-  cursor: zoom-in;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-}
-
-.photo-thumb-shine {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 0%, transparent) 40%,
-    color-mix(in srgb, var(--accent) 18%, transparent) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
-
-.photo-thumb:hover .photo-thumb-shine,
-.photo-thumb:focus-visible .photo-thumb-shine {
-  opacity: 1;
-}
+/* ---------- Lightbox ---------- */
 
 .photo-lightbox {
   position: fixed;
@@ -409,8 +324,7 @@ body::after {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background: color-mix(in srgb, #080b10 92%, transparent);
-  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, #201e1d 94%, transparent);
   animation: fade-down 0.25s ease;
 }
 
@@ -418,10 +332,8 @@ body::after {
   position: relative;
   max-height: min(88vh, 960px);
   max-width: min(96vw, 1200px);
-  border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, #ffffff 12%, transparent);
-  box-shadow: 0 32px 80px -24px rgba(0, 0, 0, 0.75);
+  border: 2px solid color-mix(in srgb, #ffffff 24%, transparent);
 }
 
 .photo-lightbox-image {
@@ -431,6 +343,7 @@ body::after {
   max-height: min(88vh, 960px);
   max-width: min(96vw, 1200px);
   object-fit: contain;
+  filter: grayscale(1);
 }
 
 .photo-lightbox-close,
@@ -439,11 +352,9 @@ body::after {
   z-index: 101;
   display: grid;
   place-items: center;
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, #ffffff 16%, transparent);
-  background: color-mix(in srgb, #12161d 80%, transparent);
-  color: #f4f4f5;
-  backdrop-filter: blur(8px);
+  border: 2px solid color-mix(in srgb, #ffffff 24%, transparent);
+  background: color-mix(in srgb, #201e1d 88%, transparent);
+  color: #f3f2f2;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
@@ -485,9 +396,9 @@ body::after {
   left: 50%;
   z-index: 101;
   transform: translateX(-50%);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: color-mix(in srgb, #ffffff 72%, transparent);
+  color: color-mix(in srgb, #ffffff 76%, transparent);
 }

@@ -8,7 +8,7 @@ import PhotoLightbox from "./PhotoLightbox";
 type RunPhotosProps = {
   photos: string[];
   alt: string;
-  /** grid = details panel; strip = horizontal scroll */
+  /** grid = details panel; strip = a ruled row of frames */
   layout?: "grid" | "strip";
   className?: string;
 };
@@ -29,19 +29,17 @@ export default function RunPhotos({
     setOpen(true);
   };
 
-  const gridClass =
+  // The 2px gap is the divider; frames are square-cornered and grayscale.
+  const wrapClass =
     layout === "strip"
-      ? "flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1"
-      : "grid grid-cols-3 gap-2";
+      ? "grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-0.5 bg-[var(--border)]"
+      : "grid grid-cols-3 gap-0.5 bg-[var(--border)]";
 
-  const itemClass =
-    layout === "strip"
-      ? "relative aspect-[4/3] w-[72%] shrink-0 snap-center overflow-hidden rounded-xl sm:w-[45%]"
-      : "group/photo relative aspect-square overflow-hidden rounded-xl";
+  const itemClass = layout === "strip" ? "relative h-40" : "relative aspect-square";
 
   return (
     <>
-      <div className={`${gridClass} ${className}`}>
+      <div className={`${wrapClass} ${className}`}>
         {photos.map((src, i) => (
           <button
             key={src}
@@ -54,10 +52,9 @@ export default function RunPhotos({
               src={photoSrc(src)}
               alt={alt}
               fill
-              sizes={layout === "strip" ? "45vw" : "120px"}
-              className="object-cover transition-transform duration-500 group-hover/photo:scale-[1.04]"
+              sizes={layout === "strip" ? "45vw" : "160px"}
+              className="object-cover"
             />
-            <span className="photo-thumb-shine" aria-hidden />
           </button>
         ))}
       </div>

@@ -27,216 +27,179 @@ export default function Races() {
   const spotlightCover = spotlightRace ? resolveCoverPhoto(spotlightRace) : null;
 
   return (
-    <section id="races" className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        variants={staggerContainer}
-      >
-        <SectionHeading index="04">Breakthrough</SectionHeading>
-        <motion.p
-          variants={fadeUp}
-          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
+    <motion.section
+      id="races"
+      className="mx-auto max-w-[1240px] px-10 max-sm:px-5"
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
+      variants={staggerContainer}
+    >
+      <div className="grid grid-cols-[220px_1fr] gap-10 border-b-2 border-border py-18 max-[900px]:grid-cols-1">
+        <SectionHeading
+          index="04"
+          intro="Four bibs in five months. 55:17 for a first 10K, then 51:11, then two halves — 1:59:15, then 1:49:01."
         >
-          The races that rewrote what felt possible — and the proof that kept stacking.
-        </motion.p>
+          Breakthrough
+        </SectionHeading>
 
-        {/* Featured half */}
-        <motion.article
-          variants={fadeUp}
-          className="card relative mt-10 overflow-hidden px-6 py-10 sm:px-8 sm:py-14"
-        >
-          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <p className="kicker text-accent">Featured · {featuredRace.date}</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]">
-                {featuredRace.name}
-              </h3>
-              <p className="mt-1 text-sm text-muted">
+        <div className="grid gap-10">
+          {/* Featured half — the finish time carries the accent. */}
+          <motion.article variants={fadeUp} className="border-t-2 border-foreground pt-6">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="tag tag-accent">Featured · {featuredRace.date}</span>
+              <span className="tag tag-outline">
                 {featuredRace.distance}
                 {featuredRace.note ? ` · ${featuredRace.note}` : ""}
-              </p>
-
-              <p
-                className="metric mt-8 text-5xl text-foreground sm:text-6xl"
-                aria-label={`Finish time ${featuredRace.time}`}
-              >
-                <motion.span
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                  className="inline-block"
-                >
-                  {featuredRace.time}
-                </motion.span>
-              </p>
-
-              {featuredRace.story && (
-                <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
-                  {featuredRace.story}
-                </p>
-              )}
-
-              {featuredRace.resultUrl && (
-                <div className="mt-8 flex flex-wrap gap-2.5">
-                  <a
-                    href={featuredRace.resultUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-primary inline-flex items-center gap-1.5"
-                  >
-                    Official result
-                  </a>
-                  {featuredRace.runId && (
-                    <a
-                      href={`https://www.strava.com/activities/${featuredRace.runId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn-ghost inline-flex items-center gap-1.5"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
-                      Strava
-                    </a>
-                  )}
-                </div>
-              )}
+              </span>
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#0b0e14]">
-              {route ? (
-                <RouteMap map={route} tone="dark" className="h-full w-full p-6" />
-              ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-                  <p className="font-mono text-xs text-muted">Half marathon · 21.1 km</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </motion.article>
-
-        {featuredRace.eventGallery && (
-          <EventGalleryBanner gallery={featuredRace.eventGallery} />
-        )}
-
-        {/* Latest race — photo spotlight */}
-        {spotlightRace && spotlightCover && (
-          <motion.article
-            variants={fadeUp}
-            className="card gradient-border relative mt-8 overflow-hidden"
-          >
-            <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="photo-cover relative min-h-[280px] lg:min-h-[420px]">
-                <Image
-                  src={photoSrc(spotlightCover)}
-                  alt={spotlightRace.name}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
-                {spotlightPhotos.length > 0 && (
-                  <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-black/45 p-4 backdrop-blur-md">
-                    <RunPhotos photos={spotlightPhotos} alt={spotlightRace.name} layout="strip" />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col justify-center px-6 py-10 sm:px-8 sm:py-12">
-                <p className="kicker text-accent">Latest · {spotlightRace.date}</p>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
-                  {spotlightRace.name}
-                </h3>
-                <p className="mt-1 text-sm text-muted">
-                  {spotlightRace.distance}
-                  {spotlightRace.note ? ` · ${spotlightRace.note}` : ""}
-                </p>
-
-                <p className="metric mt-8 text-5xl text-foreground">{spotlightRace.time}</p>
-
-                {spotlightRace.story && (
-                  <p className="mt-5 max-w-md text-base leading-relaxed text-muted">
-                    {spotlightRace.story}
+            <div className="mt-5 grid grid-cols-[1fr_200px] items-start gap-8 max-[900px]:grid-cols-1">
+              <div>
+                <h3 className="text-[1.875rem]">{featuredRace.name}</h3>
+                {featuredRace.story && (
+                  <p className="mt-3.5 max-w-[62ch] text-[17px] leading-[1.55] text-neutral-800">
+                    {featuredRace.story}
                   </p>
                 )}
-
-                <div className="mt-8 flex flex-wrap gap-2.5">
-                  {spotlightRace.resultUrl && (
+                {featuredRace.resultUrl && (
+                  <div className="mt-5.5 flex flex-wrap gap-3">
                     <a
-                      href={spotlightRace.resultUrl}
+                      href={featuredRace.resultUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn-primary inline-flex items-center gap-1.5"
+                      className="btn-primary"
                     >
                       Official result
                     </a>
-                  )}
-                  {spotlightRace.runId && (
-                    <a
-                      href={`https://www.strava.com/activities/${spotlightRace.runId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn-ghost inline-flex items-center gap-1.5"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
-                      Strava
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.article>
-        )}
-
-        {/* Earlier results */}
-        <motion.div variants={fadeUp} className="mt-10">
-          <h4 className="font-mono text-xs uppercase tracking-widest text-muted">
-            The path so far
-          </h4>
-          <ul className="mt-4 divide-y divide-border border-y border-border">
-            {supportingRaces.map((race) => {
-              const thumb = resolveCoverPhoto(race);
-              return (
-                <li
-                  key={`${race.date}-${race.name}`}
-                  className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 py-4 transition-colors hover:bg-surface-2/60 sm:grid-cols-[7rem_1fr_5rem_auto] sm:px-1 lg:grid-cols-[7rem_1fr_5rem_auto_4.5rem]"
-                >
-                  <p className="order-1 font-mono text-xs text-muted sm:order-none">
-                    {race.date}
-                  </p>
-                  <div className="order-3 col-span-2 sm:order-none sm:col-span-1">
-                    <p className="font-semibold text-foreground">{race.name}</p>
-                    {race.note && <p className="text-xs text-accent">{race.note}</p>}
-                    {race.story && (
-                      <p className="mt-1 max-w-md text-xs leading-relaxed text-muted">
-                        {race.story}
-                      </p>
+                    {featuredRace.runId && (
+                      <a
+                        href={`https://www.strava.com/activities/${featuredRace.runId}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-ghost"
+                      >
+                        Strava
+                      </a>
                     )}
                   </div>
-                  <p className="order-2 text-right font-mono text-sm text-muted sm:order-none sm:text-left">
-                    {race.distance}
-                  </p>
-                  <p className="order-4 text-right font-mono text-lg font-semibold tabular-nums text-foreground sm:order-none">
-                    {race.time}
-                  </p>
-                  {thumb && (
-                    <div className="order-5 relative col-span-2 hidden h-14 w-14 overflow-hidden rounded-xl border border-border lg:col-span-1 lg:col-start-5 lg:block">
-                      <Image
-                        src={photoSrc(thumb)}
-                        alt=""
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
-                    </div>
+                )}
+              </div>
+              <p
+                className="metric text-[clamp(2.5rem,5vw,3.75rem)] leading-none text-accent"
+                aria-label={`Finish time ${featuredRace.time}`}
+              >
+                {featuredRace.time}
+              </p>
+            </div>
+
+            {route && (
+              <div className="mt-6 border-2 border-border">
+                <RouteMap map={route} tone="light" className="aspect-[16/7] h-auto w-full p-6" />
+              </div>
+            )}
+          </motion.article>
+
+          {featuredRace.eventGallery && <EventGalleryBanner gallery={featuredRace.eventGallery} />}
+
+          {/* Latest race */}
+          {spotlightRace && (
+            <motion.article variants={fadeUp} className="border-t-2 border-border pt-6">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="tag tag-neutral">Latest · {spotlightRace.date}</span>
+                <span className="tag tag-outline">
+                  {spotlightRace.distance}
+                  {spotlightRace.note ? ` · ${spotlightRace.note}` : ""}
+                </span>
+              </div>
+
+              <div className="mt-5 grid grid-cols-[1fr_200px] items-start gap-8 max-[900px]:grid-cols-1">
+                <div>
+                  <h3 className="text-[1.625rem]">{spotlightRace.name}</h3>
+                  {spotlightRace.story && (
+                    <p className="mt-3.5 max-w-[62ch] text-[17px] leading-[1.55] text-neutral-800">
+                      {spotlightRace.story}
+                    </p>
                   )}
-                </li>
-              );
-            })}
-          </ul>
-        </motion.div>
-      </motion.div>
-    </section>
+                  <div className="mt-5.5 flex flex-wrap gap-3">
+                    {spotlightRace.resultUrl && (
+                      <a
+                        href={spotlightRace.resultUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-ghost"
+                      >
+                        Official result
+                      </a>
+                    )}
+                    {spotlightRace.runId && (
+                      <a
+                        href={`https://www.strava.com/activities/${spotlightRace.runId}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-ghost border-transparent"
+                      >
+                        Strava
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <p className="metric text-[clamp(2.125rem,4vw,3rem)] leading-none">
+                  {spotlightRace.time}
+                </p>
+              </div>
+
+              {spotlightCover && spotlightPhotos.length > 0 && (
+                <div className="mt-6">
+                  <RunPhotos photos={spotlightPhotos} alt={spotlightRace.name} layout="strip" />
+                </div>
+              )}
+            </motion.article>
+          )}
+
+          {/* Earlier results — ruled row grid. */}
+          <motion.div variants={fadeUp}>
+            <h4 className="border-b-2 border-border pb-2.5 text-[1.1875rem]">The path so far</h4>
+            <ul>
+              {supportingRaces.map((race) => {
+                const thumb = resolveCoverPhoto(race);
+                return (
+                  <li
+                    key={`${race.date}-${race.name}`}
+                    className="rule-row grid grid-cols-[130px_1fr_110px_90px] items-baseline gap-4 border-b-2 border-border py-5 pr-3 max-[900px]:grid-cols-[1fr_auto]"
+                  >
+                    <p className="text-[13px] font-semibold text-neutral-700">{race.date}</p>
+                    <div>
+                      <p className="text-lg font-extrabold">{race.name}</p>
+                      {race.note && <p className="mt-1 text-[13px] text-accent">{race.note}</p>}
+                      {race.story && (
+                        <p className="mt-2 max-w-[58ch] text-[15px] leading-[1.5] text-neutral-800">
+                          {race.story}
+                        </p>
+                      )}
+                      {thumb && (
+                        <div className="relative mt-3 hidden h-14 w-14 border-2 border-border lg:block">
+                          <Image
+                            src={photoSrc(thumb)}
+                            alt=""
+                            fill
+                            sizes="56px"
+                            className="grayscale-photo object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-[13px] font-semibold text-neutral-700 max-[900px]:hidden">
+                      {race.distance}
+                    </p>
+                    <p className="metric text-[19px]">{race.time}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.div>
+        </div>
+      </div>
+    </motion.section>
   );
 }

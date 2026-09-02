@@ -1,4 +1,3 @@
-import ThemeToggle from "@/components/ThemeToggle";
 import SocialLinks from "@/components/SocialLinks";
 
 const links = [
@@ -6,33 +5,36 @@ const links = [
   { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
   { href: "#impact", label: "Impact" },
-  { href: "#contact", label: "Contact" },
   { href: "/running", label: "Running" },
   { href: "/learning", label: "Learning" },
 ];
 
 export default function Header() {
   return (
-    <header className="vt-header sticky top-0 z-50 animate-[fade-down_0.6s_ease-out] border-b border-border/80 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#top" className="font-mono text-sm font-medium tracking-tight text-foreground">
+    <header className="vt-header sticky top-0 z-50 animate-[fade-down_0.6s_ease-out] border-b-2 border-border bg-background/88 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-6 px-10 py-3.5 max-sm:px-5">
+        <a href="#top" className="text-xl font-extrabold tracking-[-0.03em] text-foreground">
           RRK<span className="text-accent">.</span>
         </a>
-        <nav className="hidden items-center gap-7 text-sm text-muted sm:flex">
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-7 text-[13px] font-semibold uppercase tracking-[0.06em] lg:flex"
+        >
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="group relative py-1 transition-colors hover:text-foreground"
+              className="link-line text-neutral-800 transition-colors hover:text-foreground"
             >
               {link.label}
-              <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-accent transition-transform duration-300 ease-out group-hover:scale-x-100" />
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-1">
-          <SocialLinks />
-          <ThemeToggle />
+        <div className="flex items-center gap-4">
+          <SocialLinks className="max-sm:hidden" />
+          <a href="#contact" className="btn-primary">
+            Get in touch
+          </a>
         </div>
       </div>
     </header>

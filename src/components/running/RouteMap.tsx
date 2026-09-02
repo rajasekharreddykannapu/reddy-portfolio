@@ -1,5 +1,10 @@
 import type { RunMap } from "@/lib/runs";
 
+/**
+ * GPS track. Flat: one ghost stroke under one drawn stroke, no glow.
+ * `tone` is kept for call-site compatibility — the system has one ground,
+ * so both tones resolve to ink-on-ground with an accent line.
+ */
 export default function RouteMap({
   map,
   className = "",
@@ -9,16 +14,22 @@ export default function RouteMap({
   className?: string;
   tone?: "light" | "dark";
 }) {
-  const stroke = tone === "dark" ? "#fbbf24" : "var(--accent)";
-  const startStroke = tone === "dark" ? "#0c0f14" : "var(--surface)";
+  const stroke = "var(--accent)";
+  const startStroke = tone === "dark" ? "var(--foreground)" : "var(--background)";
 
   if (!map) {
     return (
       <div
-        className={`flex items-center justify-center bg-surface-2 text-muted ${className}`}
+        className={`flex items-center justify-center bg-neutral-200 text-neutral-600 ${className}`}
         aria-label="No GPS track"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6 opacity-40">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="h-6 w-6"
+        >
           <path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Z" strokeLinejoin="round" />
           <circle cx="12" cy="11" r="2" />
         </svg>
@@ -38,11 +49,10 @@ export default function RouteMap({
     >
       <path
         d={map.path}
-        stroke={stroke}
+        stroke="var(--neutral-300)"
         strokeWidth="8"
         strokeLinejoin="round"
         strokeLinecap="round"
-        opacity={tone === "dark" ? 0.22 : 0.18}
       />
       <path
         className="route-line"
@@ -54,10 +64,11 @@ export default function RouteMap({
         strokeLinecap="round"
       />
       {start && (
-        <circle
-          cx={start[1]}
-          cy={start[2]}
-          r="4.5"
+        <rect
+          x={Number(start[1]) - 4}
+          y={Number(start[2]) - 4}
+          width="8"
+          height="8"
           fill={stroke}
           stroke={startStroke}
           strokeWidth="2"

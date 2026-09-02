@@ -7,79 +7,70 @@ import Counter from "@/components/Counter";
 
 export default function Hero() {
   return (
-    <section
-      id="top"
-      className="relative mx-auto max-w-5xl overflow-hidden px-6 pt-20 pb-24 sm:pt-28 sm:pb-32"
-    >
-      <div aria-hidden className="hero-glow" />
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-        className="relative z-10"
-      >
-        <motion.p
-          variants={fadeUp}
-          className="inline-flex items-center gap-2 font-mono text-sm text-accent"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-          </span>
-          {profile.location}
-        </motion.p>
-        <motion.h1
-          variants={fadeUp}
-          className="text-sheen mt-4 text-4xl font-semibold tracking-tight sm:text-6xl"
-        >
-          {profile.name}
-        </motion.h1>
-        <motion.p variants={fadeUp} className="mt-3 text-xl font-medium text-muted sm:text-2xl">
-          {profile.title}
-        </motion.p>
-        <motion.p variants={fadeUp} className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
-          {profile.valueProp}
-        </motion.p>
-        <motion.div variants={fadeUp} className="mt-9 flex flex-wrap gap-3">
-          <motion.a
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            href="#experience"
-            className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground shadow-[0_8px_30px_-8px_var(--accent)] transition-shadow hover:shadow-[0_10px_40px_-6px_var(--accent)]"
+    <section id="top" className="mx-auto max-w-[1240px] px-10 max-sm:px-5">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+        <div className="border-b-2 border-border pt-22 pb-14">
+          <motion.p
+            variants={fadeUp}
+            className="kicker flex items-center gap-2.5 text-neutral-700"
           >
-            View experience
-          </motion.a>
-          <motion.a
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            href="/learning"
-            className="rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            <span aria-hidden className="inline-block h-0.5 w-7 bg-accent" />
+            {profile.location}
+          </motion.p>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-7 max-w-[15ch] text-[clamp(2.75rem,8vw,6.5rem)] leading-[0.92]"
           >
-            Field notes
-          </motion.a>
-          <motion.a
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            href="#contact"
-            className="rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            {profile.name}
+          </motion.h1>
+          <motion.div
+            variants={fadeUp}
+            className="mt-10 grid grid-cols-2 items-end gap-10 max-[860px]:grid-cols-1"
           >
-            Get in touch
-          </motion.a>
-        </motion.div>
+            <div>
+              <p className="text-[clamp(1.25rem,2.4vw,1.75rem)] font-extrabold tracking-[-0.01em] text-accent-700">
+                {profile.title}
+              </p>
+              <p className="mt-4 max-w-[46ch] text-lg leading-[1.55] text-neutral-800">
+                {profile.valueProp}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a href="#experience" className="btn-primary">
+                View experience
+              </a>
+              <a href="/learning" className="btn-ghost">
+                Field notes
+              </a>
+              <a href="#contact" className="btn-ghost border-transparent">
+                Get in touch
+              </a>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Stat row — cells divided by 2px vertical rules; last figure in the accent. */}
         <motion.dl
           variants={fadeUp}
-          className="card mt-14 grid max-w-2xl grid-cols-3 divide-x divide-border overflow-hidden"
+          className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] border-b-2 border-border"
         >
-          {stats.map((stat) => (
-            <div key={stat.label} className="px-5 py-6 text-center sm:text-left">
+          {stats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`py-8 ${i === 0 ? "pr-8" : "px-8"} ${
+                i === stats.length - 1 ? "" : "border-r-2 border-border"
+              }`}
+            >
               <dt className="sr-only">{stat.label}</dt>
               <dd>
-                <span className="text-gradient block text-2xl font-semibold tracking-tight sm:text-3xl">
+                <span
+                  className={`metric block text-[clamp(2.5rem,5vw,4rem)] leading-none ${
+                    i === stats.length - 1 ? "text-accent" : "text-foreground"
+                  }`}
+                >
                   <Counter value={stat.value} />
                 </span>
-                <span className="mt-1 block text-xs leading-snug text-muted sm:text-sm">
-                  {stat.label}
-                </span>
+                <span className="kicker mt-2.5 block">{stat.label}</span>
               </dd>
             </div>
           ))}

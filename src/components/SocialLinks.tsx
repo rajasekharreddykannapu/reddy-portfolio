@@ -20,7 +20,7 @@ const socials = [
 
 export default function SocialLinks({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex items-center gap-1 ${className}`}>
+    <div className={`flex items-center gap-2 ${className}`}>
       {socials.map(({ label, href, Icon, event }) => {
         const external = href.startsWith("http");
         return (
@@ -30,9 +30,9 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
             aria-label={label}
             title={label}
             target={external ? "_blank" : undefined}
-            rel={external ? "noreferrer" : undefined}
+            rel={external ? "me noreferrer" : undefined}
             onClick={event ? () => track(event, { source: "header" }) : undefined}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-accent"
+            className="flex h-8 w-8 items-center justify-center text-neutral-700 transition-colors hover:text-accent"
           >
             <Icon className="h-[1.05rem] w-[1.05rem]" />
           </a>

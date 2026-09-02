@@ -3,36 +3,28 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
-import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
-import SectionHeading from "@/components/SectionHeading";
+import { fadeUp } from "@/lib/motion";
+import Section from "@/components/Section";
 
 export default function About() {
   return (
-    <motion.section
-      id="about"
-      className="mx-auto max-w-5xl px-6 py-20"
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
-      variants={staggerContainer}
-    >
-      <SectionHeading index="01">About</SectionHeading>
+    <Section id="about" index="01" title="About">
       <motion.p
         variants={fadeUp}
-        className="mt-6 max-w-3xl text-xl leading-relaxed text-foreground sm:text-2xl"
+        className="max-w-[62ch] text-[1.3125rem] leading-[1.6] text-foreground"
       >
         {profile.summary}
       </motion.p>
-      <motion.p variants={fadeUp} className="mt-6 text-sm text-muted">
+      <motion.p variants={fadeUp} className="mt-7 text-[15px] text-muted">
         Also:{" "}
-        <Link href="/running" className="text-accent transition-colors hover:underline">
+        <Link href="/running" className="text-accent-700 transition-colors hover:text-accent">
           running journey
         </Link>
         {" · "}
-        <Link href="/learning" className="text-accent transition-colors hover:underline">
+        <Link href="/learning" className="text-accent-700 transition-colors hover:text-accent">
           field notes
         </Link>
       </motion.p>
-    </motion.section>
+    </Section>
   );
 }

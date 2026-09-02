@@ -4,8 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { engineBeats, featuredRunHighlights, videoSpotlight } from "@/lib/running";
 import { findRunById, photoSrc, primaryPhoto } from "@/lib/runs";
-import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
-import SectionHeading from "@/components/SectionHeading";
+import { fadeUp } from "@/lib/motion";
+import Section from "@/components/Section";
 import RouteMap from "./RouteMap";
 import RunVideo from "./RunVideo";
 
@@ -13,132 +13,106 @@ export default function TrainingEngine() {
   const spotlightRun = videoSpotlight.runId ? findRunById(videoSpotlight.runId) : undefined;
 
   return (
-    <section id="engine" className="mx-auto max-w-5xl px-6 py-20">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        variants={staggerContainer}
-      >
-        <SectionHeading index="05">The training engine</SectionHeading>
-        <motion.p
-          variants={fadeUp}
-          className="mt-3 max-w-xl text-[0.975rem] leading-7 text-muted"
-        >
-          Easy miles, speed work, and a longest run that proved the base was real.
-        </motion.p>
-
+    <Section
+      id="engine"
+      index="05"
+      title="The training engine"
+      intro="Easy miles, speed work, and a longest run that proved the base was real."
+    >
+      <div className="grid gap-10">
         {spotlightRun?.video && (
           <motion.article
             variants={fadeUp}
-            className="card gradient-border mt-10 overflow-hidden"
+            className="grid grid-cols-2 gap-8 border-t-2 border-foreground pt-6 max-[900px]:grid-cols-1"
           >
-            <div className="grid items-center gap-8 p-6 sm:p-8 lg:grid-cols-[1fr_auto]">
-              <div>
-                <p className="kicker text-accent">Latest long run · {videoSpotlight.date}</p>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
-                  {videoSpotlight.title}
-                </h3>
-                <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
-                  {videoSpotlight.story}
-                </p>
-                <p className="metric mt-6 text-4xl text-foreground">{videoSpotlight.stat}</p>
-                <a
-                  href={`https://www.strava.com/activities/${spotlightRun.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-6 inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-accent"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#fc4c02]" />
-                  View on Strava
-                </a>
-              </div>
+            <div>
+              <span className="tag tag-accent">Latest long run · {videoSpotlight.date}</span>
+              <h3 className="mt-4 text-[1.625rem]">{videoSpotlight.title}</h3>
+              <p className="mt-3 max-w-[52ch] text-[17px] leading-[1.55] text-neutral-800">
+                {videoSpotlight.story}
+              </p>
+              <p className="metric mt-4 text-[1.375rem]">{videoSpotlight.stat}</p>
+              <a
+                href={`https://www.strava.com/activities/${spotlightRun.id}`}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-ghost mt-4.5"
+              >
+                View on Strava
+              </a>
+            </div>
+            <div className="border-2 border-border">
               <RunVideo video={spotlightRun.video} title={spotlightRun.name} />
             </div>
           </motion.article>
         )}
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
-          <motion.ol variants={fadeUp} className="space-y-8">
-            {engineBeats.map((beat) => (
-              <li key={beat.title}>
-                <div className="flex flex-wrap items-baseline gap-2">
-                  <h3 className="text-lg font-semibold text-foreground">{beat.title}</h3>
-                  {beat.stat && (
-                    <span className="text-gradient font-mono text-sm font-semibold">
-                      {beat.stat}
-                    </span>
-                  )}
+        {/* Sessions — ruled rows, distance as an outlined tag. */}
+        <motion.ol variants={fadeUp}>
+          {engineBeats.map((beat, i) => (
+            <li
+              key={beat.title}
+              className={`rule-row grid grid-cols-[130px_1fr] gap-6 border-t-2 border-border py-5.5 pr-3 max-[700px]:grid-cols-1 ${
+                i === engineBeats.length - 1 ? "border-b-2" : ""
+              }`}
+            >
+              <span className="text-[13px] font-semibold text-neutral-700">{beat.date}</span>
+              <div>
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <h3 className="text-[1.1875rem]">{beat.title}</h3>
+                  {beat.stat && <span className="tag tag-outline">{beat.stat}</span>}
                 </div>
-                <p className="mt-1 font-mono text-xs text-muted">{beat.date}</p>
-                <p className="mt-2 leading-relaxed text-muted">{beat.detail}</p>
-              </li>
-            ))}
-          </motion.ol>
+                <p className="mt-2.5 max-w-[70ch] text-base leading-[1.55] text-neutral-800">
+                  {beat.detail}
+                </p>
+              </div>
+            </li>
+          ))}
+        </motion.ol>
 
-          <motion.div variants={fadeUp} className="grid gap-4 sm:grid-cols-1">
-            <p className="font-mono text-xs uppercase tracking-widest text-muted lg:hidden">
-              Featured efforts
-            </p>
+        {/* Featured efforts — gap-as-divider grid. */}
+        <motion.div variants={fadeUp}>
+          <h3 className="border-b-2 border-border pb-2.5 text-[1.1875rem]">Featured efforts</h3>
+          <div className="rule-grid mt-5 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
             {featuredRunHighlights.map((run) => {
               const live = run.runId ? findRunById(run.runId) : undefined;
               const map = live?.map ?? null;
               const cover = live ? primaryPhoto(live.photos) : null;
               return (
-                <div
-                  key={run.title}
-                  className="card card-glow flex overflow-hidden transition-colors hover:border-accent/40"
-                >
-                  <div className="relative w-[38%] shrink-0 bg-surface-2 sm:w-36">
-                    {cover ? (
-                      <>
-                        <Image
-                          src={photoSrc(cover)}
-                          alt={run.title}
-                          fill
-                          sizes="144px"
-                          className="object-cover"
-                        />
-                        {map && (
-                          <div className="photo-map-inset absolute bottom-2 right-2 h-11 w-16 overflow-hidden rounded-md">
-                            <RouteMap map={map} tone="dark" className="h-full w-full p-1" />
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <RouteMap map={map} className="h-full min-h-[5.5rem] w-full p-2.5" />
-                    )}
+                <article key={run.title} className="p-5.5">
+                  <div className="kicker flex justify-between gap-3">
+                    <span>{run.date.replace(/ 2026/, "")}</span>
+                    <span className="text-accent">{run.note}</span>
                   </div>
-                  <div className="flex flex-1 flex-col justify-center p-4">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h4 className="font-semibold text-foreground">{run.title}</h4>
-                      <span className="shrink-0 font-mono text-[0.65rem] text-muted">
-                        {run.date.replace(/ 2026/, "")}
-                      </span>
+                  <h4 className="mt-3 text-[1.1875rem]">{run.title}</h4>
+                  <p className="mt-2.5 text-sm text-neutral-800">
+                    {run.finishTime ? `${run.finishTime} · ` : ""}
+                    {run.distance}
+                    {run.pace ? ` · ${run.pace}/km` : ""}
+                  </p>
+                  {cover ? (
+                    <div className="relative mt-4 h-32 border-2 border-border">
+                      <Image
+                        src={photoSrc(cover)}
+                        alt={run.title}
+                        fill
+                        sizes="(max-width: 900px) 100vw, 250px"
+                        className="grayscale-photo object-cover"
+                      />
                     </div>
-                    <p className="mt-1 font-mono text-sm text-accent">{run.note}</p>
-                    <p className="mt-1 font-mono text-xs text-muted">
-                      {run.finishTime ? (
-                        <>
-                          <span className="text-foreground">{run.finishTime}</span>
-                          {" · "}
-                          {run.distance}
-                          {run.pace ? ` · ${run.pace}/km` : ""}
-                        </>
-                      ) : (
-                        <>
-                          {run.distance}
-                          {run.pace ? ` · ${run.pace}/km` : ""}
-                        </>
-                      )}
-                    </p>
-                  </div>
-                </div>
+                  ) : (
+                    map && (
+                      <div className="mt-4 border-2 border-border">
+                        <RouteMap map={map} className="h-32 w-full p-3" />
+                      </div>
+                    )
+                  )}
+                </article>
               );
             })}
-          </motion.div>
-        </div>
-      </motion.div>
-    </section>
+          </div>
+        </motion.div>
+      </div>
+    </Section>
   );
 }

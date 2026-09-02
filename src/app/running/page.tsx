@@ -11,7 +11,6 @@ import TrainingEngine from "@/components/running/TrainingEngine";
 import Upcoming from "@/components/running/Upcoming";
 import RunLog from "@/components/running/RunLog";
 import Gear from "@/components/running/Gear";
-import PointerSpotlight from "@/components/running/PointerSpotlight";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -36,27 +35,24 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * No tinted section wrappers — the 2px rules inside each section do the
+ * separating, and PointerSpotlight is gone (no cursor glow in a flat system).
+ */
 export default function RunningPage() {
   return (
     <>
-      <PointerSpotlight />
       <RunningHeader />
       <main className="flex-1">
         <RunningHero />
         <Origin />
-        <div className="border-y border-border/50 bg-surface-2/40">
-          <ProgressionChart />
-          <JourneyCharts />
-        </div>
+        <ProgressionChart />
+        <JourneyCharts />
         <Races />
-        <div className="border-y border-border/50 bg-surface-2/40">
-          <TrainingEngine />
-        </div>
+        <TrainingEngine />
         <Upcoming />
-        <div className="border-t border-border/50 bg-surface-2/40">
-          <RunLog />
-          <Gear />
-        </div>
+        <RunLog />
+        <Gear />
       </main>
       <Footer />
     </>

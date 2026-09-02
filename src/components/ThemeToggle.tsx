@@ -23,7 +23,7 @@ export default function ThemeToggle() {
       aria-label="Toggle color theme"
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
-      className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
+      className="flex h-9 w-9 items-center justify-center overflow-hidden border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
     >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (

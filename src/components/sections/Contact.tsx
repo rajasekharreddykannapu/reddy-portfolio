@@ -4,13 +4,18 @@ import { track } from "@vercel/analytics";
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
-import SectionHeading from "@/components/SectionHeading";
 
 const links = [
   { label: "Email", href: `mailto:${profile.email}`, value: profile.email },
   { label: "GitHub", href: profile.github, value: profile.github.replace("https://", "") },
   ...(profile.linkedin
-    ? [{ label: "LinkedIn", href: profile.linkedin, value: profile.linkedin.replace("https://", "") }]
+    ? [
+        {
+          label: "LinkedIn",
+          href: profile.linkedin,
+          value: profile.linkedin.replace("https://", "").replace(/\/$/, ""),
+        },
+      ]
     : []),
   {
     label: "Instagram",
@@ -20,43 +25,61 @@ const links = [
   },
 ];
 
+/**
+ * The poster statement: the one place the accent runs as a full field.
+ * Type stays display-grade, everything flush left.
+ */
 export default function Contact() {
   return (
     <motion.section
       id="contact"
-      className="mx-auto max-w-5xl px-6 py-24"
+      className="bg-accent text-accent-foreground"
       initial="hidden"
       whileInView="visible"
       viewport={viewportOnce}
       variants={staggerContainer}
     >
-      <SectionHeading index="05">Contact</SectionHeading>
-      <motion.p
-        variants={fadeUp}
-        className="mt-6 max-w-xl text-2xl font-medium leading-snug text-foreground sm:text-3xl"
-      >
-        Open to conversations about engineering leadership, platform architecture, and scaling teams.
-      </motion.p>
-      <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-        {links.map((link) => (
-          <motion.a
-            key={link.label}
-            href={link.href}
-            target={link.href.startsWith("http") ? "_blank" : undefined}
-            rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-            onClick={
-              "event" in link && link.event
-                ? () => track(link.event, { source: "contact" })
-                : undefined
-            }
-            whileHover={{ y: -2 }}
-            className="card flex w-full min-w-0 items-center justify-between gap-6 px-5 py-3.5 text-sm transition-colors hover:border-accent sm:w-auto sm:min-w-[15rem]"
-          >
-            <span className="shrink-0 text-muted">{link.label}</span>
-            <span className="min-w-0 truncate font-mono text-foreground">{link.value}</span>
-          </motion.a>
-        ))}
-      </motion.div>
+      <div className="mx-auto max-w-[1240px] px-10 py-20 max-sm:px-5">
+        <motion.p
+          variants={fadeUp}
+          className="text-sm font-extrabold tracking-[0.1em] text-accent-200"
+        >
+          05
+        </motion.p>
+        <motion.h2
+          variants={fadeUp}
+          className="mt-2.5 max-w-[20ch] text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95]"
+        >
+          Open to conversations about engineering leadership, platform architecture, and scaling
+          teams.
+        </motion.h2>
+        <motion.div
+          variants={fadeUp}
+          className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-0.5 bg-white/40"
+        >
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "me noreferrer" : undefined}
+              onClick={
+                "event" in link && link.event
+                  ? () => track(link.event, { source: "contact" })
+                  : undefined
+              }
+              className="block min-w-0 bg-accent p-6 transition-colors hover:bg-accent-600"
+            >
+              <span className="block text-xs font-bold uppercase tracking-[0.14em] text-accent-200">
+                {link.label}
+              </span>
+              <span className="mt-2 block text-[15px] font-extrabold [overflow-wrap:anywhere]">
+                {link.value}
+              </span>
+            </a>
+          ))}
+        </motion.div>
+      </div>
     </motion.section>
   );
 }

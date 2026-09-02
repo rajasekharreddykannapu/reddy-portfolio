@@ -2,35 +2,32 @@
 
 import { motion } from "framer-motion";
 import { gear } from "@/lib/running";
-import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
-import SectionHeading from "@/components/SectionHeading";
+import { fadeUp } from "@/lib/motion";
+import Section from "@/components/Section";
 
 export default function Gear() {
   return (
-    <motion.section
+    <Section
       id="gear"
-      className="mx-auto max-w-5xl px-6 py-16"
-      initial="hidden"
-      whileInView="visible"
-      viewport={viewportOnce}
-      variants={staggerContainer}
+      index="08"
+      title="Shoe rotation"
+      intro="Four pairs, 434 km between them. The Nimbus carries the volume; the Novablast only comes out on race mornings."
     >
-      <SectionHeading index="08">Shoe rotation</SectionHeading>
       <motion.div
         variants={fadeUp}
-        className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4"
+        className="rule-grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))]"
       >
         {gear.map((shoe) => (
-          <div key={shoe.model} className="border-t border-border pt-4">
+          <article key={shoe.model} className="p-5.5">
             <div className="flex items-baseline justify-between gap-3">
-              <p className="font-mono text-xs text-accent">{shoe.name}</p>
-              <p className="metric text-sm text-muted">{shoe.km} km</p>
+              <p className="kicker">{shoe.name}</p>
+              <p className="metric text-lg text-accent">{shoe.km} km</p>
             </div>
-            <h3 className="mt-2 text-sm font-semibold text-foreground">{shoe.model}</h3>
-            <p className="mt-1 text-xs leading-relaxed text-muted">{shoe.role}</p>
-          </div>
+            <h3 className="mt-3.5 text-[1.1875rem]">{shoe.model}</h3>
+            <p className="mt-2 text-sm text-neutral-800">{shoe.role}</p>
+          </article>
         ))}
       </motion.div>
-    </motion.section>
+    </Section>
   );
 }
