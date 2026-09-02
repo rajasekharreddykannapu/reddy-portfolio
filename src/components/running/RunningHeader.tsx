@@ -1,3 +1,5 @@
+import MobileNav from "@/components/MobileNav";
+
 const links = [
   { href: "#origin", label: "Origin" },
   { href: "#arc", label: "Proof" },
@@ -33,14 +35,17 @@ export default function RunningHeader() {
             </a>
           ))}
         </nav>
-        <a
-          href="https://www.strava.com/athletes/202080481"
-          target="_blank"
-          rel="me noreferrer"
-          className="btn-primary"
-        >
-          Strava
-        </a>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://www.strava.com/athletes/202080481"
+            target="_blank"
+            rel="me noreferrer"
+            className="btn-primary"
+          >
+            Strava
+          </a>
+          <MobileNav links={links} label="Running sections" />
+        </div>
       </div>
     </header>
   );

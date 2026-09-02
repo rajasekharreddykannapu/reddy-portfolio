@@ -1,3 +1,5 @@
+import MobileNav from "@/components/MobileNav";
+
 const links = [
   { href: "#daily", label: "Daily" },
   { href: "#tracks", label: "Learn" },
@@ -19,7 +21,7 @@ export default function LearningHeader() {
         </a>
         <nav
           aria-label="Learning sections"
-          className="flex min-w-0 items-center gap-6.5 text-[13px] font-semibold uppercase tracking-[0.06em]"
+          className="hidden min-w-0 items-center gap-6.5 text-[13px] font-semibold uppercase tracking-[0.06em] lg:flex"
         >
           {links.map((link) => (
             <a
@@ -31,6 +33,7 @@ export default function LearningHeader() {
             </a>
           ))}
         </nav>
+        <MobileNav links={links} label="Learning sections" />
       </div>
     </header>
   );

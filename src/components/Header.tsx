@@ -1,4 +1,5 @@
 import SocialLinks from "@/components/SocialLinks";
+import MobileNav from "@/components/MobileNav";
 
 const links = [
   { href: "#about", label: "About" },
@@ -35,6 +36,7 @@ export default function Header() {
           <a href="#contact" className="btn-primary">
             Get in touch
           </a>
+          <MobileNav links={links} label="Primary" showSocial />
         </div>
       </div>
     </header>
