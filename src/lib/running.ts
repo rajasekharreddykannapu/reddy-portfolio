@@ -14,11 +14,11 @@ export const runningProfile = {
   kicker: "The running journey",
   headline: "From one hard loop to marathon distance.",
   intro:
-    "Twelve months ago one park lap left me walking. By June a sub-2 half — by August, 1:49 at NMDC. No coach, just sunrise miles logged on Strava.",
+    "Twelve months ago one park lap left me walking. By June a sub-2 half — by August, 1:49 at NMDC — then a 47:10 10K at Run for Nature. No coach, just sunrise miles logged on Strava.",
   stravaUrl: "https://www.strava.com/athletes/202080481",
   since: "Logging since Jan 2026",
   /** Strava activity id for hero route art when runs.json is populated. */
-  heroRunId: "19956634788",
+  heroRunId: "20054628774",
 };
 
 export type RunStat = { value: string; label: string; hint?: string };
@@ -35,9 +35,9 @@ export type RunRecord = { value: string; label: string; note: string };
 
 export const records: RunRecord[] = [
   { value: "1:49:01", label: "Half marathon", note: "NMDC Hyderabad · 30 Aug 2026" },
-  { value: "51:11", label: "10K", note: "Hyderabad City Slam · 24 May 2026" },
+  { value: "47:10", label: "10K", note: "Run for Nature · 6 Sep 2026" },
   { value: "22.4 km", label: "Longest run", note: "Sunday long run · 23 Aug 2026" },
-  { value: "5:03 /km", label: "10K race pace", note: "Hyderabad City Slam · 24 May 2026" },
+  { value: "4:43 /km", label: "10K race pace", note: "Run for Nature · 6 Sep 2026" },
 ];
 
 // ── Origin chapter (day zero → first double digits) ─────────────────────────
@@ -186,6 +186,14 @@ export const timeline: TimelineEntry[] = [
       "Chip time 1:49:01 at the 15th NMDC Hyderabad Half Marathon. Ten minutes faster than the first half in June — the season goal landed on race morning.",
     stat: "21.1 km · 1:49:01",
   },
+  {
+    date: "6 Sep 2026",
+    kind: "race",
+    title: "Run for Nature — 10K PB",
+    detail:
+      "A new 10K personal best at 47:10 — four minutes faster than City Slam. The race that proved the half base had speed left in it.",
+    stat: "10K · 47:10 PB",
+  },
 ];
 
 // ── Month-by-month progression (fallback when runs.json is empty) ───────────
@@ -257,7 +265,7 @@ export const races: Race[] = [
     name: "Hyderabad Summer City Slam",
     distance: "10K",
     time: "51:11",
-    note: "Personal best",
+    note: "Former 10K PB",
     story: "Four minutes faster than the same distance a month before — 5:03/km in brutal summer heat.",
     runId: "18628386726",
   },
@@ -277,7 +285,6 @@ export const races: Race[] = [
     distance: "16.1 km",
     time: "1:22:35",
     note: "Same pace as City Slam 10K",
-    spotlight: true,
     story:
       "The City Slam 5:03/km, carried for sixteen kilometres in monsoon humidity at T-Works. Proof the half was not a one-off.",
     runId: "19762807960",
@@ -308,6 +315,17 @@ export const races: Race[] = [
         "Relive the best moments from NMDC Hyderabad Marathon 2026 — tap to browse the full gallery.",
     },
   },
+  {
+    date: "6 Sep 2026",
+    name: "Run for Nature 2026",
+    distance: "10K",
+    time: "47:10",
+    note: "10K PB · sub-48",
+    spotlight: true,
+    story:
+      "Four minutes off City Slam — 47:10 at 4:43/km. The first sub-48 10K, and proof the half training had turned into real race-day speed.",
+    runId: "20054628774",
+  },
 ];
 
 export const featuredRace = races.find((r) => r.featured)!;
@@ -316,12 +334,13 @@ export const supportingRaces = races.filter((r) => !r.featured && !r.spotlight);
 
 /** Featured video card in the training chapter. */
 export const videoSpotlight = {
-  runId: "19858726882",
-  title: "Sunday long run",
-  date: "23 Aug 2026",
-  stat: "22.4 km · 2:26:59",
+  runId: "20054628774",
+  title: "Run for Nature 2026",
+  date: "6 Sep 2026",
+  kicker: "Latest race · video",
+  stat: "10K · 47:10 PB",
   story:
-    "A humid Hyderabad morning, easy effort, and a new longest run — captured in a short recap from the road.",
+    "A new 10K personal best — four minutes faster than City Slam — captured in a short from race morning.",
 };
 
 /** Official results link keyed by Strava activity id. */
@@ -381,6 +400,13 @@ export const engineBeats: EngineBeat[] = [
       "1:49:01 — ten minutes off the June half and under the 1:50 target. Corral A, humid air, and a finish-line medal that tasted like the whole season.",
     stat: "1:49:01 · 5:10/km",
   },
+  {
+    date: "6 Sep 2026",
+    title: "Run for Nature 10K",
+    detail:
+      "47:10 — a new 10K PB at 4:43/km. Four minutes faster than City Slam, and the first time under 48.",
+    stat: "47:10 · 4:43/km",
+  },
 ];
 
 /** Highlight cards for the training chapter when live run data is thin. */
@@ -401,7 +427,7 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     distance: "10.0 km",
     finishTime: "51:11",
     pace: "5:03",
-    note: "10K PB",
+    note: "Former 10K PB",
     runId: "18628386726",
   },
   {
@@ -445,6 +471,15 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     pace: "5:10",
     note: "Half PB · sub-1:50",
     runId: "19956634788",
+  },
+  {
+    title: "Run for Nature 2026",
+    date: "6 Sep 2026",
+    distance: "10.0 km",
+    finishTime: "47:10",
+    pace: "4:43",
+    note: "10K PB · video",
+    runId: "20054628774",
   },
 ];
 

@@ -8,6 +8,7 @@ import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
 import SectionHeading from "@/components/SectionHeading";
 import RouteMap from "./RouteMap";
 import RunPhotos from "./RunPhotos";
+import RunVideo from "./RunVideo";
 import EventGalleryBanner from "./EventGalleryBanner";
 
 function resolveRacePhotos(race: { runId?: string; photos?: string[] }) {
@@ -25,6 +26,9 @@ export default function Races() {
   const route = featuredRace.runId ? findRunById(featuredRace.runId)?.map ?? null : null;
   const spotlightPhotos = spotlightRace ? resolveRacePhotos(spotlightRace) : [];
   const spotlightCover = spotlightRace ? resolveCoverPhoto(spotlightRace) : null;
+  const spotlightRun = spotlightRace?.runId ? findRunById(spotlightRace.runId) : undefined;
+  const spotlightMap = spotlightRun?.map ?? null;
+  const spotlightVideo = spotlightRun?.video ?? null;
 
   return (
     <motion.section
@@ -38,7 +42,7 @@ export default function Races() {
       <div className="grid grid-cols-[220px_1fr] gap-10 border-b-2 border-border py-18 max-[900px]:grid-cols-1">
         <SectionHeading
           index="04"
-          intro="Four bibs in five months. 55:17 for a first 10K, then 51:11, then two halves — 1:59:15, then 1:49:01."
+          intro="Six races in. First 10K at 55:17, then 51:11, two halves — 1:59:15 and 1:49:01 — and a new 10K PB at 47:10."
         >
           Breakthrough
         </SectionHeading>
@@ -152,6 +156,33 @@ export default function Races() {
               {spotlightCover && spotlightPhotos.length > 0 && (
                 <div className="mt-6">
                   <RunPhotos photos={spotlightPhotos} alt={spotlightRace.name} layout="strip" />
+                </div>
+              )}
+
+              {spotlightVideo && (
+                <div className="mt-6 grid grid-cols-[1fr_auto] items-start gap-8 border-t-2 border-border pt-6 max-[900px]:grid-cols-1">
+                  {spotlightMap && (
+                    <div className="border-2 border-border">
+                      <RouteMap
+                        map={spotlightMap}
+                        tone="light"
+                        className="aspect-[16/7] h-auto w-full p-5"
+                      />
+                    </div>
+                  )}
+                  <div className="border-2 border-border p-3 sm:min-w-[240px]">
+                    <RunVideo video={spotlightVideo} title={spotlightRace.name} />
+                  </div>
+                </div>
+              )}
+
+              {!spotlightVideo && spotlightMap && (
+                <div className="mt-6 border-2 border-border">
+                  <RouteMap
+                    map={spotlightMap}
+                    tone="light"
+                    className="aspect-[16/7] h-auto w-full p-5"
+                  />
                 </div>
               )}
             </motion.article>

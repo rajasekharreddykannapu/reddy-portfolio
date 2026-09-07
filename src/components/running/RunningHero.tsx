@@ -9,6 +9,7 @@ import {
   headlineStats,
   withLiveLongest,
   withLiveHalfMarathon,
+  withLive10K,
 } from "@/lib/runs";
 import { staggerContainer, fadeUp } from "@/lib/motion";
 import Counter from "@/components/Counter";
@@ -26,7 +27,9 @@ export default function RunningHero() {
   const heroRun = resolveHeroRun();
   const map = heroRun?.map ?? heroRouteSilhouette;
   const stats = hasRunData ? headlineStats() : runStats;
-  const prs = hasRunData ? withLiveHalfMarathon(withLiveLongest(records)) : records;
+  const prs = hasRunData
+    ? withLive10K(withLiveHalfMarathon(withLiveLongest(records)))
+    : records;
 
   return (
     <section id="top" className="mx-auto max-w-[1240px] px-10 max-sm:px-5">

@@ -26,7 +26,9 @@ export default function TrainingEngine() {
             className="grid grid-cols-2 gap-8 border-t-2 border-foreground pt-6 max-[900px]:grid-cols-1"
           >
             <div>
-              <span className="tag tag-accent">Latest long run · {videoSpotlight.date}</span>
+              <span className="tag tag-accent">
+                {videoSpotlight.kicker ?? `Latest · ${videoSpotlight.date}`}
+              </span>
               <h3 className="mt-4 text-[1.625rem]">{videoSpotlight.title}</h3>
               <p className="mt-3 max-w-[52ch] text-[17px] leading-[1.55] text-neutral-800">
                 {videoSpotlight.story}

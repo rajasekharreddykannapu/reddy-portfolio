@@ -381,6 +381,44 @@ export function withLiveHalfMarathon(records: HeadlineRecord[]): HeadlineRecord[
   );
 }
 
+/** Best chip-time 10K from the editorial race list. */
+export function withLive10K(records: HeadlineRecord[]): HeadlineRecord[] {
+  const tens = races.filter((race) => /^10K$/i.test(race.distance.trim()));
+  let best = tens[0];
+  let bestSec = best ? parseRaceTime(best.time) : Number.POSITIVE_INFINITY;
+
+  for (const race of tens.slice(1)) {
+    const sec = parseRaceTime(race.time);
+    if (sec < bestSec) {
+      best = race;
+      bestSec = sec;
+    }
+  }
+
+  if (!best) return records;
+
+  const paceSec = Math.round(bestSec / 10);
+  const pace = `${Math.floor(paceSec / 60)}:${String(paceSec % 60).padStart(2, "0")} /km`;
+
+  return records.map((rec) => {
+    if (rec.label === "10K") {
+      return {
+        value: best.time,
+        label: rec.label,
+        note: `${best.name} · ${best.date}`,
+      };
+    }
+    if (rec.label === "10K race pace") {
+      return {
+        value: pace,
+        label: rec.label,
+        note: `${best.name} · ${best.date}`,
+      };
+    }
+    return rec;
+  });
+}
+
 // Formatting helpers.
 export const fmtKm = (m: number) => (m / 1000).toFixed(2);
 
