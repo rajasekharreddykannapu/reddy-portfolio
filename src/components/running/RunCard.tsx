@@ -4,12 +4,15 @@ import Image from "next/image";
 import { useState } from "react";
 import type { Run } from "@/lib/runs";
 import { gearById, fmtKm, fmtDay, fmtTimeOfDay, primaryPhoto, photoSrc } from "@/lib/runs";
-import { resultUrlForRunId } from "@/lib/running";
+import {
+  chipTimeForRunId,
+  displayNameForRun,
+  resultUrlForRunId,
+} from "@/lib/running";
 import RouteMap from "./RouteMap";
 import MiniChart from "./MiniChart";
 import RunPhotos from "./RunPhotos";
 import PhotoLightbox from "./PhotoLightbox";
-import RunVideo from "./RunVideo";
 
 /** A right-aligned numeric cell in the log row. */
 function Cell({ label, value }: { label: string; value: string }) {
@@ -41,16 +44,26 @@ export default function RunCard({ run }: { run: Run }) {
   const maxKmh = run.maxSpeed ? (run.maxSpeed * 3.6).toFixed(1) : null;
   const stravaUrl = `https://www.strava.com/activities/${run.id}`;
   const resultUrl = resultUrlForRunId(run.id);
+  const chipTime = chipTimeForRunId(run.id);
+  const name = displayNameForRun(run.id, run.name);
   const cover = primaryPhoto(run.photos);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const hasDetail =
-    run.elevation || run.hr || run.description || run.photos.length > 0 || run.video || run.calories;
+    run.elevation ||
+    run.hr ||
+    run.description ||
+    run.photos.length > 0 ||
+    run.video ||
+    run.calories ||
+    chipTime ||
+    resultUrl;
 
   const meta = [
     fmtTimeOfDay(run.date),
     run.photos.length > 1 ? `${run.photos.length} photos` : null,
     run.video ? "video" : null,
+    chipTime ? "chip" : null,
     run.prCount > 0 ? `${run.prCount} PR` : null,
   ].filter(Boolean);
 
@@ -58,8 +71,8 @@ export default function RunCard({ run }: { run: Run }) {
     <div className="rule-row border-b-2 border-border">
       <div className="grid grid-cols-[1fr_86px_repeat(4,68px)] items-baseline gap-4 py-4 pr-3 max-[760px]:grid-cols-2">
         <div className="min-w-0">
-          <h4 className="truncate text-base font-extrabold" title={run.name}>
-            {run.name}
+          <h4 className="truncate text-base font-extrabold" title={name}>
+            {name}
           </h4>
           {meta.length > 0 && (
             <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-accent">
@@ -70,7 +83,7 @@ export default function RunCard({ run }: { run: Run }) {
         <p className="text-[13px] font-semibold text-neutral-700">{fmtDay(run.date)}</p>
         <Cell label="km" value={fmtKm(run.distance)} />
         <Cell label="/km" value={run.pace ?? "—"} />
-        <Cell label="time" value={run.duration ?? "—"} />
+        <Cell label={chipTime ? "chip" : "time"} value={chipTime ?? run.duration ?? "—"} />
         <Cell label="elev" value={`${Math.round(run.elevationGain)}m`} />
       </div>
 
@@ -82,11 +95,11 @@ export default function RunCard({ run }: { run: Run }) {
             setLightboxIndex(Math.max(0, run.photos.indexOf(cover)));
             setLightboxOpen(true);
           }}
-          aria-label={`View photos from ${run.name}`}
+          aria-label={`View photos from ${name}`}
         >
           <Image
             src={photoSrc(cover)}
-            alt={run.name}
+            alt={name}
             fill
             sizes="(max-width: 900px) 100vw, 900px"
             className="grayscale-photo object-cover"
@@ -111,10 +124,23 @@ export default function RunCard({ run }: { run: Run }) {
           </summary>
 
           <div className="mt-4 grid gap-4">
+            {chipTime && run.duration && chipTime !== run.duration && (
+              <p className="text-[13px] text-neutral-700">
+                <span className="font-bold text-accent-700">Official chip · {chipTime}</span>
+                {" · "}
+                Moving (Strava) · {run.duration}
+              </p>
+            )}
+
             {run.video && (
-              <div className="border-2 border-border">
-                <RunVideo video={run.video} title={run.name} />
-              </div>
+              <a
+                href={run.video.watchUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="link-line text-[13px] font-bold uppercase tracking-[0.08em] text-accent-700"
+              >
+                {run.video.label ? `${run.video.label} — ` : ""}Watch on YouTube
+              </a>
             )}
 
             {run.description && (
@@ -123,7 +149,7 @@ export default function RunCard({ run }: { run: Run }) {
               </p>
             )}
 
-            {run.photos.length > 0 && <RunPhotos photos={run.photos} alt={run.name} layout="strip" />}
+            {run.photos.length > 0 && <RunPhotos photos={run.photos} alt={name} layout="strip" />}
 
             {run.elevation && (
               <div>
@@ -187,7 +213,7 @@ export default function RunCard({ run }: { run: Run }) {
       {run.photos.length > 0 && (
         <PhotoLightbox
           photos={run.photos}
-          alt={run.name}
+          alt={name}
           open={lightboxOpen}
           index={lightboxIndex}
           onClose={() => setLightboxOpen(false)}

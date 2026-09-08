@@ -4,7 +4,7 @@ const links = [
   { href: "#origin", label: "Origin" },
   { href: "#arc", label: "Proof" },
   { href: "#races", label: "Races" },
-  { href: "#next", label: "Season" },
+  { href: "#tmm-plan", label: "Plan" },
   { href: "#log", label: "Archive" },
 ];
 

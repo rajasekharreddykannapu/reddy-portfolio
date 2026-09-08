@@ -2,54 +2,21 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { engineBeats, featuredRunHighlights, videoSpotlight } from "@/lib/running";
+import { engineBeats, featuredRunHighlights } from "@/lib/running";
 import { findRunById, photoSrc, primaryPhoto } from "@/lib/runs";
 import { fadeUp } from "@/lib/motion";
 import Section from "@/components/Section";
 import RouteMap from "./RouteMap";
-import RunVideo from "./RunVideo";
 
 export default function TrainingEngine() {
-  const spotlightRun = videoSpotlight.runId ? findRunById(videoSpotlight.runId) : undefined;
-
   return (
     <Section
       id="engine"
       index="05"
       title="The training engine"
-      intro="Easy miles, speed work, and a longest run that proved the base was real."
+      intro="Easy miles, speed work, and the long runs that made race day possible — not another race recap."
     >
       <div className="grid gap-10">
-        {spotlightRun?.video && (
-          <motion.article
-            variants={fadeUp}
-            className="grid grid-cols-2 gap-8 border-t-2 border-foreground pt-6 max-[900px]:grid-cols-1"
-          >
-            <div>
-              <span className="tag tag-accent">
-                {videoSpotlight.kicker ?? `Latest · ${videoSpotlight.date}`}
-              </span>
-              <h3 className="mt-4 text-[1.625rem]">{videoSpotlight.title}</h3>
-              <p className="mt-3 max-w-[52ch] text-[17px] leading-[1.55] text-neutral-800">
-                {videoSpotlight.story}
-              </p>
-              <p className="metric mt-4 text-[1.375rem]">{videoSpotlight.stat}</p>
-              <a
-                href={`https://www.strava.com/activities/${spotlightRun.id}`}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-ghost mt-4.5"
-              >
-                View on Strava
-              </a>
-            </div>
-            <div className="border-2 border-border">
-              <RunVideo video={spotlightRun.video} title={spotlightRun.name} />
-            </div>
-          </motion.article>
-        )}
-
-        {/* Sessions — ruled rows, distance as an outlined tag. */}
         <motion.ol variants={fadeUp}>
           {engineBeats.map((beat, i) => (
             <li
@@ -72,9 +39,8 @@ export default function TrainingEngine() {
           ))}
         </motion.ol>
 
-        {/* Featured efforts — gap-as-divider grid. */}
         <motion.div variants={fadeUp}>
-          <h3 className="border-b-2 border-border pb-2.5 text-[1.1875rem]">Featured efforts</h3>
+          <h3 className="border-b-2 border-border pb-2.5 text-[1.1875rem]">Key efforts</h3>
           <div className="rule-grid mt-5 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
             {featuredRunHighlights.map((run) => {
               const live = run.runId ? findRunById(run.runId) : undefined;

@@ -206,38 +206,91 @@ export default function JourneyCharts() {
         </SectionHeading>
 
         <motion.div variants={fadeUp} className="grid gap-10">
-          <ChartBlock
-            kicker={`Best month ${bestPace.pace}/km`}
-            accentKicker
-            title="Median pace, month by month"
-          >
-            <RowBars rows={paceRows} />
-          </ChartBlock>
+          {/* On small screens, charts sit behind a single disclosure to cut scroll. */}
+          <details className="group border-t-2 border-border pt-4 min-[900px]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-bold uppercase tracking-[0.08em] text-neutral-700 hover:text-accent-700">
+              <span>Show pace &amp; consistency charts</span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-4 w-4 transition-transform group-open:rotate-180"
+                aria-hidden
+              >
+                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </summary>
+            <div className="mt-6 grid gap-10">
+              <ChartBlock
+                kicker={`Best month ${bestPace.pace}/km`}
+                accentKicker
+                title="Median pace, month by month"
+              >
+                <RowBars rows={paceRows} />
+              </ChartBlock>
 
-          <ChartBlock
-            kicker={avgDays ? `${avgDays} days / week` : "Days out"}
-            title="Weekly consistency"
-          >
-            {weekBars ? (
-              <ColumnBars bars={weekBars} />
-            ) : (
-              <p className="kicker py-14">Sync Strava to unlock weekly bars</p>
-            )}
-          </ChartBlock>
+              <ChartBlock
+                kicker={avgDays ? `${avgDays} days / week` : "Days out"}
+                title="Weekly consistency"
+              >
+                {weekBars ? (
+                  <ColumnBars bars={weekBars} />
+                ) : (
+                  <p className="kicker py-14">Sync Strava to unlock weekly bars</p>
+                )}
+              </ChartBlock>
 
-          <ChartBlock
-            kicker={peakLong ? `${longest[0]?.km ?? "—"} → ${peakLong.km} km` : "Distance PRs"}
-            accentKicker
-            title="Longest run, stretching out"
-          >
-            <ColumnBars bars={longestBars} height="h-45" baseline />
-            {peakLong && (
-              <p className="kicker mt-4.5">
-                Latest PR · {peakLong.name} · {peakLong.km} km · Fastest median ·{" "}
-                {formatPace(bestPace.paceSec)}/km
-              </p>
-            )}
-          </ChartBlock>
+              <ChartBlock
+                kicker={peakLong ? `${longest[0]?.km ?? "—"} → ${peakLong.km} km` : "Distance PRs"}
+                accentKicker
+                title="Longest run, stretching out"
+              >
+                <ColumnBars bars={longestBars} height="h-45" baseline />
+                {peakLong && (
+                  <p className="kicker mt-4.5">
+                    Latest PR · {peakLong.name} · {peakLong.km} km · Fastest median ·{" "}
+                    {formatPace(bestPace.paceSec)}/km
+                  </p>
+                )}
+              </ChartBlock>
+            </div>
+          </details>
+
+          <div className="hidden gap-10 min-[900px]:grid">
+            <ChartBlock
+              kicker={`Best month ${bestPace.pace}/km`}
+              accentKicker
+              title="Median pace, month by month"
+            >
+              <RowBars rows={paceRows} />
+            </ChartBlock>
+
+            <ChartBlock
+              kicker={avgDays ? `${avgDays} days / week` : "Days out"}
+              title="Weekly consistency"
+            >
+              {weekBars ? (
+                <ColumnBars bars={weekBars} />
+              ) : (
+                <p className="kicker py-14">Sync Strava to unlock weekly bars</p>
+              )}
+            </ChartBlock>
+
+            <ChartBlock
+              kicker={peakLong ? `${longest[0]?.km ?? "—"} → ${peakLong.km} km` : "Distance PRs"}
+              accentKicker
+              title="Longest run, stretching out"
+            >
+              <ColumnBars bars={longestBars} height="h-45" baseline />
+              {peakLong && (
+                <p className="kicker mt-4.5">
+                  Latest PR · {peakLong.name} · {peakLong.km} km · Fastest median ·{" "}
+                  {formatPace(bestPace.paceSec)}/km
+                </p>
+              )}
+            </ChartBlock>
+          </div>
         </motion.div>
       </div>
     </motion.section>

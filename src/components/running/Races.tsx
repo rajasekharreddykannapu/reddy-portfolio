@@ -89,12 +89,17 @@ export default function Races() {
                   </div>
                 )}
               </div>
-              <p
-                className="metric text-[clamp(2.5rem,5vw,3.75rem)] leading-none text-accent"
-                aria-label={`Finish time ${featuredRace.time}`}
-              >
-                {featuredRace.time}
-              </p>
+              <div className="text-right max-[900px]:text-left">
+                <p
+                  className="metric text-[clamp(2.5rem,5vw,3.75rem)] leading-none text-accent"
+                  aria-label={`Finish time ${featuredRace.time}`}
+                >
+                  {featuredRace.time}
+                </p>
+                {featuredRace.chipTime && (
+                  <p className="kicker mt-2 text-neutral-600">Official chip</p>
+                )}
+              </div>
             </div>
 
             {route && (
@@ -148,9 +153,14 @@ export default function Races() {
                     )}
                   </div>
                 </div>
-                <p className="metric text-[clamp(2.125rem,4vw,3rem)] leading-none">
-                  {spotlightRace.time}
-                </p>
+                <div className="text-right max-[900px]:text-left">
+                  <p className="metric text-[clamp(2.125rem,4vw,3rem)] leading-none">
+                    {spotlightRace.time}
+                  </p>
+                  {spotlightRace.chipTime && (
+                    <p className="kicker mt-2 text-neutral-600">Official chip</p>
+                  )}
+                </div>
               </div>
 
               {spotlightCover && spotlightPhotos.length > 0 && (

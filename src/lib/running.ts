@@ -234,6 +234,11 @@ export type Race = {
   photos?: string[];
   /** Official chip-time / results page when available. */
   resultUrl?: string;
+  /**
+   * Official chip / gun time when it differs from Strava moving time.
+   * Display this as the race PB; keep Strava duration as moving time.
+   */
+  chipTime?: string;
   /** External event photo gallery (e.g. Memzo finish-line album). */
   eventGallery?: {
     url: string;
@@ -303,6 +308,7 @@ export const races: Race[] = [
     story:
       "Ten minutes off the first half — 1:49:01 in humid Hyderabad air. The sub-1:50 goal from the season plan, crossed at the 15th edition start line.",
     runId: "19956634788",
+    chipTime: "1:49:01",
     coverPhoto: "nmdc-finish.jpg",
     photos: ["nmdc-finish.jpg", "nmdc-medal.jpg", "nmdc-celebrate.jpg"],
     resultUrl:
@@ -325,6 +331,7 @@ export const races: Race[] = [
     story:
       "Four minutes off City Slam — 47:10 at 4:43/km. The first sub-48 10K, and proof the half training had turned into real race-day speed.",
     runId: "20054628774",
+    chipTime: "47:10",
   },
 ];
 
@@ -332,16 +339,31 @@ export const featuredRace = races.find((r) => r.featured)!;
 export const spotlightRace = races.find((r) => r.spotlight);
 export const supportingRaces = races.filter((r) => !r.featured && !r.spotlight);
 
-/** Featured video card in the training chapter. */
-export const videoSpotlight = {
-  runId: "20054628774",
-  title: "Run for Nature 2026",
-  date: "6 Sep 2026",
-  kicker: "Latest race · video",
-  stat: "10K · 47:10 PB",
-  story:
-    "A new 10K personal best — four minutes faster than City Slam — captured in a short from race morning.",
+/** Display-name overrides for Strava titles that need editorial cleanup. */
+export const runDisplayNames: Record<string, string> = {
+  "20054628774": "Run for Nature 2026",
+  "20055111169": "Run for Nature — cooldown",
+  "19956634788": "NMDC Hyderabad Half Marathon",
 };
+
+/**
+ * Soft-hide from the default archive preview (still available when expanded,
+ * or filtered entirely from the log). Cool-down / duplicate race-day activities.
+ */
+export const archiveHiddenRunIds = new Set(["20055111169"]);
+
+export function raceForRunId(runId: string | undefined) {
+  if (!runId) return undefined;
+  return races.find((r) => r.runId === runId);
+}
+
+export function chipTimeForRunId(runId: string | undefined): string | undefined {
+  return raceForRunId(runId)?.chipTime;
+}
+
+export function displayNameForRun(runId: string, fallback: string): string {
+  return runDisplayNames[runId] ?? fallback;
+}
 
 /** Official results link keyed by Strava activity id. */
 export function resultUrlForRunId(runId: string | undefined): string | undefined {
@@ -422,15 +444,6 @@ export type FeaturedRunHighlight = {
 
 export const featuredRunHighlights: FeaturedRunHighlight[] = [
   {
-    title: "Hyderabad City Slam",
-    date: "24 May 2026",
-    distance: "10.0 km",
-    finishTime: "51:11",
-    pace: "5:03",
-    note: "Former 10K PB",
-    runId: "18628386726",
-  },
-  {
     title: "Telangana Run",
     date: "7 Jun 2026",
     distance: "21.1 km",
@@ -439,28 +452,12 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     runId: "18817317833",
   },
   {
-    title: "NMDC dry run",
-    date: "2 Aug 2026",
-    distance: "21.3 km",
-    note: "Longest · 254 m ↑",
-    runId: "19563722110",
-  },
-  {
-    title: "Hyderabad Monsoon Run",
-    date: "16 Aug 2026",
-    distance: "16.4 km",
-    finishTime: "1:22:35",
-    pace: "5:03",
-    note: "16K at 10K pace",
-    runId: "19762807960",
-  },
-  {
     title: "Sunday long run",
     date: "23 Aug 2026",
     distance: "22.4 km",
     finishTime: "2:26:59",
     pace: "6:34",
-    note: "Longest · video",
+    note: "Longest · base",
     runId: "19858726882",
   },
   {
@@ -478,7 +475,7 @@ export const featuredRunHighlights: FeaturedRunHighlight[] = [
     distance: "10.0 km",
     finishTime: "47:10",
     pace: "4:43",
-    note: "10K PB · video",
+    note: "10K PB",
     runId: "20054628774",
   },
 ];
@@ -490,13 +487,45 @@ export const heroRouteSilhouette = {
 };
 
 // ── Shoe rotation ───────────────────────────────────────────────────────────
-export type Gear = { name: string; model: string; km: number; role: string };
+export type Gear = {
+  name: string;
+  model: string;
+  /** Fallback km when Strava gear ids have no matches. */
+  km: number;
+  role: string;
+  /** Strava gear id(s) — with or without leading `g`. */
+  gearIds: string[];
+};
 
 export const gear: Gear[] = [
-  { name: "Daily trainer", model: "ASICS Gel-Nimbus 27", km: 304, role: "Long runs & most weekly miles" },
-  { name: "Race day", model: "ASICS Novablast 5", km: 59, role: "Half marathons & fast efforts" },
-  { name: "College shoe", model: "Adidas Duramo SL", km: 52, role: "Easy and recovery days" },
-  { name: "Barefoot", model: "No shoes", km: 19, role: "Hikes & giri pradakshina" },
+  {
+    name: "Daily trainer",
+    model: "ASICS Gel-Nimbus 27",
+    km: 304,
+    role: "Long runs & most weekly miles",
+    gearIds: ["31577296", "g31577296"],
+  },
+  {
+    name: "Race day",
+    model: "ASICS Novablast 5",
+    km: 59,
+    role: "Half marathons & fast efforts",
+    gearIds: ["31160220", "g31160220"],
+  },
+  {
+    name: "College shoe",
+    model: "Adidas Duramo SL",
+    km: 52,
+    role: "Easy and recovery days",
+    gearIds: ["31050860", "g31050860"],
+  },
+  {
+    name: "Barefoot",
+    model: "No shoes",
+    km: 19,
+    role: "Hikes & giri pradakshina",
+    gearIds: ["29723521", "g29723521"],
+  },
 ];
 
 // ── Season roadmap ──────────────────────────────────────────────────────────
@@ -526,25 +555,17 @@ export const upcoming: UpcomingEvent[] = [
     url: "https://vedantadelhihalfmarathon.procam.in/",
   },
   {
-    date: "25 Oct 2026",
-    name: "Times Internet Half Marathon",
-    distance: "Half marathon",
-    status: "registered",
-    chapter: "build",
-    url: "https://timesofindia.indiatimes.com/times-events/marathon",
-  },
-  {
     date: "1 Nov 2026",
     name: "Hyderabad Hitech Marathon",
     distance: "Full marathon",
     location: "Hyderabad",
     status: "registered",
     chapter: "peak",
-    note: "First full marathon — the big one of the season.",
+    note: "First full marathon — finish and learn. TMM is the time-goal race.",
     prep: [
-      "Long runs past 30 km through October",
-      "Hold ~30 km easy weeks as the base",
-      "Respect the heat — practice race-day fueling",
+      "Treat as debut, not an all-out PB attempt",
+      "Practice race-day fueling for Mumbai",
+      "Recover honestly in the week after",
     ],
     url: "https://hyderabadhitecmarathon.com/",
   },
@@ -564,6 +585,8 @@ export const upcoming: UpcomingEvent[] = [
     location: "Mumbai",
     status: "registered",
     chapter: "close",
+    goalTime: "Sub-3:30",
+    note: "A-race — 19-week plan ends here.",
     url: "https://tatamumbaimarathon.procam.in/",
   },
 ];
@@ -572,15 +595,16 @@ export type Goal = { title: string; detail: string };
 
 export const goals: Goal[] = [
   {
+    title: "Tata Mumbai Marathon under 3:30",
+    detail:
+      "A-race on 17 Jan 2027. Target ~4:58/km after Hitech as the debut full and a December 25K tune-up.",
+  },
+  {
+    title: "First full marathon — finish",
+    detail: "Hitech on 1 Nov is marathon #1: finish strong, learn fueling, don’t empty the tank.",
+  },
+  {
     title: "Half marathon under 1:45",
-    detail: "NMDC landed at 1:49 — next target is carving another four minutes with tempo and threshold work.",
-  },
-  {
-    title: "First full marathon",
-    detail: "Carry the half base to 42.2 km: long runs beyond 30 km, patient weekly volume.",
-  },
-  {
-    title: "Run every week, all year",
-    detail: "Consistency over heroics — ~30 km a week of mostly easy Zone 2 miles.",
+    detail: "NMDC landed at 1:49 — October halves and plan quality work should carve toward 1:45.",
   },
 ];

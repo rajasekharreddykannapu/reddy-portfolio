@@ -86,6 +86,32 @@ export const gearById: Record<string, { model: string; label: string }> = {
   "29723521": { model: "Barefoot", label: "No shoes" },
 };
 
+/** Live km per editorial shoe, summed from Strava gear ids on activities. */
+export function liveGearKm(
+  shoes: { gearIds: string[]; km: number }[],
+  list: Run[] = runs,
+): { km: number; totalKm: number }[] {
+  const byId = new Map<string, number>();
+  for (const r of list) {
+    if (!r.gearId || r.distance <= 0) continue;
+    const key = r.gearId.replace(/^g/, "");
+    byId.set(key, (byId.get(key) ?? 0) + r.distance);
+  }
+
+  const rows = shoes.map((shoe) => {
+    const ids = new Set(shoe.gearIds.map((id) => id.replace(/^g/, "")));
+    let metres = 0;
+    for (const id of ids) metres += byId.get(id) ?? 0;
+    const live = Math.round(metres / 1000);
+    return { km: live > 0 ? live : shoe.km };
+  });
+
+  return rows.map((row) => ({
+    ...row,
+    totalKm: rows.reduce((s, r) => s + r.km, 0),
+  }));
+}
+
 export type RunMonth = {
   key: string; // "2026-08"
   label: string; // "August 2026"

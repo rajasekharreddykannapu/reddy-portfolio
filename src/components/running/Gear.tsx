@@ -2,32 +2,40 @@
 
 import { motion } from "framer-motion";
 import { gear } from "@/lib/running";
+import { liveGearKm } from "@/lib/runs";
 import { fadeUp } from "@/lib/motion";
-import Section from "@/components/Section";
 
+/** Compact shoe strip — lives under the archive, not as a full chapter. */
 export default function Gear() {
+  const live = liveGearKm(gear);
+  const totalKm = live[0]?.totalKm ?? gear.reduce((s, g) => s + g.km, 0);
+
   return (
-    <Section
-      id="gear"
-      index="08"
-      title="Shoe rotation"
-      intro="Four pairs, 434 km between them. The Nimbus carries the volume; the Novablast only comes out on race mornings."
+    <motion.div
+      variants={fadeUp}
+      className="mt-14 border-t-2 border-border border-b-2 pb-10 pt-8"
     >
-      <motion.div
-        variants={fadeUp}
-        className="rule-grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))]"
-      >
-        {gear.map((shoe) => (
-          <article key={shoe.model} className="p-5.5">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h3 className="text-[1.1875rem]">Shoe rotation</h3>
+        <p className="kicker">
+          <span className="text-accent">{totalKm} km</span> across {gear.length} pairs
+        </p>
+      </div>
+      <p className="mt-2 max-w-[62ch] text-sm text-neutral-700">
+        The Nimbus carries the volume; the Novablast only comes out on race mornings.
+      </p>
+      <div className="rule-grid mt-5 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+        {gear.map((shoe, i) => (
+          <article key={shoe.model} className="p-4">
             <div className="flex items-baseline justify-between gap-3">
               <p className="kicker">{shoe.name}</p>
-              <p className="metric text-lg text-accent">{shoe.km} km</p>
+              <p className="metric text-base text-accent">{live[i]?.km ?? shoe.km} km</p>
             </div>
-            <h3 className="mt-3.5 text-[1.1875rem]">{shoe.model}</h3>
-            <p className="mt-2 text-sm text-neutral-800">{shoe.role}</p>
+            <h4 className="mt-2 text-base font-extrabold">{shoe.model}</h4>
+            <p className="mt-1 text-[13px] text-neutral-700">{shoe.role}</p>
           </article>
         ))}
-      </motion.div>
-    </Section>
+      </div>
+    </motion.div>
   );
 }

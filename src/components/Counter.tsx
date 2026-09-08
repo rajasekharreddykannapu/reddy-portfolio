@@ -14,21 +14,35 @@ function parse(value: string) {
   };
 }
 
+/**
+ * Always SSR / first-paint the final value — never flash "0".
+ * When in view, optionally count up from ~70% of the target.
+ */
 export default function Counter({ value, className = "" }: { value: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduce = useReducedMotion();
   const parsed = useMemo(() => parse(value), [value]);
-  const [display, setDisplay] = useState<number | string>(parsed ? 0 : value);
+  const [display, setDisplay] = useState<number | string>(() =>
+    parsed ? parsed.target : value,
+  );
+  const animated = useRef(false);
 
   useEffect(() => {
-    if (!parsed || !inView) return;
-    if (reduce) {
-      setDisplay(parsed.target);
+    if (!parsed) {
+      setDisplay(value);
       return;
     }
-    const controls = animate(0, parsed.target, {
-      duration: 1.1,
+    // Keep the painted value in sync if the prop changes (e.g. live stats).
+    if (!animated.current) setDisplay(parsed.target);
+  }, [parsed, value]);
+
+  useEffect(() => {
+    if (!parsed || !inView || reduce || animated.current) return;
+    animated.current = true;
+    const from = Math.max(0, Math.round(parsed.target * 0.7));
+    const controls = animate(from, parsed.target, {
+      duration: 0.9,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (latest) => setDisplay(Math.round(latest)),
     });

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { hasRunData, runsOnly, groupByMonth } from "@/lib/runs";
-import { runningProfile } from "@/lib/running";
+import { archiveHiddenRunIds, runningProfile } from "@/lib/running";
 import { fadeUp } from "@/lib/motion";
 import Section from "@/components/Section";
 import RunCard from "./RunCard";
+import Gear from "./Gear";
 
 const PREVIEW_COUNT = 9;
 
@@ -16,21 +17,26 @@ const PREVIEW_COUNT = 9;
  */
 export default function RunLog() {
   const [open, setOpen] = useState(false);
-  const months = hasRunData ? groupByMonth(runsOnly) : [];
-  const latest = [...runsOnly].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const visible = useMemo(
+    () => runsOnly.filter((r) => !archiveHiddenRunIds.has(r.id)),
+    [],
+  );
+  const months = hasRunData ? groupByMonth(visible) : [];
+  const latest = [...visible].sort((a, b) => (a.date < b.date ? 1 : -1));
   const preview = latest.slice(0, PREVIEW_COUNT);
   const hidden = Math.max(0, latest.length - PREVIEW_COUNT);
 
   return (
     <Section
       id="log"
-      index="07"
+      index="08"
       title="Every run"
       intro={
         hasRunData
-          ? "Latest efforts from Strava. Open Details for elevation and the GPS track."
+          ? "Latest efforts from Strava. Open Details for elevation, chip vs moving time, and the GPS track."
           : "The full Strava archive lives here once run data is synced."
       }
+      rule={false}
     >
       {!hasRunData ? (
         <div className="border-2 border-border px-6 py-14">
@@ -56,6 +62,7 @@ export default function RunLog() {
               Show all {latest.length} runs
             </button>
           )}
+          <Gear />
         </motion.div>
       ) : (
         <motion.div variants={fadeUp} className="grid gap-10">
@@ -82,6 +89,7 @@ export default function RunLog() {
           <button type="button" onClick={() => setOpen(false)} className="btn-ghost">
             Show latest only
           </button>
+          <Gear />
         </motion.div>
       )}
     </Section>

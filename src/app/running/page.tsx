@@ -8,9 +8,9 @@ import ProgressionChart from "@/components/running/ProgressionChart";
 import JourneyCharts from "@/components/running/JourneyCharts";
 import Races from "@/components/running/Races";
 import TrainingEngine from "@/components/running/TrainingEngine";
+import MarathonPlan from "@/components/running/MarathonPlan";
 import Upcoming from "@/components/running/Upcoming";
 import RunLog from "@/components/running/RunLog";
-import Gear from "@/components/running/Gear";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -50,9 +50,9 @@ export default function RunningPage() {
         <JourneyCharts />
         <Races />
         <TrainingEngine />
+        <MarathonPlan />
         <Upcoming />
         <RunLog />
-        <Gear />
       </main>
       <Footer />
     </>

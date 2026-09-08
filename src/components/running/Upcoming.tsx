@@ -51,9 +51,9 @@ export default function Upcoming() {
   return (
     <Section
       id="next"
-      index="06"
-      title="Path to the marathon"
-      intro="Two halves in October to sharpen, the first full marathon on 1 November, then two more start lines."
+      index="07"
+      title="Race calendar"
+      intro="Checkpoints on the way to Mumbai — Hitech to finish, TMM to race the clock."
     >
       <div className="grid gap-9">
         {next.map((event) => (

@@ -12,7 +12,7 @@ export const homeDescription =
   "Principal Engineering Manager · .NET 8, Azure, Angular · scaled Kenyt.AI to 1000+ customers · Hyderabad, India";
 
 export const runningDescription =
-  "47:10 10K PB at Run for Nature, 1:49 half at NMDC, live Strava stats — the running journey of Kannapu Rajasekhar Reddy.";
+  "Sub-3:30 Tata Mumbai Marathon plan, 47:10 10K PB, 1:49 half — the running journey of Kannapu Rajasekhar Reddy.";
 
 export const learningDescription =
   "Daily reading OS for .NET, Azure, Angular, Elastic, and AI product engineering — field notes from the desk.";

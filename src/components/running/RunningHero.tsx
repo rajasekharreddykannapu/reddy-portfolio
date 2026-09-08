@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { runningProfile, runStats, records, heroRouteSilhouette } from "@/lib/running";
+import {
+  runningProfile,
+  runStats,
+  records,
+  heroRouteSilhouette,
+  displayNameForRun,
+} from "@/lib/running";
 import {
   findRunById,
   longestRun,
@@ -73,7 +79,10 @@ export default function RunningHero() {
               <RouteMap map={map} tone="light" className="aspect-[4/3] h-auto w-full p-7" />
             </div>
             <figcaption className="kicker mt-3 flex justify-between gap-4">
-              <span>Featured route · {heroRun?.name ?? "Long run"}</span>
+              <span>
+                Featured route ·{" "}
+                {heroRun ? displayNameForRun(heroRun.id, heroRun.name) : "Long run"}
+              </span>
               <span className="text-accent">
                 {heroRun ? `${(heroRun.distance / 1000).toFixed(1)} km` : runningProfile.since}
               </span>
