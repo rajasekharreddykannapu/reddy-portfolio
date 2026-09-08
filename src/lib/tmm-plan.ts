@@ -1,6 +1,9 @@
 // ---------------------------------------------------------------------------
 // Tata Mumbai Marathon 2027 — 19-week plan (from coach PDF overview).
 // Week starts are Mondays. Race day is Sun 17 Jan 2027 (Week 19).
+//
+// PDF often stacks two Friday sessions (e.g. Full Body + quality run) with
+// Saturday as Rest before the Sunday long/race.
 // ---------------------------------------------------------------------------
 
 export type SessionKind =
@@ -31,13 +34,13 @@ export type PlanWeek = {
   focus: string;
   /** Approximate planned run volume (strength sessions excluded) */
   runKm?: number;
-  mon: PlanSession;
-  tue: PlanSession;
-  wed: PlanSession;
-  thu: PlanSession;
-  fri: PlanSession;
-  sat: PlanSession;
-  sun: PlanSession;
+  mon: PlanSession[];
+  tue: PlanSession[];
+  wed: PlanSession[];
+  thu: PlanSession[];
+  fri: PlanSession[];
+  sat: PlanSession[];
+  sun: PlanSession[];
 };
 
 export const tmmPlan = {
@@ -132,6 +135,9 @@ const S = {
   }),
 };
 
+/** One or more sessions on a calendar day (PDF stacks Friday doubles often). */
+const D = (...sessions: PlanSession[]): PlanSession[] => sessions;
+
 /** Full 19-week grid transcribed from the PDF overview. */
 export const planWeeks: PlanWeek[] = [
   {
@@ -141,13 +147,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "base",
     focus: "Open the block — hilly 22K long",
     runKm: 60,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("8 km"),
-    wed: S.intervals("7.5 km", "1 km Repeats"),
-    thu: S.easy("6 km"),
-    fri: S.strength("Full Body"),
-    sat: S.intervals("8 km", "On / Off Ks"),
-    sun: S.long("22 km", "Hilly Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("8 km")),
+    wed: D(S.intervals("7.5 km", "1 km Repeats")),
+    thu: D(S.easy("6 km")),
+    fri: D(S.strength("Full Body"), S.intervals("8 km", "On / Off Ks")),
+    sat: D(S.rest()),
+    sun: D(S.long("22 km", "Hilly Long Run")),
   },
   {
     week: 2,
@@ -156,13 +162,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "base",
     focus: "Rolling speed + 25K long",
     runKm: 54,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("7 km"),
-    wed: S.intervals("8 km", "Rolling 400s"),
-    thu: S.easy("5.5 km"),
-    fri: S.strength("Full Body"),
-    sat: S.hills("8 km", "Hill Repeats"),
-    sun: S.long("25 km", "Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("7 km")),
+    wed: D(S.intervals("8 km", "Rolling 400s")),
+    thu: D(S.easy("5.5 km")),
+    fri: D(S.strength("Full Body"), S.hills("8 km", "Hill Repeats")),
+    sat: D(S.rest()),
+    sun: D(S.long("25 km", "Long Run")),
   },
   {
     week: 3,
@@ -171,13 +177,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "base",
     focus: "Soldierathon half — race checkpoint",
     runKm: 46,
-    mon: S.strength("Full Body"),
-    tue: S.easy("8 km"),
-    wed: S.tempo("9 km", "Progressive Run"),
-    thu: S.strength("Legs & Core"),
-    fri: S.easy("8 km"),
-    sat: S.rest(),
-    sun: S.race("21.1 km", "Federal Bank Soldierathon", "27 Sep 2026"),
+    mon: D(S.strength("Full Body")),
+    tue: D(S.easy("8 km")),
+    wed: D(S.tempo("9 km", "Progressive Run")),
+    thu: D(S.strength("Legs & Core")),
+    fri: D(S.easy("8 km")),
+    sat: D(S.rest()),
+    sun: D(S.race("21.1 km", "Federal Bank Soldierathon", "27 Sep 2026")),
   },
   {
     week: 4,
@@ -186,13 +192,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "base",
     focus: "Ananthagiri hills — 32K trail",
     runKm: 46,
-    mon: S.rest(),
-    tue: S.easy("6.5 km"),
-    wed: S.strength("Legs & Core"),
-    thu: S.intervals("7.5 km", "400 m Repeats"),
-    fri: S.strength("Full Body"),
-    sat: S.rest(),
-    sun: S.long("32 km", "Avantika Ananthagiri Hills Trail", "4 Oct 2026"),
+    mon: D(S.rest()),
+    tue: D(S.easy("6.5 km")),
+    wed: D(S.strength("Legs & Core")),
+    thu: D(S.intervals("7.5 km", "400 m Repeats")),
+    fri: D(S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.long("32 km", "Avantika Ananthagiri Hills Trail", "4 Oct 2026")),
   },
   {
     week: 5,
@@ -201,13 +207,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "base",
     focus: "Progressive 25K long",
     runKm: 57,
-    mon: S.rest(),
-    tue: S.easy("8 km"),
-    wed: S.strength("Full Body"),
-    thu: S.easy("8 km"),
-    fri: S.intervals("8 km", "400s into 200s"),
-    sat: S.easy("8 km"),
-    sun: S.long("25 km", "Progressive Long Run"),
+    mon: D(S.rest()),
+    tue: D(S.easy("8 km")),
+    wed: D(S.strength("Full Body")),
+    thu: D(S.easy("8 km")),
+    fri: D(S.intervals("8 km", "400s into 200s")),
+    sat: D(S.easy("8 km")),
+    sun: D(S.long("25 km", "Progressive Long Run")),
   },
   {
     week: 6,
@@ -216,13 +222,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "Vedanta Delhi Half",
     runKm: 35,
-    mon: S.rest(),
-    tue: S.easy("6 km"),
-    wed: S.strength("Legs & Core"),
-    thu: S.tempo("7.5 km", "Race Pace Practice Ks"),
-    fri: S.strength("Full Body"),
-    sat: S.rest(),
-    sun: S.race("21.1 km", "Vedanta Delhi Half Marathon", "18 Oct 2026"),
+    mon: D(S.rest()),
+    tue: D(S.easy("6 km")),
+    wed: D(S.strength("Legs & Core")),
+    thu: D(S.tempo("7.5 km", "Race Pace Practice Ks")),
+    fri: D(S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.race("21.1 km", "Vedanta Delhi Half Marathon", "18 Oct 2026")),
   },
   {
     week: 7,
@@ -231,13 +237,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "Recovery week before Hitech",
     runKm: 25,
-    mon: S.rest(),
-    tue: S.strength("Legs & Core"),
-    wed: S.easy("5 km"),
-    thu: S.intervals("5 km", "Mile Repeats"),
-    fri: S.strength("Full Body"),
-    sat: S.rest(),
-    sun: S.long("15 km", "Long Run"),
+    mon: D(S.rest()),
+    tue: D(S.strength("Legs & Core")),
+    wed: D(S.easy("5 km")),
+    thu: D(S.intervals("5 km", "Mile Repeats")),
+    fri: D(S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.long("15 km", "Long Run")),
   },
   {
     week: 8,
@@ -246,13 +252,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "First full — Hyderabad Hitech",
     runKm: 56,
-    mon: S.rest(),
-    tue: S.easy("6 km"),
-    wed: S.strength("Legs & Core"),
-    thu: S.intervals("7.6 km", "K200s"),
-    fri: S.strength("Full Body"),
-    sat: S.rest(),
-    sun: S.race("42.2 km", "Hyderabad Hitech Marathon", "1 Nov 2026 · debut full"),
+    mon: D(S.rest()),
+    tue: D(S.easy("6 km")),
+    wed: D(S.strength("Legs & Core")),
+    thu: D(S.intervals("7.6 km", "K200s")),
+    fri: D(S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.race("42.2 km", "Hyderabad Hitech Marathon", "1 Nov 2026 · debut full")),
   },
   {
     week: 9,
@@ -261,13 +267,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "Rebuild — hilly 28K",
     runKm: 61,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("10 km"),
-    wed: S.easy("10 km"),
-    thu: S.intervals("8 km", "Mile Repeats"),
-    fri: S.easy("5 km"),
-    sat: S.strength("Full Body"),
-    sun: S.long("28 km", "Hilly Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("10 km")),
+    wed: D(S.easy("10 km")),
+    thu: D(S.intervals("8 km", "Mile Repeats")),
+    fri: D(S.easy("5 km"), S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.long("28 km", "Hilly Long Run")),
   },
   {
     week: 10,
@@ -276,13 +282,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "30K race-practice long",
     runKm: 64,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("7 km"),
-    wed: S.strength("Full Body"),
-    thu: S.tempo("10 km", "Progressive Run"),
-    fri: S.easy("7 km"),
-    sat: S.hills("10 km", "Hill Repeats"),
-    sun: S.long("30 km", "Race Practice Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("7 km")),
+    wed: D(S.strength("Full Body")),
+    thu: D(S.tempo("10 km", "Progressive Run")),
+    fri: D(S.easy("7 km"), S.hills("10 km", "Hill Repeats")),
+    sat: D(S.rest()),
+    sun: D(S.long("30 km", "Race Practice Long Run")),
   },
   {
     week: 11,
@@ -291,13 +297,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "build",
     focus: "Tempo + shorter long",
     runKm: 44,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("7 km"),
-    wed: S.tempo("7 km", "Tempo 5 km"),
-    thu: S.strength("Full Body"),
-    fri: S.intervals("7 km", "1 km Repeats"),
-    sat: S.rest(),
-    sun: S.long("16 km", "Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("7 km")),
+    wed: D(S.tempo("7 km", "Tempo 5 km")),
+    thu: D(S.strength("Full Body")),
+    fri: D(S.intervals("7 km", "1 km Repeats")),
+    sat: D(S.rest()),
+    sun: D(S.long("16 km", "Long Run")),
   },
   {
     week: 12,
@@ -306,13 +312,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "specific",
     focus: "32K race-practice long",
     runKm: 68,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("10 km"),
-    wed: S.strength("Full Body"),
-    thu: S.intervals("9 km", "Over and Unders", "1 km reps"),
-    fri: S.easy("10 km"),
-    sat: S.intervals("7 km", "800 m Repeats"),
-    sun: S.long("32 km", "Race Practice Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("10 km")),
+    wed: D(S.strength("Full Body")),
+    thu: D(S.intervals("9 km", "Over and Unders", "1 km reps")),
+    fri: D(S.easy("10 km"), S.intervals("7 km", "800 m Repeats")),
+    sat: D(S.rest()),
+    sun: D(S.long("32 km", "Race Practice Long Run")),
   },
   {
     week: 13,
@@ -321,13 +327,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "specific",
     focus: "Peak long — 34K hilly progressive",
     runKm: 73,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("11 km"),
-    wed: S.hills("11 km", "Alternating Hill Reps"),
-    thu: S.easy("6.5 km"),
-    fri: S.strength("Full Body"),
-    sat: S.tempo("10 km", "Tempo 6 km"),
-    sun: S.long("34 km", "Hilly Progressive Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("11 km")),
+    wed: D(S.hills("11 km", "Alternating Hill Reps")),
+    thu: D(S.easy("6.5 km")),
+    fri: D(S.strength("Full Body"), S.tempo("10 km", "Tempo 6 km")),
+    sat: D(S.rest()),
+    sun: D(S.long("34 km", "Hilly Progressive Long Run")),
   },
   {
     week: 14,
@@ -336,13 +342,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "specific",
     focus: "Cutback long before 25K",
     runKm: 44,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("8 km"),
-    wed: S.intervals("9 km", "400 m Repeats"),
-    thu: S.strength("Full Body"),
-    fri: S.tempo("8 km", "Tempo 2-1-1"),
-    sat: S.rest(),
-    sun: S.long("19 km", "Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("8 km")),
+    wed: D(S.intervals("9 km", "400 m Repeats")),
+    thu: D(S.strength("Full Body")),
+    fri: D(S.tempo("8 km", "Tempo 2-1-1")),
+    sat: D(S.rest()),
+    sun: D(S.long("19 km", "Long Run")),
   },
   {
     week: 15,
@@ -351,13 +357,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "specific",
     focus: "Tata Steel World 25K",
     runKm: 43,
-    mon: S.rest(),
-    tue: S.easy("9 km"),
-    wed: S.strength("Legs & Core"),
-    thu: S.intervals("9 km", "Descending Intervals"),
-    fri: S.strength("Full Body"),
-    sat: S.rest(),
-    sun: S.race("25 km", "Tata Steel World 25K", "20 Dec 2026"),
+    mon: D(S.rest()),
+    tue: D(S.easy("9 km")),
+    wed: D(S.strength("Legs & Core")),
+    thu: D(S.intervals("9 km", "Descending Intervals")),
+    fri: D(S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.race("25 km", "Tata Steel World 25K", "20 Dec 2026")),
   },
   {
     week: 16,
@@ -366,13 +372,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "specific",
     focus: "Last big long — 32K",
     runKm: 76,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("12 km"),
-    wed: S.easy("11 km"),
-    thu: S.intervals("11 km", "Mile Up & Overs"),
-    fri: S.easy("10 km"),
-    sat: S.strength("Full Body"),
-    sun: S.long("32 km", "Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("12 km")),
+    wed: D(S.easy("11 km")),
+    thu: D(S.intervals("11 km", "Mile Up & Overs")),
+    fri: D(S.easy("10 km"), S.strength("Full Body")),
+    sat: D(S.rest()),
+    sun: D(S.long("32 km", "Long Run")),
   },
   {
     week: 17,
@@ -381,13 +387,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "taper",
     focus: "Progressive half as long run",
     runKm: 60,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("12 km"),
-    wed: S.intervals("9 km", "Progressive Mile Repeats"),
-    thu: S.easy("10 km"),
-    fri: S.strength("Full Body"),
-    sat: S.tempo("8 km", "Tempo 2 km Repeats"),
-    sun: S.long("21.1 km", "Half Marathon Progressive Long"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("12 km")),
+    wed: D(S.intervals("9 km", "Progressive Mile Repeats")),
+    thu: D(S.easy("10 km")),
+    fri: D(S.strength("Full Body"), S.tempo("8 km", "Tempo 2 km Repeats")),
+    sat: D(S.rest()),
+    sun: D(S.long("21.1 km", "Half Marathon Progressive Long")),
   },
   {
     week: 18,
@@ -396,13 +402,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "taper",
     focus: "Volume down — 13K long",
     runKm: 38,
-    mon: S.strength("Legs & Core"),
-    tue: S.easy("10 km"),
-    wed: S.hills("8 km", "Hill Repeats"),
-    thu: S.strength("Full Body"),
-    fri: S.intervals("6.5 km", "On / Off Ks"),
-    sat: S.rest(),
-    sun: S.long("13 km", "Long Run"),
+    mon: D(S.strength("Legs & Core")),
+    tue: D(S.easy("10 km")),
+    wed: D(S.hills("8 km", "Hill Repeats")),
+    thu: D(S.strength("Full Body")),
+    fri: D(S.intervals("6.5 km", "On / Off Ks")),
+    sat: D(S.rest()),
+    sun: D(S.long("13 km", "Long Run")),
   },
   {
     week: 19,
@@ -411,13 +417,13 @@ export const planWeeks: PlanWeek[] = [
     phase: "taper",
     focus: "Race week — Tata Mumbai Marathon",
     runKm: 57,
-    mon: S.rest(),
-    tue: S.easy("7 km"),
-    wed: S.strength("Legs & Core"),
-    thu: S.tempo("7.5 km", "Race Pace Fartlek"),
-    fri: S.rest(),
-    sat: S.rest(),
-    sun: S.race("42.2 km", "Tata Mumbai Marathon", "17 Jan 2027 · Sub-3:30"),
+    mon: D(S.rest()),
+    tue: D(S.easy("7 km")),
+    wed: D(S.strength("Legs & Core")),
+    thu: D(S.tempo("7.5 km", "Race Pace Fartlek")),
+    fri: D(S.rest()),
+    sat: D(S.rest()),
+    sun: D(S.race("42.2 km", "Tata Mumbai Marathon", "17 Jan 2027 · Sub-3:30")),
   },
 ];
 
@@ -434,8 +440,27 @@ export const planDayLabels: Record<PlanDayKey, string> = {
   sun: "Sun",
 };
 
-export function sessionsForWeek(week: PlanWeek): { day: PlanDayKey; session: PlanSession }[] {
-  return DAY_KEYS.map((day) => ({ day, session: week[day] }));
+export type PlanDaySessions = {
+  day: PlanDayKey;
+  sessions: PlanSession[];
+};
+
+export type PlanSessionRef = {
+  day: PlanDayKey;
+  index: number;
+  session: PlanSession;
+};
+
+/** Calendar days Mon–Sun with one or more sessions each. */
+export function daysForWeek(week: PlanWeek): PlanDaySessions[] {
+  return DAY_KEYS.map((day) => ({ day, sessions: week[day] }));
+}
+
+/** Flattened session list (double Fridays appear as two entries). */
+export function sessionsForWeek(week: PlanWeek): PlanSessionRef[] {
+  return DAY_KEYS.flatMap((day) =>
+    week[day].map((session, index) => ({ day, index, session })),
+  );
 }
 
 /** Monday 00:00 local-ish — use UTC noon to avoid TZ edge cases. */

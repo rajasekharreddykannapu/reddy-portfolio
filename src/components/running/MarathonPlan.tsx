@@ -16,7 +16,7 @@ import {
   planPhases,
   planWeeks,
   currentPlanWeek,
-  sessionsForWeek,
+  daysForWeek,
   planDayLabels,
   sessionKindLabel,
   todayPlanDay,
@@ -73,12 +73,14 @@ function SessionCard({
   match,
   isToday = false,
   compact = false,
+  showDayLabel = true,
 }: {
   day: PlanDayKey;
   session: PlanSession;
   match?: PlanMatch;
   isToday?: boolean;
   compact?: boolean;
+  showDayLabel?: boolean;
 }) {
   const done = Boolean(match?.done);
   const isRace = session.kind === "race";
@@ -111,12 +113,14 @@ function SessionCard({
         </span>
       )}
 
-      <p className="pr-7 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-600">
-        {planDayLabels[day]}
-        {isToday ? " · today" : ""}
-      </p>
+      {showDayLabel && (
+        <p className="pr-7 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-600">
+          {planDayLabels[day]}
+          {isToday ? " · today" : ""}
+        </p>
+      )}
       <p
-        className={`mt-2 text-[11px] font-bold uppercase tracking-[0.08em] ${
+        className={`${showDayLabel ? "mt-2" : "mt-0"} text-[11px] font-bold uppercase tracking-[0.08em] ${
           done ? "text-accent-700" : isToday ? "text-accent" : ""
         }`}
       >
@@ -159,20 +163,53 @@ function SessionCard({
   );
 }
 
+function DayColumn({
+  day,
+  sessions,
+  weekNum,
+  isToday,
+  matchFor,
+  compact = false,
+}: {
+  day: PlanDayKey;
+  sessions: PlanSession[];
+  weekNum: number;
+  isToday: boolean;
+  matchFor: (week: number, day: PlanDayKey, index: number) => PlanMatch | undefined;
+  compact?: boolean;
+}) {
+  return (
+    <li className="flex min-h-[8.5rem] flex-col gap-2">
+      {sessions.map((session, index) => (
+        <SessionCard
+          key={`${day}-${index}`}
+          day={day}
+          session={session}
+          match={matchFor(weekNum, day, index)}
+          isToday={isToday}
+          compact={compact}
+          showDayLabel={index === 0}
+        />
+      ))}
+    </li>
+  );
+}
+
 export default function MarathonPlan() {
   const thisWeek = useMemo(() => currentPlanWeek(), []);
   const today = useMemo(() => todayPlanDay(), []);
   const hits = useMemo(() => buildStravaPlanHits(runs), []);
   const stats = useMemo(() => planProgressStats(hits), [hits]);
   const [openWeek, setOpenWeek] = useState<number | null>(thisWeek.week);
-  const sessions = sessionsForWeek(thisWeek);
+  const days = daysForWeek(thisWeek);
   const phaseMeta = planPhases.find((p) => p.id === thisWeek.phase);
   const weekStats = stats.perWeek[thisWeek.week] ?? { done: 0, total: 7 };
   const weekPct = weekStats.total
     ? Math.round((weekStats.done / weekStats.total) * 100)
     : 0;
   const weekComplete = weekStats.done === weekStats.total;
-  const matchFor = (week: number, day: PlanDayKey) => hits[sessionKey(week, day)];
+  const matchFor = (week: number, day: PlanDayKey, index: number) =>
+    hits[sessionKey(week, day, index)];
 
   return (
     <Section
@@ -318,19 +355,19 @@ export default function MarathonPlan() {
           />
 
           <ul className="mt-6 grid grid-cols-7 gap-2 max-[1100px]:grid-cols-4 max-[700px]:grid-cols-2">
-            {sessions.map(({ day, session }) => (
-              <li key={day} className="min-h-[8.5rem]">
-                <SessionCard
-                  day={day}
-                  session={session}
-                  match={matchFor(thisWeek.week, day)}
-                  isToday={day === today}
-                />
-              </li>
+            {days.map(({ day, sessions }) => (
+              <DayColumn
+                key={day}
+                day={day}
+                sessions={sessions}
+                weekNum={thisWeek.week}
+                isToday={day === today}
+                matchFor={matchFor}
+              />
             ))}
           </ul>
           <p className="kicker mt-4 text-neutral-600">
-            Matched cells link to the Strava activity. Today’s session stays outlined until sync catches up.
+            Double Fridays stack strength + quality; Saturday is rest before the long. Matched cells link to Strava.
           </p>
         </motion.article>
 
@@ -339,7 +376,7 @@ export default function MarathonPlan() {
           <ul className="mt-2">
             {planWeeks.map((week) => {
               const open = openWeek === week.week;
-              const days = sessionsForWeek(week);
+              const weekDays = daysForWeek(week);
               const ws = stats.perWeek[week.week] ?? { done: 0, total: 7 };
               const complete = ws.done === ws.total;
               const isNow = week.week === thisWeek.week;
@@ -385,18 +422,19 @@ export default function MarathonPlan() {
                   </button>
 
                   {open && (
-                    <div className="grid grid-cols-7 gap-2 pb-5 max-[1100px]:grid-cols-4 max-[700px]:grid-cols-2">
-                      {days.map(({ day, session }) => (
-                        <SessionCard
+                    <ul className="grid grid-cols-7 gap-2 pb-5 max-[1100px]:grid-cols-4 max-[700px]:grid-cols-2">
+                      {weekDays.map(({ day, sessions }) => (
+                        <DayColumn
                           key={day}
                           day={day}
-                          session={session}
-                          match={matchFor(week.week, day)}
+                          sessions={sessions}
+                          weekNum={week.week}
                           isToday={isNow && day === today}
+                          matchFor={matchFor}
                           compact
                         />
                       ))}
-                    </div>
+                    </ul>
                   )}
                 </li>
               );

@@ -53,41 +53,44 @@ function isRunSport(sport: string): boolean {
 
 export type PlanMatch = {
   done: boolean;
-  /** Matched Strava activity when applicable */
   activity?: Pick<Run, "id" | "name" | "distance" | "duration" | "sport">;
 };
 
 /**
  * Rest days complete once the calendar day arrives (no Strava needed).
  * Strength / run / race need a matching synced Strava activity that day.
+ * `usedIds` prevents one activity from clearing two planned sessions.
  */
 export function matchPlanSession(
   session: PlanSession,
   dayActs: Run[],
   isoDate: string,
+  usedIds: Set<string>,
   now = new Date(),
 ): PlanMatch {
   if (session.kind === "rest") {
     return { done: isoDate <= todayIso(now) };
   }
 
+  const available = dayActs.filter((a) => !usedIds.has(a.id));
+
   if (session.kind === "strength") {
-    const hit = dayActs.find((a) => isStrengthSport(a.sport));
-    return hit
-      ? {
-          done: true,
-          activity: {
-            id: hit.id,
-            name: hit.name,
-            distance: hit.distance,
-            duration: hit.duration,
-            sport: hit.sport,
-          },
-        }
-      : { done: false };
+    const hit = available.find((a) => isStrengthSport(a.sport));
+    if (!hit) return { done: false };
+    usedIds.add(hit.id);
+    return {
+      done: true,
+      activity: {
+        id: hit.id,
+        name: hit.name,
+        distance: hit.distance,
+        duration: hit.duration,
+        sport: hit.sport,
+      },
+    };
   }
 
-  const runActs = dayActs.filter((a) => isRunSport(a.sport));
+  const runActs = available.filter((a) => isRunSport(a.sport));
   if (!runActs.length) return { done: false };
 
   const target = plannedKm(session);
@@ -97,6 +100,7 @@ export function matchPlanSession(
     return { done: false };
   }
 
+  usedIds.add(best.id);
   return {
     done: true,
     activity: {
@@ -111,18 +115,24 @@ export function matchPlanSession(
 
 export type StravaPlanHits = Record<string, PlanMatch>;
 
-export function sessionKey(week: number, day: PlanDayKey): string {
-  return `${week}-${day}`;
+export function sessionKey(week: number, day: PlanDayKey, index = 0): string {
+  return `${week}-${day}-${index}`;
 }
 
 export function buildStravaPlanHits(runs: Run[], now = new Date()): StravaPlanHits {
   const hits: StravaPlanHits = {};
   for (const week of planWeeks) {
-    for (const { day, session } of sessionsForWeek(week)) {
+    const usedByDay = new Map<PlanDayKey, Set<string>>();
+    for (const { day, index, session } of sessionsForWeek(week)) {
       const iso = planDayDate(week, day);
       const acts = activitiesOnDate(runs, iso);
-      const match = matchPlanSession(session, acts, iso, now);
-      if (match.done) hits[sessionKey(week.week, day)] = match;
+      let usedIds = usedByDay.get(day);
+      if (!usedIds) {
+        usedIds = new Set();
+        usedByDay.set(day, usedIds);
+      }
+      const match = matchPlanSession(session, acts, iso, usedIds, now);
+      if (match.done) hits[sessionKey(week.week, day, index)] = match;
     }
   }
   return hits;
@@ -135,17 +145,17 @@ export function planProgressStats(hits: StravaPlanHits) {
   const perWeek: Record<number, { done: number; total: number }> = {};
 
   for (const week of planWeeks) {
-    const days = sessionsForWeek(week);
+    const refs = sessionsForWeek(week);
     let wDone = 0;
-    for (const { day } of days) {
+    for (const { day, index } of refs) {
       total += 1;
-      if (hits[sessionKey(week.week, day)]?.done) {
+      if (hits[sessionKey(week.week, day, index)]?.done) {
         done += 1;
         wDone += 1;
       }
     }
-    perWeek[week.week] = { done: wDone, total: days.length };
-    if (wDone === days.length) weeksComplete += 1;
+    perWeek[week.week] = { done: wDone, total: refs.length };
+    if (wDone === refs.length) weeksComplete += 1;
   }
 
   return {
