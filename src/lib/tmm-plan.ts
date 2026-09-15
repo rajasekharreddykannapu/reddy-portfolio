@@ -150,8 +150,9 @@ export const planWeeks: PlanWeek[] = [
     mon: D(S.strength("Legs & Core")),
     tue: D(S.easy("8 km")),
     wed: D(S.intervals("7.5 km", "1 km Repeats")),
-    thu: D(S.easy("6 km")),
-    fri: D(S.strength("Full Body"), S.intervals("8 km", "On / Off Ks")),
+    // As run: Full Body moved onto Thursday with easy; Friday keeps quality only; Saturday rest.
+    thu: D(S.easy("6 km"), S.strength("Full Body")),
+    fri: D(S.intervals("8 km", "On / Off Ks")),
     sat: D(S.rest()),
     sun: D(S.long("22 km", "Hilly Long Run")),
   },

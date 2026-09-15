@@ -88,7 +88,9 @@ function SessionCard({
   const statusLabel = done
     ? session.kind === "rest"
       ? "Rest day"
-      : "Matched"
+      : match?.shifted
+        ? "Moved"
+        : "Matched"
     : isToday
       ? "Today"
       : sessionKindLabel[session.kind];
@@ -367,7 +369,7 @@ export default function MarathonPlan() {
             ))}
           </ul>
           <p className="kicker mt-4 text-neutral-600">
-            Double Fridays stack strength + quality; Saturday is rest before the long. Matched cells link to Strava.
+            Double days stack in one column. Rest clears only with no training that day; sessions can still match ±1 day if you shuffle.
           </p>
         </motion.article>
 
