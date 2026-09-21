@@ -6,6 +6,7 @@ import {
   defaultOgImage,
   defaultTitle,
   homeDescription,
+  homeKeywords,
   siteUrl,
   titleTemplate,
 } from "@/lib/seo";
@@ -27,17 +28,7 @@ export const metadata: Metadata = {
     template: titleTemplate,
   },
   description: homeDescription,
-  keywords: [
-    "Engineering Manager",
-    "Principal Engineer",
-    "Software Architecture",
-    "Microservices",
-    "Distributed Systems",
-    ".NET",
-    "Azure",
-    "Angular",
-    "Kannapu Rajasekhar Reddy",
-  ],
+  keywords: homeKeywords,
   authors: [{ name: "Kannapu Rajasekhar Reddy", url: siteUrl }],
   alternates: {
     canonical: "/",

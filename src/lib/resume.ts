@@ -5,18 +5,26 @@ export const profile = {
   email: "rajasekhar.sachin@gmail.com",
   linkedin: "https://www.linkedin.com/in/kannapurajasekharreddy/" as string | null,
   github: "https://github.com/rajasekharreddykannapu",
-  instagram: "https://www.instagram.com/krsreddy200/",
+  /** Career start at Kenyt.AI — used for dynamic years-of-experience. */
+  careerStart: "2019-06-01",
   valueProp:
-    "Building scalable, distributed, cloud-native SaaS platforms — and the teams that ship them.",
+    "Building production AI agents (voice, chat, and omnichannel) and the teams that ship them.",
   summary:
-    "Principal Engineering Manager with 6+ years of experience building scalable, distributed, cloud-native SaaS platforms. Proven track record of scaling systems, teams, and revenue (₹10L → $1M, 10 → 1000+ customers). Expertise in microservices architecture, API design, performance optimization, and high-availability systems using C#, Angular, and Azure. Strong background in technical leadership, system design, and engineering execution.",
+    "Principal Engineering Manager with 7+ years at Kenyt.AI, from one of its earliest engineers to leading engineering for its AI products. I design and ship production conversational AI (voice agents, chatbots, and CoPulse, an omnichannel customer engagement platform) for clients across real estate, healthcare, education, and government. I stay hands-on in architecture and code, from LLM prompt design and voice latency optimization to distributed backends on .NET 8, TypeScript, Kafka, Redis, and Postgres. Helped scale Kenyt from ₹10L to $1M in revenue and from 10 to 1,000+ customers.",
 };
+
+/** Full years since career start (June 2019). */
+export function yearsOfExperience(now = new Date()): number {
+  const start = new Date(`${profile.careerStart}T12:00:00`);
+  const ms = now.getTime() - start.getTime();
+  return Math.max(0, Math.floor(ms / (365.25 * 24 * 60 * 60 * 1000)));
+}
 
 export type Stat = { value: string; label: string };
 
 export const stats: Stat[] = [
-  { value: "6+", label: "Years of experience" },
-  { value: "9", label: "Engineers led" },
+  { value: `${yearsOfExperience()}+`, label: "Years of experience" },
+  { value: "Up to 9", label: "Engineers led" },
   { value: "1000+", label: "Customers scaled to" },
 ];
 
@@ -35,10 +43,14 @@ export const experience: ExperienceEntry[] = [
     start: "May 2025",
     end: "Present",
     bullets: [
-      "Lead a 9-person engineering team delivering AI-driven products and SaaS platforms across multiple clusters.",
-      "Define and execute the strategic technical roadmap, aligning engineering initiatives with business OKRs and scalable architecture principles.",
-      "Mentor senior engineers and managers, driving best practices and architectural standards org-wide.",
-      "Independently architected and executed full migration from .NET Framework 4.8 to .NET 8 (Mar 2025), enabling cloud-native application deployment and delivering measurable performance optimization across the platform.",
+      "Lead engineering for Kenyt.AI's conversational AI products, having led a team of up to 9 engineers across multiple client clusters.",
+      "Architected CoPulse (copulse.app), a self-serve AI customer engagement platform unifying WhatsApp, Instagram, Messenger, email, voice, and web chat into a single inbox.",
+      "Design and ship production voice agents and chatbots for clients in real estate, healthcare, education, and municipal government, owning prompt architecture and LLM integration (OpenAI, Anthropic).",
+      "Optimized voice agent response latency from 10s to 2s on live outbound calls.",
+      "Secured Meta App Review approval for Messenger and Instagram messaging permissions for CoPulse.",
+      "Independently architected and executed full migration from .NET Framework 4.8 to .NET 8 (Mar 2025), enabling cloud-native application deployment and improving [TODO: metric, e.g. response time / throughput] by [TODO: %].",
+      "Define the technical roadmap, aligning engineering work with business OKRs and scalable architecture.",
+      "Mentor senior engineers and managers on best practices and architectural standards.",
     ],
   },
   {
@@ -93,6 +105,16 @@ export const education = {
 
 export const skills = [
   {
+    group: "AI & LLM",
+    items: [
+      "LLM Integration (OpenAI, Anthropic)",
+      "Prompt Engineering",
+      "Voice AI Agents",
+      "Conversational AI",
+      "Omnichannel Messaging (WhatsApp, Instagram, Messenger)",
+    ],
+  },
+  {
     group: "Architecture",
     items: [
       "Microservices",
@@ -106,15 +128,15 @@ export const skills = [
   },
   {
     group: "Languages",
-    items: ["C#", "C++", "JavaScript"],
+    items: ["C#", "C++", "JavaScript", "TypeScript"],
   },
   {
     group: "Frameworks",
-    items: ["Angular", "ASP.NET Web API", ".NET 8"],
+    items: ["Angular", "ASP.NET Web API", ".NET 8", "Fastify", "React"],
   },
   {
     group: "Cloud & Data",
-    items: ["Azure", "Elasticsearch", "Redis"],
+    items: ["Azure", "Elasticsearch", "Redis", "Postgres", "Kafka"],
   },
   {
     group: "Leadership & Practice",
@@ -136,22 +158,22 @@ export type ImpactEntry = {
 
 export const impact: ImpactEntry[] = [
   {
-    metric: ".NET 4.8 → .NET 8",
-    title: "Full-Platform Framework Migration",
+    metric: "10s → 2s",
+    title: "Real-Time Voice AI Latency",
     description:
-      "Independently architected and executed a full migration from .NET Framework 4.8 to .NET 8, unlocking cloud-native deployment and measurable performance gains across the platform.",
+      "Optimized the end-to-end response pipeline for outbound voice agents handling live sales and qualification calls, making conversations feel natural at production scale.",
   },
   {
-    metric: "Angular v8 → v16",
-    title: "Frontend Modernization",
+    metric: "6 channels → 1 inbox",
+    title: "CoPulse Omnichannel Platform",
     description:
-      "Led the Angular frontend migration across the platform, improving runtime performance and securing long-term framework supportability without pausing feature delivery.",
+      "Architected a self-serve AI customer engagement platform that unifies WhatsApp, Instagram, Messenger, email, voice, and web chat into a single inbox, including securing Meta App Review approval for messaging permissions.",
   },
   {
-    metric: "Manual → Automated",
-    title: "Azure Multi-Cluster Release Pipeline",
+    metric: "[TODO: number] bots · 4 industries",
+    title: "Production AI Agents Across Verticals",
     description:
-      "Engineered an automated Azure publish pipeline producing deployment-ready artifacts for multi-cluster rollouts, eliminating manual build steps and cutting release friction.",
+      "Designed and shipped AI voice agents and chatbots for real estate, healthcare, education, and municipal government clients, owning prompt architecture, LLM integration, and deployment.",
   },
   {
     metric: "₹10L → $1M · 10 → 1000+ customers",

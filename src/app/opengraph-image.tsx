@@ -46,8 +46,8 @@ export default function OpenGraphImage() {
           </h1>
           <p style={{ margin: 0, fontSize: 30, color: "#c8c2b8" }}>{profile.title}</p>
         </div>
-        <p style={{ margin: 0, fontSize: 24, color: "#9ca3af" }}>
-          .NET 8 · Azure · Angular · Hyderabad
+        <p style={{ margin: 0, fontSize: 24, color: "#9ca3af", maxWidth: 900 }}>
+          Production AI agents · .NET 8 · TypeScript · LLMs · Hyderabad
         </p>
       </div>
     ),

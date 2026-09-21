@@ -9,7 +9,22 @@ export const defaultTitle = `${profile.name} — ${profile.title}`;
 export const titleTemplate = `%s · ${profile.name}`;
 
 export const homeDescription =
-  "Principal Engineering Manager · .NET 8, Azure, Angular · scaled Kenyt.AI to 1000+ customers · Hyderabad, India";
+  "Principal Engineering Manager building production AI agents (voice, chat, and omnichannel) · .NET 8, TypeScript, LLMs · scaled Kenyt.AI to 1000+ customers · Hyderabad, India";
+
+export const homeKeywords = [
+  "Engineering Manager",
+  "AI Engineering Leader",
+  "Conversational AI",
+  "Voice AI",
+  "LLM",
+  "Prompt Engineering",
+  "AI Agents",
+  "Distributed Systems",
+  "Microservices",
+  ".NET",
+  "TypeScript",
+  "Kannapu Rajasekhar Reddy",
+];
 
 export const runningDescription =
   "Sub-3:30 Tata Mumbai Marathon plan, 47:10 10K PB, 1:49 half — the running journey of Kannapu Rajasekhar Reddy.";
@@ -17,7 +32,7 @@ export const runningDescription =
 export const learningDescription =
   "Daily reading OS for .NET, Azure, Angular, Elastic, and AI product engineering — field notes from the desk.";
 
-export const sameAs = [profile.linkedin, profile.github, profile.instagram].filter(
+export const sameAs = [profile.linkedin, profile.github].filter(
   (url): url is string => Boolean(url),
 );
 

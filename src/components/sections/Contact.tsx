@@ -1,6 +1,5 @@
 "use client";
 
-import { track } from "@vercel/analytics";
 import { motion } from "framer-motion";
 import { profile } from "@/lib/resume";
 import { staggerContainer, fadeUp, viewportOnce } from "@/lib/motion";
@@ -17,12 +16,6 @@ const links = [
         },
       ]
     : []),
-  {
-    label: "Instagram",
-    href: profile.instagram,
-    value: profile.instagram.replace("https://www.", "").replace(/\/$/, ""),
-    event: "instagram_click" as const,
-  },
 ];
 
 /**
@@ -50,8 +43,7 @@ export default function Contact() {
           variants={fadeUp}
           className="mt-2.5 max-w-[20ch] text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95]"
         >
-          Open to conversations about engineering leadership, platform architecture, and scaling
-          teams.
+          Always happy to talk about production AI agents, voice AI, and building engineering teams.
         </motion.h2>
         <motion.div
           variants={fadeUp}
@@ -63,11 +55,6 @@ export default function Contact() {
               href={link.href}
               target={link.href.startsWith("http") ? "_blank" : undefined}
               rel={link.href.startsWith("http") ? "me noreferrer" : undefined}
-              onClick={
-                "event" in link && link.event
-                  ? () => track(link.event, { source: "contact" })
-                  : undefined
-              }
               className="block min-w-0 bg-accent p-6 transition-colors hover:bg-accent-600"
             >
               <span className="block text-xs font-bold uppercase tracking-[0.14em] text-accent-200">
